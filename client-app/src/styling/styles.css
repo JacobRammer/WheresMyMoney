@@ -1,0 +1,24 @@
+html {
+    background-color: rgb(252, 245, 199);
+}
+
+.sidebar {
+    background-color: rgb(121, 173, 220);
+    width: 260px;
+    position: absolute;
+    height: 100vh;
+    display: block;
+}
+
+.sidebar h2 {
+    margin-top: 10px;
+} 
+
+.sidebar:link {
+    text-decoration: none;
+}
+
+.sidebar-list li {
+    font-weight: bold;
+    padding: 5px;
+}
