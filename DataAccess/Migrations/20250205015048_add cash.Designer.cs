@@ -13,7 +13,9 @@ namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
     [Migration("20250205015048_add cash")]
+#pragma warning disable CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
     partial class addcash
+#pragma warning restore CS8981 // The type name only contains lower-cased ascii characters. Such names may become reserved for the language.
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,17 +1,15 @@
 using App.Core;
 using DataAccess;
 using Domain.Enums;
-using Domain.Models.Accounts;
 using MediatR;
 
-namespace App.Mediatr.Accounts
+namespace App.Mediatr.Accounts.CashAccount
 {
-    public class CreateAccount
+    public class CreateCashAccount
     {
         public class Command : IRequest<Result<Unit>>
         {
             public string Name { get; set; }
-            public AccountType Type { get; set; }
         }
         
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -23,17 +21,15 @@ namespace App.Mediatr.Accounts
             // save changes to the db
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                if (request.Type == AccountType.CashAccount)
+                Domain.Models.Accounts.CashAccount account = new Domain.Models.Accounts.CashAccount
                 {
-                    CashAccount account = new CashAccount
-                    {
-                        Name = request.Name,
-                        Balance = 0,
-                        Id = Guid.NewGuid()
-                    };
+                    Name = request.Name,
+                    Balance = 0,
+                    Id = Guid.NewGuid(),
+                    AccountType = AccountType.Checking
+                };
 
-                    _context.CashAccounts.Add(account);
-                }
+                _context.CashAccounts.Add(account);
                 await _context.SaveChangesAsync(cancellationToken);
 
                 return Result<Unit>.Success(Unit.Value);

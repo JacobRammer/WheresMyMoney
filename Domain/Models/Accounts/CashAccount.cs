@@ -1,3 +1,5 @@
+using Domain.Enums;
+
 namespace Domain.Models.Accounts;
 
 /// <summary>

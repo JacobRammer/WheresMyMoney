@@ -4,6 +4,10 @@ namespace Domain.Enums
     {
         None = 0,
 
-        CashAccount = 1,
+        Checking = 1,
+        
+        Savings = 2,
+        
+        Credit = 3
     }
 }

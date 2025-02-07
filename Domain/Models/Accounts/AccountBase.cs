@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Domain.Enums;
 
 namespace Domain.Models.Accounts;
 
@@ -22,4 +23,9 @@ public class AccountBase
     /// the account balance
     /// </summary>
     public double Balance { get; set; }
+    
+    /// <summary>
+    /// The <see cref="AccountType"/> of the account
+    /// </summary>
+    public AccountType AccountType { get; set; }
 }

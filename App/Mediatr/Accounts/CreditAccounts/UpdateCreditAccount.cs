@@ -4,12 +4,12 @@ using Domain.Models.Accounts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Mediatr.Accounts;
+namespace App.Mediatr.Accounts.CreditAccounts;
 
 /// <summary>
 /// Updates a <see cref="CashAccount"/>
 /// </summary>
-public class UpdateAccount
+public class UpdateCreditAccount
 {
     public class Command : IRequest<Result<Unit>>
     {
@@ -27,7 +27,7 @@ public class UpdateAccount
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            CashAccount account = await _context.CashAccounts.FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
+            CreditAccount account = await _context.CreditAccounts.FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
             
             if (account != null)
                 account.Name = request.Name;
