@@ -1,6 +1,7 @@
 using App.Core;
 using DataAccess;
 using Domain.Models.Accounts;
+using Domain.Models.DTOs.Accounts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ public class UpdateCreditAccount
     {
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public CreditAccountDto CreditAccountDto { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -28,9 +29,13 @@ public class UpdateCreditAccount
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             CreditAccount account = await _context.CreditAccounts.FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
-            
+
             if (account != null)
-                account.Name = request.Name;
+            {
+                account.Name = request.CreditAccountDto.Name;
+                account.Balance = request.CreditAccountDto.Balance;
+                account.Description = account.Description;
+            }
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);

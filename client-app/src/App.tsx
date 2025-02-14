@@ -1,13 +1,15 @@
 import {observer} from "mobx-react-lite";
 import "./styling/styles.css";
-import Sidebar from "./components/sidebar/sidebar.tsx";
-import {ChakraProvider} from "@chakra-ui/react";
+import {Button, Center, ChakraProvider, Link} from "@chakra-ui/react";
+import Theme from "./theme/theme.ts";
 
 export default observer(function App() {
     
     return (
-        <ChakraProvider>
-            <Sidebar/>
+        <ChakraProvider theme={Theme}>
+            <Center h='calc(100vh)'>
+                <Button as={Link} href='/app'>Take me to the app!</Button>
+            </Center>
         </ChakraProvider>
     )
 })

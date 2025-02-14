@@ -8,6 +8,8 @@ namespace Domain.Enums
         
         Savings = 2,
         
-        Credit = 3
+        Credit = 3,
+        
+        Loan = 4,
     }
 }

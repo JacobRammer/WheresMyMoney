@@ -13,4 +13,6 @@ public class DataContext(DbContextOptions options) : DbContext(options)
     public DbSet<CashAccount> CashAccounts { get; set; }
 
     public DbSet<CreditAccount> CreditAccounts { get; set; }
+    
+    public DbSet<LoanAccount> LoanAccounts { get; set; }
 }

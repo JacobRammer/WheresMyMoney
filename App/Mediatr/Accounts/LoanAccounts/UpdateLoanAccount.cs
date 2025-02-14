@@ -1,23 +1,22 @@
 using App.Core;
 using DataAccess;
 using Domain.Models.Accounts;
-using Domain.Models.DTOs;
 using Domain.Models.DTOs.Accounts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Mediatr.Accounts.CashAccounts;
+namespace App.Mediatr.Accounts.LoanAccounts;
 
 /// <summary>
 /// Updates a <see cref="CashAccount"/>
 /// </summary>
-public class UpdateCashAccount
+public class UpdateLoanAccount
 {
     public class Command : IRequest<Result<Unit>>
     {
         public Guid Id { get; set; }
 
-        public CashAccountDto CashAccountDto { get; set; }
+        public LoanAccountDto LoanAccount { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -29,14 +28,15 @@ public class UpdateCashAccount
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            CashAccount account = await _context.CashAccounts.FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
-            
+            LoanAccount account = await _context.LoanAccounts.FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
+
             if (account != null)
             {
-                account.Name = request.CashAccountDto.Name;
-                account.AccountType = request.CashAccountDto.AccountType;
-                account.Balance = request.CashAccountDto.Balance;
-                account.Description = request.CashAccountDto.Desctiption;
+                account.Name = request.LoanAccount.Name;
+                account.Balance = request.LoanAccount.Balance;
+                account.InterestRate = request.LoanAccount.InterestRate;
+                account.MonthlyPayment = request.LoanAccount.MonthlyPayment;
+                account.Description = request.LoanAccount.Desctiption;
             }
             await _context.SaveChangesAsync(cancellationToken);
 

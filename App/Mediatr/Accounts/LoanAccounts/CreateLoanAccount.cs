@@ -5,14 +5,13 @@ using Domain.Models.Accounts;
 using Domain.Models.DTOs.Accounts;
 using MediatR;
 
-
-namespace App.Mediatr.Accounts.CreditAccounts
+namespace App.Mediatr.Accounts.LoanAccounts
 {
-    public class CreateCreditAccount
+    public class CreateLoanAccount
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public CreditAccountDto CreditAccountDto { get; set; }
+            public LoanAccountDto LoanAccount { get; set; }
         }
         
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -24,20 +23,20 @@ namespace App.Mediatr.Accounts.CreditAccounts
             // save changes to the db
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                if (request.CreditAccountDto.Balance > 0)
+                if (request.LoanAccount.Balance > 0)
+                    request.LoanAccount.Balance *= -1;
+                LoanAccount account = new LoanAccount
                 {
-                    request.CreditAccountDto.Balance *= -1;
-                }
-                CreditAccount account = new CreditAccount
-                {
-                    Name = request.CreditAccountDto.Name,
-                    Balance = request.CreditAccountDto.Balance,
+                    Name = request.LoanAccount.Name,
+                    Balance = request.LoanAccount.Balance,
                     Id = Guid.NewGuid(),
-                    AccountType = AccountType.Credit,
-                    Description = request.CreditAccountDto.Desctiption,
+                    AccountType = AccountType.Loan,
+                    InterestRate = request.LoanAccount.InterestRate,
+                    MonthlyPayment = request.LoanAccount.MonthlyPayment,
+                    Description = request.LoanAccount.Desctiption,
                 };
 
-                _context.CreditAccounts.Add(account);
+                _context.LoanAccounts.Add(account);
                 await _context.SaveChangesAsync(cancellationToken);
 
                 return Result<Unit>.Success(Unit.Value);

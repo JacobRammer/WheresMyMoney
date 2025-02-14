@@ -1,19 +1,9 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using Domain.Enums;
 
-namespace Domain.Models.Accounts;
+namespace Domain.Models.DTOs.Accounts;
 
-/// <summary>
-/// Base class for all accounts.
-/// </summary>
-public class AccountBase
+public class AccountBaseDto
 {
-    /// <summary>
-    /// The account ID
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// The account name
     /// </summary>
@@ -29,5 +19,5 @@ public class AccountBase
     /// </summary>
     public AccountType AccountType { get; set; }
 
-    public string? Description { get; set; }
+    public string? Desctiption { get; set; }
 }

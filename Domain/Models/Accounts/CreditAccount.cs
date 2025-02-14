@@ -7,5 +7,6 @@ namespace Domain.Models.Accounts;
 /// </summary>
 public class CreditAccount : AccountBase
 {
-    public AccountType Type => AccountType.Credit;
+
+    public double MonthlyPayment { get; set; }
 }

@@ -2,67 +2,55 @@ import {observer} from "mobx-react-lite";
 import {
     Box,
     Center,
-    ChakraProvider,
-    Heading,
-    Link,
-    List,
-    ListIcon,
-    ListItem,
+    Heading, Link,
 } from "@chakra-ui/react";
-import {ChartBarBig, Landmark, PiggyBank} from "lucide-react";
 import {useStore} from "../../stores/store.ts";
 import CashAccounts from "./cashAccounts.tsx";
 import {useEffect} from "react";
+import Links from "./links.tsx";
+import CreditAccounts from "./creditAccounts.tsx";
+import LoanAccounts from "./loanAccounts.tsx";
 
 export default observer(function Sidebar() {
     const {accountStore} = useStore();
-    const {accountRegistry, loadAccounts} = accountStore;
+    const cashAccountRegistry = accountStore.cashAccountRegistry;
+    const loadCashAccounts = accountStore.loadCashAccounts;
+    const loadCreditAccounts = accountStore.loadCreditAccounts;
+    const creditAccountRegistry = accountStore.creditAccountRegistry;
+    const loanAccountRegistry = accountStore.loanAccountRegistry;
+    const loadLoanAccounts = accountStore.loadLoanAccounts;
+    const loanBalance = accountStore.loanBalance;
 
     useEffect(() => {
-        if (accountRegistry.size === 0)
-            loadAccounts()
-    }, [accountRegistry.size, loadAccounts()]);
+        if (cashAccountRegistry.size === 0)
+            loadCashAccounts()
+        if (creditAccountRegistry.size === 0)
+            loadCreditAccounts()
+        if (loanAccountRegistry.size === 0)
+            loadLoanAccounts()
+    }, [cashAccountRegistry.size, loadCashAccounts(), creditAccountRegistry.size, loadCreditAccounts(),
+    loanAccountRegistry, loanBalance]);
     return (
-        <ChakraProvider>
             <Box>
                 <Box className='sidebar'>
                     
                     <Center>
-                        <Heading size="lg">Your Budget</Heading>
+                        <Link href='/app'><Heading size="lg">Your Budget</Heading></Link>
                     </Center>
                     
                     <Box paddingTop='25px'>
-                        <List className='sidebar-list'>
-                            
-                            <ListItem fontSize='2xl'>
-                                <Link href='/app' _hover={{textDecoration: 'none'}}>
-                                <ListIcon style={{marginBottom: '6px'}}> 
-                                <PiggyBank viewBox='0 0 24 24' />
-                                </ListIcon>Budget</Link>
-                            </ListItem>
-
-                            <ListItem fontSize='2xl'>
-                                <Link href='/reports' _hover={{textDecoration: 'none'}}>
-                                <ListIcon style={{marginBottom: '6px'}}>
-                                <ChartBarBig viewBox='0 0 24 24' />
-                                </ListIcon>Reports</Link>
-                            </ListItem>
-
-                            <ListItem fontSize='2xl'>
-                                <Link href='/accounts' _hover={{textDecoration: 'none'}}>
-                                <ListIcon style={{marginBottom: '6px'}}>
-                                <Landmark viewBox='0 0 24 24' />
-                                </ListIcon>Accounts</Link>
-                            </ListItem>
-                        </List>
+                        <Links/>
                     </Box>
-                    <Box>
-                        {accountRegistry.size !== 0 && 
+                        {cashAccountRegistry.size !== 0 && 
                             <CashAccounts/>
                         }
-                    </Box>
+                        {creditAccountRegistry.size !== 0 &&
+                            <CreditAccounts/>
+                        }
+                    {loanAccountRegistry.size !== 0 && 
+                        <LoanAccounts/>
+                    }
                 </Box>
             </Box>
-        </ChakraProvider>
     )
 })

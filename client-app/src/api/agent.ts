@@ -1,6 +1,8 @@
 import axios, {AxiosResponse} from "axios";
 import {BudgetCategory} from "../models/budgetCategory.ts";
 import {CashAccount} from "../models/cashAccount.ts";
+import {CreditAccount} from "../models/creditAccount.ts";
+import {LoanAccount} from "../models/loanAccount.ts";
 
 axios.defaults.baseURL = 'http://localhost:5241/api';
 
@@ -22,7 +24,9 @@ const BudgetCategories = {
 }
 
 const FinanceAccounts = {
-    getCashAccounts: () => requests.get<CashAccount[]>('/Accounts'),
+    getCashAccounts: () => requests.get<CashAccount[]>('/CashAccount'),
+    getCreditAccounts: () => requests.get<CreditAccount[]>('/CreditAccount'),
+    getLoanAccounts: () => requests.get<LoanAccount[]>('/LoanAccount'),
 }
 
 const agent = {
