@@ -1,15 +1,11 @@
 import {observer} from "mobx-react-lite";
-import {
-    Box,
-    Center,
-    Heading, Link,
-} from "@chakra-ui/react";
 import {useStore} from "../../stores/store.ts";
 import CashAccounts from "./cashAccounts.tsx";
 import {useEffect} from "react";
 import Links from "./links.tsx";
 import CreditAccounts from "./creditAccounts.tsx";
 import LoanAccounts from "./loanAccounts.tsx";
+import {Box, Center, Title} from "@mantine/core";
 
 export default observer(function Sidebar() {
     const {accountStore} = useStore();
@@ -35,10 +31,10 @@ export default observer(function Sidebar() {
                 <Box className='sidebar'>
                     
                     <Center>
-                        <Link href='/app'><Heading size="lg">Your Budget</Heading></Link>
+                        <a href='/app' className='SidebarHeader'><Title order={1}>Your Budget</Title></a>
                     </Center>
                     
-                    <Box paddingTop='25px'>
+                    <Box className='SidebarLinkComponent'>
                         <Links/>
                     </Box>
                         {cashAccountRegistry.size !== 0 && 

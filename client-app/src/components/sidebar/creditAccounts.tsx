@@ -1,9 +1,9 @@
 import {observer} from "mobx-react-lite";
-import {Box, Button, Collapse, Link, Text} from "@chakra-ui/react";
 import {ChevronDown, ChevronRight} from "lucide-react";
 import {useStore} from "../../stores/store.ts";
 import {useState} from "react";
 import {CreditAccount} from "../../models/creditAccount.ts";
+import {Box, Collapse, MantineProvider, NavLink, Text} from "@mantine/core";
 
 export default observer(function CreditAccounts() {
 
@@ -13,27 +13,24 @@ export default observer(function CreditAccounts() {
     const handleToggle = () => setShow(!show);
     
     return (
-        <Box>
-            <Link onClick={handleToggle} >
-                <Button onClick={handleToggle} variant='plain' >
-                    {!show ? <ChevronRight style={{marginRight: '5px'}}/> : <ChevronDown style={{marginRight: '5px'}} />}
-                    Credit
-                </Button>
-                <Box float='right' style={{marginRight: '10px', marginTop: '9px', borderRadius: '10px', backgroundColor: creditBalance <= 0? 'red' : 'green', display: 'flex'}}>
-                    ${creditBalance}
-                </Box>
-            </Link>
+        <MantineProvider >
+            <Box className='SidebarLinkComponent'>
 
-            <Collapse in={show}>
-                {flattenCreditAccountRegistry().map((account: CreditAccount) => (
-                    <Link _hover={{textDecoration: 'none'}} href={`/Accounts/${account.id}`} key={account.id}>
-                        <Box marginBottom='5px' marginLeft='5px'  float='left' width='60%' style={{padding: '2px'}}><Text fontSize='sm'>{account.name}</Text></Box>
-                        <Box float='right' marginRight='5px'  style={{padding: '2px', borderRadius: '10px', backgroundColor: account.balance < 0? 'red' : 'transparent',
-                        display: 'flex'}}>
-                            <Text fontSize='sm'>${account.balance}</Text></Box>
-                    </Link>
-                ))}
-            </Collapse>
-        </Box>
+                <NavLink className='SidebarLink'
+                         onClick={handleToggle}
+                         label={<Text size='sm' fw={600}>Credit</Text>}
+                         leftSection={!show ? <ChevronRight style={{marginRight: '5px'}}/> : <ChevronDown style={{marginRight: '5px'}} />}
+                         rightSection={<Text size='sm' style={{marginLeft: '5px'}}>${creditBalance}</Text>}/>
+
+                <Collapse in={show} className='AccountSidebarDetails'>
+                    {flattenCreditAccountRegistry().map((account: CreditAccount) => (
+                        <NavLink href={`/Accounts/${account.id}`} key={account.id} className='SidebarLink'
+                                 label={<Text size='sm'>{account.name}</Text>}
+                                 rightSection={<Text size='sm'>${account.balance}</Text>}
+                        />
+                    ))}
+                </Collapse>
+            </Box>
+        </MantineProvider>
     )
 })

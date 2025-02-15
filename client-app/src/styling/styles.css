@@ -7,19 +7,13 @@ body, html {
     padding: 0;
 }
 
+
+
 .sidebar {
     background-color: rgb(121, 173, 220);
     width: 260px;
     height: 100vh;
     overflow-y: scroll;
-}
-
-.sidebar h2 {
-    margin-top: 10px;
-} 
-
-.sidebar:link {
-    text-decoration: none;
 }
 
 .sidebar-list li {
@@ -49,4 +43,24 @@ body, html {
     font-size: 29px;
     font-weight: bold;
     margin-left: 10px;
+}
+
+.SidebarHeader {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.SidebarLinkComponent {
+    margin: 10px;
+}
+
+.SidebarLink {
+    border-radius: 10px;
+}
+
+.AccountSidebarDetails {
+    border-radius: 10px;
+    margin-left: 20px;
 }
