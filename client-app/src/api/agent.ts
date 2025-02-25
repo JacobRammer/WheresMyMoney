@@ -27,6 +27,13 @@ const FinanceAccounts = {
     getCashAccounts: () => requests.get<CashAccount[]>('/CashAccount'),
     getCreditAccounts: () => requests.get<CreditAccount[]>('/CreditAccount'),
     getLoanAccounts: () => requests.get<LoanAccount[]>('/LoanAccount'),
+    createCashAccount: (account: CashAccount) => requests.post('/CashAccount', account),
+    createCreditAccount: (account: CreditAccount) => requests.post('/CreditAccount', account),
+    createLoanAccount: (account: LoanAccount) => requests.post('/LoanAccount', account),
+    deleteCashAccount: (id: string) => requests.del(`/CashAccount/${id}`),
+    deleteCreditAccount: (id: string) => requests.del(`/CreditAccount/${id}`),
+    deleteLoanAccount: (id: string) => requests.del(`/LoanAccount/${id}`),
+// (activity: ActivityFormValues) => requests.post('/activities', activity),
 }
 
 const agent = {

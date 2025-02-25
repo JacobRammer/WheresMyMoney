@@ -19,5 +19,5 @@ public class AccountBaseDto
     /// </summary>
     public AccountType AccountType { get; set; }
 
-    public string? Desctiption { get; set; }
+    public string? Description { get; set; }
 }

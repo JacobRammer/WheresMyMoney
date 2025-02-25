@@ -1,6 +1,7 @@
 using App.Mediatr.Accounts;
 using App.Mediatr.Accounts.CashAccounts;
 using App.Mediatr.Accounts.CreditAccounts;
+using Domain.Models.Accounts;
 using Domain.Models.DTOs.Accounts;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace BudgetApp.Controllers.Accounts;
 public class CreditAccountController : BaseApiController
 {
         [HttpPost]
-        public async Task<IActionResult> CreateAccount(CreditAccountDto creditAccount)
+        public async Task<IActionResult> CreateAccount(CreditAccount creditAccount)
         {
-            return HandleResults(await Mediator.Send(new CreateCreditAccount.Command { CreditAccountDto = creditAccount}));
+            return HandleResults(await Mediator.Send(new CreateCreditAccount.Command { CreditAccount = creditAccount}));
         }
 
         [HttpGet("{id}")]

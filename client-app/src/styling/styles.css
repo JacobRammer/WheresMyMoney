@@ -7,13 +7,15 @@ body, html {
     padding: 0;
 }
 
-
+:root {
+    --backgroundColor: rgb(121, 173, 220);
+}
 
 .sidebar {
-    background-color: rgb(121, 173, 220);
+    background-color: var(--backgroundColor);
     width: 260px;
     height: 100vh;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
 }
 
 .sidebar-list li {
@@ -31,12 +33,19 @@ body, html {
 }
 
 .RightOfSidebar {
-    flex-grow: 1;;
+    flex-grow: 1;
 }
 
 .AccountDashboardTitleBar {
-    border-bottom: 1px solid #4D6A6D;
-    margin-top: 5px;
+    border-bottom: 1px solid rgb(238, 224, 203);
+}
+
+.AccountDashboardTitleBarDetails {
+    margin: 10px;
+}
+
+.AccountDashboard {
+    flex-grow: 1;
 }
 
 .PageHeader {
@@ -63,4 +72,11 @@ body, html {
 .AccountSidebarDetails {
     border-radius: 10px;
     margin-left: 20px;
+}
+
+.AccountDashboardAddAccount {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    color: var(--backgroundColor)
 }

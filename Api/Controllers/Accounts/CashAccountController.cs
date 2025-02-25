@@ -18,7 +18,7 @@ namespace BudgetApp.Controllers.Accounts
         /// <param name="cashAccount">the <see cref="CashAccount"/> to create</param>
         /// <returns>Nothing</returns>
         [HttpPost]
-        public async Task<IActionResult> CreateAccount(CashAccountDto cashAccount)
+        public async Task<IActionResult> CreateAccount(CashAccount cashAccount)
         {
             return HandleResults(await Mediator.Send(new CreateCashAccount.Command 
                 { CashAccount = cashAccount}));

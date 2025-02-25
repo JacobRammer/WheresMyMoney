@@ -1,4 +1,6 @@
-export interface CashAccount {
+/// Represents a base account that has the least amount of information exposed
+
+export interface AccountBase {
     id: string;
     name: string;
     balance: number;
@@ -6,7 +8,7 @@ export interface CashAccount {
     accountType: string;
 }
 
-export class CashAccount implements CashAccount {
+export class AccountBase implements AccountBase {
     constructor(id: string, name: string, balance: number, description: string, accountType: string) {
         this.id = id;
         this.name = name;

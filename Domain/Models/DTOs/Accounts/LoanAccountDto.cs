@@ -1,8 +1,5 @@
 namespace Domain.Models.DTOs.Accounts;
 
-public class LoanAccountDto : AccountBaseDto
+public class LoanAccountDto : InterestAccountDto
 {
-    public double InterestRate { get; set; }
-
-    public double MonthlyPayment { get; set; }
 }

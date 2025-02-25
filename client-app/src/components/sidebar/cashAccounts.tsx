@@ -18,14 +18,20 @@ export default observer(function CashAccount() {
                          onClick={handleToggle}
                          label={<Text size='sm' fw={600}>Cash</Text>}
                          leftSection={!show ? <ChevronRight style={{marginRight: '5px'}}/> : <ChevronDown style={{marginRight: '5px'}} />}
-                                              rightSection={<Text size='sm' style={{marginLeft: '5px'}}>${cashBalance}</Text>}/>
+                                      rightSection={<Text size='sm' style={{marginLeft: '5px',
+                                      backgroundColor: cashBalance < 0 ? 'white' : 'transparent', borderRadius: '10px', 
+                                      padding: '1px'}} c={cashBalance < 0 ? 'red' : 'black'}
+                                      fw={cashBalance < 0 ? 600: 400}>${cashBalance}</Text>}
+                />
+                                          
                 
                 <Collapse in={show} className='AccountSidebarDetails'>
                     {flattenCashAccountRegistry().map((account: CashAccount) => (
                         <NavLink href={`/Accounts/${account.id}`} key={account.id} className='SidebarLink'
                             label={<Text size='sm'>{account.name}</Text>}
-                                 rightSection={<Text size='sm'>${account.balance}</Text>}
-                        />
+                                 rightSection={<Box style={{backgroundColor: account.balance < 0 ? 'white' : 'transparent', borderRadius: '10px', padding: '1px'}}>
+                                 <Text size='sm' c={account.balance < 0 ? 'red' : 'black'}
+                                 fw={account.balance < 0 ? 600: 400}>${account.balance}</Text></Box>}                        />
                     ))}
                 </Collapse>
             </Box>

@@ -3,14 +3,15 @@ import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent.ts";
 import {LoanAccount} from "../models/loanAccount.ts";
 import {CreditAccount} from "../models/creditAccount.ts";
+import {AccountBase} from "../models/accountBase.ts";
 
 export default class AccountStore {
     cashAccountRegistry = new Map<string, CashAccount>();
     creditAccountRegistry = new Map<string, CreditAccount>();
     loanAccountRegistry = new Map<string, LoanAccount>();
-    cashBalance = 0;
-    creditBalance = 0;
-    loanBalance = 0;
+    cashBalance: number = 0;
+    creditBalance: number = 0;
+    loanBalance: number = 0;
     
     constructor() {
         makeAutoObservable(this);
@@ -108,5 +109,113 @@ export default class AccountStore {
     
     totalBalance = () => {
         return this.cashBalance + this.loanBalance + this.creditBalance;
+    }
+    
+    getAccountBaseRegistry = () => {
+        const accountBaseRegistry = new Map<string, AccountBase>();
+        
+        this.flattenCashAccountRegistry().map((account: CashAccount) => {
+            accountBaseRegistry.set(account.id, new AccountBase(
+                account.id, account.name, account.balance, account.description, account.accountType
+            ));
+        })
+
+        this.creditAccountRegistry.forEach((account: CreditAccount) => {
+            accountBaseRegistry.set(account.id, new AccountBase(
+                account.id, account.name, account.balance, account.description, account.accountType
+            ));
+        })
+
+        this.loanAccountRegistry.forEach((account: LoanAccount) => {
+            accountBaseRegistry.set(account.id, new AccountBase(
+                account.id, account.name, account.balance, account.description, account.accountType
+            ));
+        })
+        
+        return Array.from(accountBaseRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
+    }
+    createCashAccount = async(cashAccount: CashAccount) => {
+        try {
+            await agent.FinanceAccounts.createCashAccount(cashAccount);
+            runInAction(() => this.cashAccountRegistry.set(cashAccount.id, cashAccount));
+            
+            // JS wants to fucking concatenate if i just add, lmao
+            runInAction(() => this.cashBalance +=  parseInt(cashAccount.balance.toString()));
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    createCreditAccount = async(creditAccount: CreditAccount) => {
+        try {
+            await agent.FinanceAccounts.createCreditAccount(creditAccount);
+            runInAction(() => this.creditAccountRegistry.set(creditAccount.id, creditAccount));
+
+            // JS wants to fucking concatenate if i just add, lmao
+            runInAction(() => this.creditBalance +=  parseInt(creditAccount.balance.toString()));
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    createLoanAccount = async(loanAccount: LoanAccount) => {
+        try {
+            await agent.FinanceAccounts.createLoanAccount(loanAccount);
+            runInAction(() => this.loanAccountRegistry.set(loanAccount.id, loanAccount));
+
+            // JS wants to fucking concatenate if i just add, lmao
+            runInAction(() => this.loanBalance +=  parseInt(loanAccount.balance.toString()));
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
+    deleteAccount = async(accountType: string, id: string) => {
+        if (accountType === "Savings" || accountType === "Checking") {
+            await this.deleteCashAccount(id);
+        }
+        
+        if (accountType === "Credit") {
+            await this.deleteCreditAccount(id);
+        }
+        
+        if (accountType === "Loan") {
+            await this.deleteLoanAccount(id);
+        }
+    }
+    
+    deleteCashAccount = async(id: string) => {
+        await agent.FinanceAccounts.deleteCashAccount(id).then(() => {
+            runInAction(() => {
+                const account = this.cashAccountRegistry.get(id)
+                if (account !== undefined) {
+                    this.cashBalance -= parseInt(account.balance.toString());
+                }
+                this.cashAccountRegistry.delete(id);
+            })
+        });
+    }
+
+    deleteCreditAccount = async(id: string) => {
+        await agent.FinanceAccounts.deleteCreditAccount(id).then(() => {
+            runInAction(() => {
+                const account = this.creditAccountRegistry.get(id)
+                if (account !== undefined) {
+                    this.creditBalance -= parseInt(account.balance.toString());
+                }
+                this.creditAccountRegistry.delete(id);
+            })
+        });
+    }
+
+    deleteLoanAccount = async(id: string) => {
+        await agent.FinanceAccounts.deleteLoanAccount(id).then(() => {
+            runInAction(() => {
+                const account = this.loanAccountRegistry.get(id)
+                if (account !== undefined) {
+                    this.loanBalance -= parseInt(account.balance.toString());
+                }
+                this.loanAccountRegistry.delete(id);
+            })
+        });
     }
 }

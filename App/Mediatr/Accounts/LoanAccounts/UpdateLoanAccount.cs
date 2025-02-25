@@ -36,7 +36,7 @@ public class UpdateLoanAccount
                 account.Balance = request.LoanAccount.Balance;
                 account.InterestRate = request.LoanAccount.InterestRate;
                 account.MonthlyPayment = request.LoanAccount.MonthlyPayment;
-                account.Description = request.LoanAccount.Desctiption;
+                account.Description = request.LoanAccount.Description;
             }
             await _context.SaveChangesAsync(cancellationToken);
 

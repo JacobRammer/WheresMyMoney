@@ -12,7 +12,7 @@ namespace App.Mediatr.Accounts.CreditAccounts
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public CreditAccountDto CreditAccountDto { get; set; }
+            public CreditAccount CreditAccount { get; set; }
         }
         
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -24,17 +24,19 @@ namespace App.Mediatr.Accounts.CreditAccounts
             // save changes to the db
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                if (request.CreditAccountDto.Balance > 0)
+                if (request.CreditAccount.Balance > 0)
                 {
-                    request.CreditAccountDto.Balance *= -1;
+                    request.CreditAccount.Balance *= -1;
                 }
                 CreditAccount account = new CreditAccount
                 {
-                    Name = request.CreditAccountDto.Name,
-                    Balance = request.CreditAccountDto.Balance,
-                    Id = Guid.NewGuid(),
+                    Name = request.CreditAccount.Name,
+                    Balance = request.CreditAccount.Balance,
+                    Id = request.CreditAccount.Id,
                     AccountType = AccountType.Credit,
-                    Description = request.CreditAccountDto.Desctiption,
+                    Description = request.CreditAccount.Description,
+                    InterestRate = request.CreditAccount.InterestRate,
+                    MonthlyPayment = request.CreditAccount.MonthlyPayment,
                 };
 
                 _context.CreditAccounts.Add(account);

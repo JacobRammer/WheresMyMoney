@@ -5,8 +5,6 @@ namespace Domain.Models.Accounts;
 /// <summary>
 /// An account that represents a credit account (ie: credit card or line of credit)
 /// </summary>
-public class CreditAccount : AccountBase
+public class CreditAccount : InterestAccount
 {
-
-    public double MonthlyPayment { get; set; }
 }

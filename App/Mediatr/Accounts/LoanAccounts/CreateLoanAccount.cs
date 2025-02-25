@@ -11,7 +11,7 @@ namespace App.Mediatr.Accounts.LoanAccounts
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public LoanAccountDto LoanAccount { get; set; }
+            public LoanAccount LoanAccount { get; set; }
         }
         
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -29,11 +29,11 @@ namespace App.Mediatr.Accounts.LoanAccounts
                 {
                     Name = request.LoanAccount.Name,
                     Balance = request.LoanAccount.Balance,
-                    Id = Guid.NewGuid(),
+                    Id = request.LoanAccount.Id,
                     AccountType = AccountType.Loan,
                     InterestRate = request.LoanAccount.InterestRate,
                     MonthlyPayment = request.LoanAccount.MonthlyPayment,
-                    Description = request.LoanAccount.Desctiption,
+                    Description = request.LoanAccount.Description,
                 };
 
                 _context.LoanAccounts.Add(account);

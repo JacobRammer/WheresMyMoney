@@ -5,7 +5,7 @@ import {useEffect} from "react";
 import Links from "./links.tsx";
 import CreditAccounts from "./creditAccounts.tsx";
 import LoanAccounts from "./loanAccounts.tsx";
-import {Box, Center, Title} from "@mantine/core";
+import {Box, Center, Title, Text} from "@mantine/core";
 
 export default observer(function Sidebar() {
     const {accountStore} = useStore();
@@ -15,7 +15,6 @@ export default observer(function Sidebar() {
     const creditAccountRegistry = accountStore.creditAccountRegistry;
     const loanAccountRegistry = accountStore.loanAccountRegistry;
     const loadLoanAccounts = accountStore.loadLoanAccounts;
-    const loanBalance = accountStore.loanBalance;
 
     useEffect(() => {
         if (cashAccountRegistry.size === 0)
@@ -24,14 +23,13 @@ export default observer(function Sidebar() {
             loadCreditAccounts()
         if (loanAccountRegistry.size === 0)
             loadLoanAccounts()
-    }, [cashAccountRegistry.size, loadCashAccounts(), creditAccountRegistry.size, loadCreditAccounts(),
-    loanAccountRegistry, loanBalance]);
+    }, []);
     return (
             <Box>
                 <Box className='sidebar'>
                     
                     <Center>
-                        <a href='/app' className='SidebarHeader'><Title order={1}>Your Budget</Title></a>
+                        <Text component='a' href='/app' className='SidebarHeader' style={{marginTop: '10px'}}><Title order={1}>Your Budget</Title></Text>
                     </Center>
                     
                     <Box className='SidebarLinkComponent'>

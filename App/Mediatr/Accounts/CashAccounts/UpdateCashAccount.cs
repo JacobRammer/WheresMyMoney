@@ -36,7 +36,7 @@ public class UpdateCashAccount
                 account.Name = request.CashAccountDto.Name;
                 account.AccountType = request.CashAccountDto.AccountType;
                 account.Balance = request.CashAccountDto.Balance;
-                account.Description = request.CashAccountDto.Desctiption;
+                account.Description = request.CashAccountDto.Description;
             }
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -7,7 +7,7 @@ import '@mantine/core/styles.css';
 export default observer(function App() {
     
     return (
-        <MantineProvider>
+        <MantineProvider defaultColorScheme="dark">
             <Center h='calc(100vh)'>
                 <Button component='a' href='/app'>Take me to the app!</Button>
             </Center>

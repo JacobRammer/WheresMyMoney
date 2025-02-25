@@ -10,7 +10,7 @@ namespace BudgetApp.Controllers.Accounts;
 public class LoanAccountController : BaseApiController
 {
     [HttpPost]
-    public async Task<IActionResult> CreateAccount(LoanAccountDto loanAccount)
+    public async Task<IActionResult> CreateAccount(LoanAccount loanAccount)
     {
         return HandleResults(await Mediator.Send(new CreateLoanAccount.Command
         {

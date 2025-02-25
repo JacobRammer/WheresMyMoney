@@ -12,7 +12,7 @@ namespace App.Mediatr.Accounts.CashAccounts
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public CashAccountDto CashAccount { get; set; }
+            public CashAccount CashAccount { get; set; }
         }
         
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -28,9 +28,9 @@ namespace App.Mediatr.Accounts.CashAccounts
                 {
                     Name = request.CashAccount.Name,
                     Balance = request.CashAccount.Balance,
-                    Id = Guid.NewGuid(),
+                    Id = request.CashAccount.Id,
                     AccountType = request.CashAccount.AccountType,
-                    Description = request.CashAccount.Desctiption,
+                    Description = request.CashAccount.Description,
                 };
 
                 _context.CashAccounts.Add(account);
