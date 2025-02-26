@@ -1,14 +1,18 @@
 import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent.ts";
 import {Account} from "../models/account.ts";
-import {AccountType} from "../enums/accountType.ts";
 
+const Savings = "Savings";
+const Checking = "Checking";
+const Credit = "Credit";
+const Loan = "Loan";
 export default class AccountStore {
     accountRegistry = new Map<string, Account>();
     cashBalance: number = 0;
     creditBalance: number = 0;
     loanBalance: number = 0;
-    
+
+
     constructor() {
         makeAutoObservable(this);
     }
@@ -41,14 +45,14 @@ export default class AccountStore {
         // Why JS concatenates numbers instead of adding, I got no fucking clue
         // So we have to convert to a string for it to actually add, lmfao
 
-        if (account.accountType === AccountType.Savings ||
-            account.accountType === AccountType.Checking) {
+        if (account.accountType === Savings ||
+            account.accountType === Checking) {
             this.cashBalance += parseInt(account.balance.toString())
         }
 
-        if (account.accountType === AccountType.Credit) {
+        if (account.accountType === Credit) {
             this.creditBalance += parseInt(account.balance.toString())
-        } else if (account.accountType === AccountType.Loan) {
+        } else if (account.accountType === Loan) {
             this.loanBalance += parseInt(account.balance.toString())
         }
     }
@@ -57,14 +61,14 @@ export default class AccountStore {
         // Why JS concatenates numbers instead of adding, I got no fucking clue
         // So we have to convert to a string for it to actually add, lmfao
 
-        if (account.accountType === AccountType.Savings ||
-            account.accountType === AccountType.Checking) {
+        if (account.accountType === Savings ||
+            account.accountType === Checking) {
             this.cashBalance -= parseInt(account.balance.toString())
         }
 
-        if (account.accountType === AccountType.Credit) {
+        if (account.accountType === Credit) {
             this.creditBalance -= parseInt(account.balance.toString())
-        } else if (account.accountType === AccountType.Loan) {
+        } else if (account.accountType === Loan) {
             this.loanBalance -= parseInt(account.balance.toString())
         }
     }
@@ -103,5 +107,17 @@ export default class AccountStore {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    getCashAccounts = () => {
+        return Array.from(this.accountRegistry.values()).filter(account => account.accountType === Savings || account.accountType === Checking);
+    }
+
+    getCreditAccounts = () => {
+        return Array.from(this.accountRegistry.values()).filter(account => account.accountType === Credit);
+    }
+
+    getLoanAccounts = () => {
+        return Array.from(this.accountRegistry.values()).filter(account => account.accountType === Loan);
     }
 }

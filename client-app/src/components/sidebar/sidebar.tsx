@@ -1,28 +1,20 @@
 import {observer} from "mobx-react-lite";
 import {useStore} from "../../stores/store.ts";
-import CashAccounts from "./cashAccounts.tsx";
 import {useEffect} from "react";
 import Links from "./links.tsx";
-import CreditAccounts from "./creditAccounts.tsx";
-import LoanAccounts from "./loanAccounts.tsx";
 import {Box, Center, Text, Title} from "@mantine/core";
+import AccountList from "./accountList.tsx";
 
 export default observer(function Sidebar() {
     const {accountStore} = useStore();
-    const cashAccountRegistry = accountStore.accountRegistry;
-    const loadCashAccounts = accountStore.loadAccounts;
-    const loadCreditAccounts = accountStore.loadCreditAccounts;
-    const creditAccountRegistry = accountStore.creditAccountRegistry;
-    const loanAccountRegistry = accountStore.loanAccountRegistry;
-    const loadLoanAccounts = accountStore.loadLoanAccounts;
+    const {
+        accountRegistry, loadAccounts, getCashAccounts, getLoanAccounts, getCreditAccounts,
+        cashBalance, loanBalance, creditBalance
+    } = accountStore;
 
     useEffect(() => {
-        if (cashAccountRegistry.size === 0)
-            loadCashAccounts()
-        if (creditAccountRegistry.size === 0)
-            loadCreditAccounts()
-        if (loanAccountRegistry.size === 0)
-            loadLoanAccounts()
+        if (accountRegistry.size === 0)
+            loadAccounts()
     }, []);
     return (
             <Box>
@@ -35,14 +27,14 @@ export default observer(function Sidebar() {
                     <Box className='SidebarLinkComponent'>
                         <Links/>
                     </Box>
-                        {cashAccountRegistry.size !== 0 && 
-                            <CashAccounts/>
+                    {getCashAccounts().length !== 0 &&
+                        <AccountList header="Cash" accounts={getCashAccounts()} balance={cashBalance}/>
                         }
-                        {creditAccountRegistry.size !== 0 &&
-                            <CreditAccounts/>
+                    {getCreditAccounts().length !== 0 &&
+                        <AccountList header="Credit" accounts={getCreditAccounts()} balance={creditBalance}/>
                         }
-                    {loanAccountRegistry.size !== 0 && 
-                        <LoanAccounts/>
+                    {getLoanAccounts().length !== 0 &&
+                        <AccountList header="Loans" accounts={getLoanAccounts()} balance={loanBalance}/>
                     }
                 </Box>
             </Box>

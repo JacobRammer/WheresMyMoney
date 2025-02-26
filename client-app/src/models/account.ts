@@ -1,11 +1,9 @@
-import {AccountType} from "../enums/accountType.ts";
-
 export interface Account {
     id: string;
     name: string;
     balance: number;
     description?: string;
-    accountType: AccountType;
+    accountType: string;
     interestRate?: number;
     monthlyPayment?: number;
 }
@@ -27,18 +25,6 @@ export class Account implements Account {
         this.description = description;
         this.interestRate = interestRate;
         this.monthlyPayment = monthlyPayment;
-
-        if (accountType === "Savings") {
-            this.accountType = AccountType.Savings;
-        } else if (accountType === "Checking") {
-            this.accountType = AccountType.Checking;
-        } else if (accountType === "Credit") {
-            this.accountType = AccountType.Credit;
-        } else if (accountType === "Loan") {
-            this.accountType = AccountType.Loan;
-        } else {
-            console.log("Error: Invalid account type")
-            this.accountType = AccountType.None;
-        }
+        this.accountType = accountType;
     }
 }

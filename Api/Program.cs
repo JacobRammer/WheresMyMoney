@@ -35,6 +35,13 @@ builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 var app = builder.Build();
 
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<DataContext>();
+
+await context.Database.MigrateAsync();
+await Seed.SeedData(context);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
