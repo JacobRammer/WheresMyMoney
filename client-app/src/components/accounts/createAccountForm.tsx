@@ -2,7 +2,6 @@ import {observer} from "mobx-react-lite";
 import {useForm} from '@mantine/form';
 import {Button, Group, Select, TextInput} from "@mantine/core";
 import {useStore} from "../../stores/store.ts";
-import {CashAccount} from "../../models/cashAccount.ts";
 import {v4 as uuidv4} from 'uuid';
 import {useState} from "react";
 import {CreditAccount} from "../../models/creditAccount.ts";
@@ -15,7 +14,7 @@ interface CreateAccountFormProps {
 export default observer(function CreateAccountForm({onCloseModal}: CreateAccountFormProps) {
 
     const {accountStore} = useStore();
-    const {createCashAccount, createLoanAccount, createCreditAccount} = accountStore;
+    const {createAccount, createLoanAccount, createCreditAccount} = accountStore;
     const [interestAccount, setShowInterestAccount] = useState<boolean>(false)
     
     function handleCloseModal() {
@@ -52,7 +51,8 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
     function handleFormSubmit(values: any) {
         if (values.accountType === "Checking" || values.accountType === "Savings") {
             const account = new CashAccount(uuidv4(), values.accountName, values.accountBalance, values.accountDescription, values.accountType);
-            createCashAccount(account).then(() => {})
+            createAccount(account).then(() => {
+            })
         }
 
         else if (values.accountType === "Credit") {

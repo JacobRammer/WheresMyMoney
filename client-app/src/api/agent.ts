@@ -1,8 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {BudgetCategory} from "../models/budgetCategory.ts";
-import {CashAccount} from "../models/cashAccount.ts";
-import {CreditAccount} from "../models/creditAccount.ts";
-import {LoanAccount} from "../models/loanAccount.ts";
+import {Account} from "../models/account.ts";
 
 axios.defaults.baseURL = 'http://localhost:5241/api';
 
@@ -24,16 +22,10 @@ const BudgetCategories = {
 }
 
 const FinanceAccounts = {
-    getCashAccounts: () => requests.get<CashAccount[]>('/CashAccount'),
-    getCreditAccounts: () => requests.get<CreditAccount[]>('/CreditAccount'),
-    getLoanAccounts: () => requests.get<LoanAccount[]>('/LoanAccount'),
-    createCashAccount: (account: CashAccount) => requests.post('/CashAccount', account),
-    createCreditAccount: (account: CreditAccount) => requests.post('/CreditAccount', account),
-    createLoanAccount: (account: LoanAccount) => requests.post('/LoanAccount', account),
-    deleteCashAccount: (id: string) => requests.del(`/CashAccount/${id}`),
-    deleteCreditAccount: (id: string) => requests.del(`/CreditAccount/${id}`),
-    deleteLoanAccount: (id: string) => requests.del(`/LoanAccount/${id}`),
-// (activity: ActivityFormValues) => requests.post('/activities', activity),
+    getAllAccounts: () => requests.get<Account[]>('/Account'),
+    getAccount: (id: string) => requests.get<Account>(`/Account/${id}`),
+    createAccount: (account: Account) => requests.post('/Account', account),
+    deleteAccount: (id: string) => requests.del(`/Account/${id}`),
 }
 
 const agent = {

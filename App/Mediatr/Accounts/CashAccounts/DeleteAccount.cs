@@ -4,9 +4,9 @@ using Domain.Models.Accounts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Mediatr.Accounts.LoanAccounts;
+namespace App.Mediatr.Accounts.CashAccounts;
 
-public class DeleteLoanAccount
+public class DeleteAccount
 {
     public class Command : IRequest<Result<Unit>>
     {
@@ -22,14 +22,13 @@ public class DeleteLoanAccount
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            LoanAccount account = await _context.LoanAccounts.FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
-            
+            Account account = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken);
+
             if (account != null)
                 _context.Remove(account);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);
         }
-
     }
 }

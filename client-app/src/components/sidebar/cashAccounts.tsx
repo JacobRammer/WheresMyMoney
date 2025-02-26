@@ -2,7 +2,7 @@ import {observer} from "mobx-react-lite";
 import {ChevronDown, ChevronRight} from "lucide-react";
 import {useStore} from "../../stores/store.ts";
 import {useState} from "react";
-import {CashAccount} from "../../models/cashAccount.ts";
+import {Account} from "../../models/account.ts";
 import {Box, Collapse, MantineProvider, NavLink, Text} from "@mantine/core";
 
 export default observer(function CashAccount() {
@@ -26,7 +26,7 @@ export default observer(function CashAccount() {
                                           
                 
                 <Collapse in={show} className='AccountSidebarDetails'>
-                    {flattenCashAccountRegistry().map((account: CashAccount) => (
+                    {flattenCashAccountRegistry().map((account: Account) => (
                         <NavLink href={`/Accounts/${account.id}`} key={account.id} className='SidebarLink'
                             label={<Text size='sm'>{account.name}</Text>}
                                  rightSection={<Box style={{backgroundColor: account.balance < 0 ? 'white' : 'transparent', borderRadius: '10px', padding: '1px'}}>

@@ -5,12 +5,12 @@ import {useEffect} from "react";
 import Links from "./links.tsx";
 import CreditAccounts from "./creditAccounts.tsx";
 import LoanAccounts from "./loanAccounts.tsx";
-import {Box, Center, Title, Text} from "@mantine/core";
+import {Box, Center, Text, Title} from "@mantine/core";
 
 export default observer(function Sidebar() {
     const {accountStore} = useStore();
-    const cashAccountRegistry = accountStore.cashAccountRegistry;
-    const loadCashAccounts = accountStore.loadCashAccounts;
+    const cashAccountRegistry = accountStore.accountRegistry;
+    const loadCashAccounts = accountStore.loadAccounts;
     const loadCreditAccounts = accountStore.loadCreditAccounts;
     const creditAccountRegistry = accountStore.creditAccountRegistry;
     const loanAccountRegistry = accountStore.loanAccountRegistry;
