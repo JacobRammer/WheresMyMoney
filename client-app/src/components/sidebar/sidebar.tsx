@@ -14,7 +14,7 @@ export default observer(function Sidebar() {
 
     useEffect(() => {
         if (accountRegistry.size === 0)
-            loadAccounts()
+            loadAccounts();
     }, []);
     return (
             <Box>

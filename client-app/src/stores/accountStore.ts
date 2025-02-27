@@ -120,4 +120,8 @@ export default class AccountStore {
     getLoanAccounts = () => {
         return Array.from(this.accountRegistry.values()).filter(account => account.accountType === Loan);
     }
+
+    getAllAccounts = () => {
+        return Array.from(this.accountRegistry.values());
+    }
 }
