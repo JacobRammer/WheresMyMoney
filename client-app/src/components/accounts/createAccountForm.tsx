@@ -1,12 +1,11 @@
 import {observer} from "mobx-react-lite";
-import {useForm} from '@mantine/form';
-import {Button, Group, Select, TextInput} from "@mantine/core";
+import {Button, Flex, Group, Select, Text, TextInput, Tooltip} from "@mantine/core";
 import {useStore} from "../../stores/store.ts";
-import {CashAccount} from "../../models/cashAccount.ts";
-import {v4 as uuidv4} from 'uuid';
 import {useState} from "react";
-import {CreditAccount} from "../../models/creditAccount.ts";
-import {LoanAccount} from "../../models/loanAccount.ts";
+import {useForm} from "@mantine/form";
+import {Account} from "../../models/account.ts";
+import {v4 as uuidv4} from 'uuid';
+import {CircleHelp} from "lucide-react";
 
 interface CreateAccountFormProps {
     onCloseModal?: () => void
@@ -15,9 +14,10 @@ interface CreateAccountFormProps {
 export default observer(function CreateAccountForm({onCloseModal}: CreateAccountFormProps) {
 
     const {accountStore} = useStore();
-    const {createCashAccount, createLoanAccount, createCreditAccount} = accountStore;
+    const {createAccount} = accountStore;
+    // const {createAccount, createLoanAccount, createCreditAccount} = accountStore;
     const [interestAccount, setShowInterestAccount] = useState<boolean>(false)
-    
+
     function handleCloseModal() {
         if (form.isValid()) {
             if (onCloseModal) {
@@ -42,6 +42,12 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
             accountType: (value: string) => value.length !== 0 ? null : 'Account type is required',
             accountBalance: (value: number) => value.toString().length !== 0 ? null : 'Account balance is required',
 
+            interestRate: (value: number) =>
+                interestAccount && value <= 0 ? 'Interest rate must be greater than 0' : null,
+            monthlyPayment: (value: number) =>
+                interestAccount && value < 0 ? 'Monthly payment must be 0 or greater' : null,
+            accountDescription: (value: string) =>
+                value.length > 255 ? 'Description must be 255 characters or less' : null
         },
     });
 
@@ -50,37 +56,28 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
     });
 
     function handleFormSubmit(values: any) {
-        if (values.accountType === "Checking" || values.accountType === "Savings") {
-            const account = new CashAccount(uuidv4(), values.accountName, values.accountBalance, values.accountDescription, values.accountType);
-            createCashAccount(account).then(() => {})
-        }
-
-        else if (values.accountType === "Credit") {
-            const account = new CreditAccount(uuidv4(), values.accountName, 
-                values.accountBalance, values.monthlyPayment, 
-                values.accountDescription, values.accountType, values.interestRate);
-            createCreditAccount(account).then(() => {})
-        }
-
-        else if (values.accountType === "Loan") {
-            const account = new LoanAccount(uuidv4(), values.accountName,
-                values.accountBalance, values.monthlyPayment,
-                values.accountDescription, values.accountType, values.interestRate);
-            createLoanAccount(account).then(() => {})
-        }
-        
-
+        const account = new Account(
+            uuidv4(), // Generate a unique ID
+            values.accountName, // Assign the account name from form values
+            values.accountBalance, // Assign the account balance from form values
+            values.accountType, // Assign the account type from form values
+            values.accountDescription || '', // Assign the optional account description
+            values.interestRate || 0, // Assign the optional interest rate
+            values.monthlyPayment || 0 // Assign the optional monthly payment
+        );
+        createAccount(account).then(() => {
+        })
     }
 
     return (
         <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
             <TextInput name="fuckoff_safaris_search"
-                    withAsterisk
-                    label="Account Name"
-                    placeholder="Checking Account"
-                    key={form.key('accountName')}
-                    type="text" autoComplete="off"
-                    {...form.getInputProps('accountName')}
+                       withAsterisk
+                       label="Account Name"
+                       placeholder="Checking Account"
+                       key={form.key('accountName')}
+                       type="text" autoComplete="off"
+                       {...form.getInputProps('accountName')}
             />
 
             <TextInput
@@ -109,8 +106,16 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
 
             {interestAccount &&
                 <TextInput
-                    label="Monthly Payment"
-                    withAsterisk
+                    label={
+                        <Flex align='center'>
+                            <Text>Monthly Payment</Text>
+                            <Tooltip label="The monthly payment for this account. If this is a dynamic value (such 
+                            as a credit card, it can be left blank as it will get set with your monthly budget.)">
+                                <CircleHelp size={15} style={{marginLeft: '10px'}}/>
+                            </Tooltip>
+                        </Flex>
+                    }
+
                     key={form.key('monthlyPayment')}
                     type="number" autoComplete="off"
                     {...form.getInputProps('monthlyPayment')}
@@ -126,7 +131,7 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
                     {...form.getInputProps('interestRate')}
                 />
             }
-            
+
             <Group justify="flex-end" mt="md">
                 <Button type="submit" onClick={handleCloseModal}>Create Account</Button>
             </Group>

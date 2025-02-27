@@ -1,22 +1,22 @@
 import {observer} from "mobx-react-lite";
 import {Box, Button, Group, Text} from "@mantine/core";
 import {useStore} from "../../stores/store.ts";
-import {AccountBase} from "../../models/accountBase.ts";
+import {Account} from "../../models/account.ts";
 
 interface CreateAccountFormProps {
     onCloseModal?: () => void;
-    account: AccountBase;
+    account: Account;
 }
 export default observer(function DeleteAccountModal({onCloseModal, account}: CreateAccountFormProps) {
     const {accountStore} = useStore();
     const deleteAccount = accountStore.deleteAccount;
 
     function handleCloseModal() {
-         deleteAccount(account.accountType, account.id).then(() => {
-             if (onCloseModal) {
-                 onCloseModal()
-             }
-         });
+        deleteAccount(account.id).then(() => {
+            if (onCloseModal) {
+                onCloseModal()
+            }
+        });
     }
     return (
         <Box>
