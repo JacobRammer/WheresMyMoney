@@ -36,15 +36,15 @@ body, html {
     flex-grow: 1;
 }
 
-.AccountDashboardTitleBar {
+.DetailHeaderWithUnderline {
     border-bottom: 1px solid rgb(238, 224, 203);
 }
 
-.AccountDashboardTitleBarDetails {
+.DetailHeaderDetailsWithMargin {
     margin: 10px;
 }
 
-.AccountDashboard {
+.DetailsPage {
     flex-grow: 1;
 }
 
@@ -74,7 +74,7 @@ body, html {
     margin-left: 20px;
 }
 
-.AccountDashboardAddAccount {
+.AddActionCircle {
     position: fixed;
     bottom: 30px;
     right: 30px;

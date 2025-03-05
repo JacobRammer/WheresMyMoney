@@ -31,7 +31,7 @@ export default observer(function AccountList({accounts, header, balance}: Props)
                 
                 <Collapse in={show} className='AccountSidebarDetails'>
                     {accounts.map((account: Account) => (
-                        <NavLink href={`/Accounts/${account.id}`} key={account.id} className='SidebarLink'
+                        <NavLink href={`/account/${account.id}`} key={account.id} className='SidebarLink'
                             label={<Text size='sm'>{account.name}</Text>}
                                  rightSection={<Box style={{backgroundColor: account.balance < 0 ? 'white' : 'transparent', borderRadius: '10px', padding: '1px'}}>
                                  <Text size='sm' c={account.balance < 0 ? 'red' : 'black'}

@@ -26,16 +26,24 @@ export default observer(function accountTable() {
 
     const rows = getAllAccounts().map((account: Account) => (
         <Table.Tr key={account.id}>
-            <Table.Td onClick={() => useBoxForNavigation(account.id)} style={{cursor: "pointer"}}>
+            <Table.Td onClick={() => {
+                useBoxForNavigation(account)
+            }} style={{cursor: "pointer"}}>
                 <Text fw={500}>{account.name}</Text>
             </Table.Td>
-            <Table.Td onClick={() => useBoxForNavigation(account.id)} style={{cursor: "pointer"}}>
+            <Table.Td onClick={() => {
+                useBoxForNavigation(account)
+            }} style={{cursor: "pointer"}}>
                 <Text fw={500}>{account.accountType}</Text>
             </Table.Td>
-            <Table.Td onClick={() => useBoxForNavigation(account.id)} style={{cursor: "pointer"}}>
+            <Table.Td onClick={() => {
+                useBoxForNavigation(account)
+            }} style={{cursor: "pointer"}}>
                 <Text fw={500}>{account.description}</Text>
             </Table.Td>
-            <Table.Td onClick={() => useBoxForNavigation(account.id)} style={{cursor: "pointer"}}>
+            <Table.Td onClick={() => {
+                useBoxForNavigation(account)
+            }} style={{cursor: "pointer"}}>
                 <Text fw={500} c={account.balance < 0 ? 'red' : 'black'}>
                     {account.balance}
                 </Text>
@@ -83,7 +91,6 @@ export default observer(function accountTable() {
     )
 })
 
-function useBoxForNavigation(id: string) {
-    // Here you can write all the code that should happen before the redirect.
-    window.location.href = `/accounts/${id}`;
+function useBoxForNavigation(account: Account) {
+    window.location.href = `/account/${account.id}`;
 }
