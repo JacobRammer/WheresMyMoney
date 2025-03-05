@@ -1,7 +1,7 @@
 import {observer} from "mobx-react-lite";
 import {useStore} from "../../stores/store.ts";
 import Sidebar from "../sidebar/sidebar.tsx";
-import {Box, Flex, MantineProvider, Title, Text, Tooltip, Modal} from "@mantine/core";
+import {Box, Flex, MantineProvider, Modal, Text, Title, Tooltip} from "@mantine/core";
 import {useEffect} from "react";
 import {CircleHelp, CirclePlus, Smile} from "lucide-react";
 import AccountTable from "./accountTable.tsx";
@@ -26,9 +26,9 @@ export default observer(function AccountDashboard() {
         <MantineProvider >
             <Flex>
                 <Sidebar/>
-                <Box className='AccountDashboard'>
-                    <Box className='AccountDashboardTitleBar'>
-                        <Box className='AccountDashboardTitleBarDetails'>
+                <Box className='DetailsPage'>
+                    <Box className='DetailHeaderWithUnderline'>
+                        <Box className='DetailHeaderDetailsWithMargin'>
                             <Title order={2}>Account Dashboard</Title>
                             <Flex align='center'>
                                 <Text>Available cash: ${cashBalance}</Text>
@@ -56,10 +56,10 @@ export default observer(function AccountDashboard() {
 
                     <AccountTable/>
                     <Tooltip label="Add account" position="top-start">
-                        <CirclePlus size={40} className="AccountDashboardAddAccount" onClick={open}/>
+                        <CirclePlus size={40} className="AddActionCircle" onClick={open}/>
                     </Tooltip>
 
-                    <Modal opened={opened} onClose={close} title="Add Account" centered>
+                    <Modal opened={opened} onClose={close} title="Add Account" centered closeOnClickOutside={false}>
                         <CreateAccountForm onCloseModal={close}/>
                     </Modal>
                 </Box>
