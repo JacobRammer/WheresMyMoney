@@ -1,4 +1,5 @@
 using Domain.Enums;
+using Domain.Models.Transactions;
 
 namespace Domain.Models.DTOs.Accounts;
 
@@ -38,4 +39,9 @@ public class AccountDto
     /// The required monthly payment
     /// </summary>
     public double MonthlyPayment { get; set; }
+
+    /// <summary>
+    /// The list of <see cref="Transaction"/>
+    /// </summary>
+    public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }

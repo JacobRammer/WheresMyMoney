@@ -29,7 +29,8 @@ namespace App.Mediatr.Accounts.CashAccounts
             // Access the db to get items
             public async Task<Result<AccountDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                AccountDto account = await _context.Accounts.ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
+                AccountDto account = await _context.Accounts
+                    .ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
 
                 return Result<AccountDto>.Success(account);

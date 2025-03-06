@@ -28,7 +28,8 @@ public class GetAllAccounts
         // Access the db to get items
         public async Task<Result<List<AccountDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            List<AccountDto> accounts = await _context.Accounts.ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
+            List<AccountDto> accounts = await _context.Accounts
+                .ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken: cancellationToken);
             return Result<List<AccountDto>>.Success(accounts);
         }
