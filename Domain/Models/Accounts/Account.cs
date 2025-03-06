@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Domain.Enums;
+using Domain.Models.Transactions;
 
 namespace Domain.Models.Accounts;
 
@@ -46,4 +47,12 @@ public class Account
     /// The required monthly payment
     /// </summary>
     public double? MonthlyPayment { get; set; }
+
+    public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+
+    public void AddTransaction(Transaction transaction)
+    {
+        Transactions.Add(transaction);
+        this.Balance += transaction.Amount;
+    }
 }

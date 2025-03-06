@@ -47,13 +47,13 @@ export default class AccountStore {
 
         if (account.accountType === Savings ||
             account.accountType === Checking) {
-            this.cashBalance += parseInt(account.balance.toString())
+            this.cashBalance += parseFloat(account.balance.toString())
         }
 
         if (account.accountType === Credit) {
-            this.creditBalance += parseInt(account.balance.toString())
+            this.creditBalance += parseFloat(account.balance.toString())
         } else if (account.accountType === Loan) {
-            this.loanBalance += parseInt(account.balance.toString())
+            this.loanBalance += parseFloat(account.balance.toString())
         }
     }
 
@@ -63,13 +63,13 @@ export default class AccountStore {
 
         if (account.accountType === Savings ||
             account.accountType === Checking) {
-            this.cashBalance -= parseInt(account.balance.toString())
+            this.cashBalance -= parseFloat(account.balance.toString())
         }
 
         if (account.accountType === Credit) {
-            this.creditBalance -= parseInt(account.balance.toString())
+            this.creditBalance -= parseFloat(account.balance.toString())
         } else if (account.accountType === Loan) {
-            this.loanBalance -= parseInt(account.balance.toString())
+            this.loanBalance -= parseFloat(account.balance.toString())
         }
     }
 
