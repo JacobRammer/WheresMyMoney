@@ -2,26 +2,31 @@ import {observer} from "mobx-react-lite";
 import {ActionIcon, Box, Modal, Table, Text, Tooltip} from "@mantine/core";
 import {Account} from "../../models/account.ts";
 import {useStore} from "../../stores/store.ts";
-import {useDisclosure} from "@mantine/hooks";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Pencil, Trash2} from "lucide-react";
 import DeleteAccountModal from "./deleteAccountModal.tsx";
+import EditAccount from "./editAccount.tsx";
 
 export default observer(function accountTable() {
     const {accountStore} = useStore();
-    const {accountRegistry, getAllAccounts} = accountStore;
+    const {getAllAccounts} = accountStore;
 
-    const [opened, {open, close}] = useDisclosure(false);
+    const [deleteModalState, setDeleteModalState] = useState(false);
+
+    const [editModalState, setEditModalState] = useState(false);
 
     const [account, setAccount] = useState(new Account("", "", 0, "", ""));
 
-    useEffect(() => {
+    // Sets the delete modal open state and sets the current account
+    function SetupDeleteAccountModal(accountToDelete: Account) {
+        setDeleteModalState(true);
+        setAccount(accountToDelete);
+    }
 
-    }, [accountRegistry.size])
-
-    function SetupDeleteAccountModal(accountBase: Account) {
-        open();
-        setAccount(accountBase);
+    // Set the edit modal open state and sets the current account
+    function SetupEditAccountModal(accountToEdit: Account) {
+        setEditModalState(true);
+        setAccount(accountToEdit);
     }
 
     const rows = getAllAccounts().map((account: Account) => (
@@ -59,7 +64,8 @@ export default observer(function accountTable() {
 
                     <Tooltip label="Edit account" position="top-start">
                         <ActionIcon size={30}>
-                            <Pencil style={{width: '70%', height: '70%'}}/>
+                            <Pencil style={{width: '70%', height: '70%'}}
+                                    onClick={() => SetupEditAccountModal(account)}/>
                         </ActionIcon>
                     </Tooltip>
                 </Box>
@@ -83,9 +89,15 @@ export default observer(function accountTable() {
                 <Table.Tbody>{rows}</Table.Tbody>
             </Table>
 
-            <Modal opened={opened} onClose={close} title="Delete Account" centered>
-                <DeleteAccountModal onCloseModal={close} account={account}/>
+
+            <Modal opened={deleteModalState} onClose={() => setDeleteModalState(false)} title="Delete Account" centered>
+                <DeleteAccountModal account={account} onCloseModal={() => setDeleteModalState(false)}/>
             </Modal>
+
+            <Modal opened={editModalState} onClose={() => setEditModalState(false)} title="Edit Account" centered>
+                <EditAccount onCloseModal={() => setEditModalState(false)} accountToEdit={account}/>
+            </Modal>
+           
         </Box>
 
     )

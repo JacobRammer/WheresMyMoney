@@ -1,21 +1,19 @@
 import {observer} from "mobx-react-lite";
-import {Button, Flex, Group, Select, Text, TextInput, Tooltip} from "@mantine/core";
 import {useStore} from "../../stores/store.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useForm} from "@mantine/form";
 import {Account} from "../../models/account.ts";
-import {v4 as uuidv4} from 'uuid';
+import {Button, Flex, Group, Text, TextInput, Tooltip} from "@mantine/core";
 import {CircleHelp} from "lucide-react";
 
-interface CreateAccountFormProps {
-    onCloseModal?: () => void
+interface EditAccountProps {
+    onCloseModal: () => void
+    accountToEdit: Account
 }
 
-export default observer(function CreateAccountForm({onCloseModal}: CreateAccountFormProps) {
-
+export default observer(function EditAccount({onCloseModal, accountToEdit}: EditAccountProps) {
     const {accountStore} = useStore();
-    const {createAccount} = accountStore;
-    // const {createAccount, createLoanAccount, createCreditAccount} = accountStore;
+    const {editAccount} = accountStore;
     const [interestAccount, setShowInterestAccount] = useState<boolean>(false)
 
     function handleCloseModal() {
@@ -26,15 +24,19 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
         }
     }
 
+    useEffect(() => {
+        setShowInterestAccount(accountToEdit.accountType === "Loan" || accountToEdit.accountType === "Credit")
+    });
+
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
-            accountName: '',
-            accountBalance: 0,
-            accountType: '',
-            accountDescription: '',
-            monthlyPayment: 0,
-            interestRate: 0
+            accountName: accountToEdit.name,
+            accountBalance: accountToEdit.balance,
+            accountType: accountToEdit.accountType,
+            accountDescription: accountToEdit.description || '',
+            monthlyPayment: accountToEdit.monthlyPayment || 0,
+            interestRate: accountToEdit.interestRate || 0,
         },
 
         validate: {
@@ -51,21 +53,19 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
         },
     });
 
-    form.watch('accountType', ({value}) => {
-        setShowInterestAccount(value === "Loan" || value === "Credit")
-    });
-
     function handleFormSubmit(values: any) {
+
         const account = new Account(
-            uuidv4(), // Generate a unique ID
-            values.accountName, // Assign the account name from form values
-            values.accountBalance, // Assign the account balance from form values
-            values.accountType, // Assign the account type from form values
-            values.accountDescription || '', // Assign the optional account description
-            values.interestRate || 0, // Assign the optional interest rate
-            values.monthlyPayment || 0 // Assign the optional monthly payment
-        );
-        createAccount(account).then(() => {
+            accountToEdit.id,
+            values.accountName,
+            accountToEdit.balance,
+            accountToEdit.accountType,
+            values.accountDescription || '',
+            values.interestRate,
+            values.monthlyPayment,
+        )
+
+        editAccount(account).then(() => {
         })
     }
 
@@ -86,22 +86,6 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
                 key={form.key('accountDescription')}
                 type="text" autoComplete="off"
                 {...form.getInputProps('accountDescription')}
-            />
-
-            <TextInput
-                label="Account Balance"
-                withAsterisk
-                key={form.key('accountBalance')}
-                type="number" autoComplete="off"
-                {...form.getInputProps('accountBalance')}
-            />
-
-            <Select
-                label="Account Type"
-                withAsterisk
-                placeholder="Account Type"
-                data={['Checking', "Savings", 'Credit', 'Loan']}
-                {...form.getInputProps('accountType')}
             />
 
             {interestAccount &&
@@ -136,7 +120,7 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
                 <Button onClick={onCloseModal} variant="default">
                     Cancel
                 </Button>
-                <Button type="submit" onClick={handleCloseModal}>Create Account</Button>
+                <Button type="submit" onClick={handleCloseModal}>Update Account</Button>
             </Group>
 
         </form>

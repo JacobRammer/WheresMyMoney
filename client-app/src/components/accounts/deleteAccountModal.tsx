@@ -4,10 +4,11 @@ import {useStore} from "../../stores/store.ts";
 import {Account} from "../../models/account.ts";
 
 interface CreateAccountFormProps {
-    onCloseModal?: () => void;
     account: Account;
+    onCloseModal?: () => void;
 }
-export default observer(function DeleteAccountModal({onCloseModal, account}: CreateAccountFormProps) {
+
+export default observer(function DeleteAccountModal({account, onCloseModal}: CreateAccountFormProps) {
     const {accountStore} = useStore();
     const deleteAccount = accountStore.deleteAccount;
 
@@ -18,18 +19,26 @@ export default observer(function DeleteAccountModal({onCloseModal, account}: Cre
             }
         });
     }
+
+    function handleModalClose() {
+        if (onCloseModal) {
+            onCloseModal()
+        }
+    }
     return (
+
         <Box>
-            <Text>Are you sure you want to delete account {account.name}? This action cannot be undone.</Text>
+            <Text>
+                {`Are you sure you want to delete account ${account?.name}? This action cannot be undone.`}
+            </Text>
             <Group mt="lg" justify="flex-end">
-                <Button onClick={onCloseModal} variant="default">
+                <Button onClick={handleModalClose} variant="default">
                     Cancel
                 </Button>
-                <Button onClick={() => handleCloseModal()} color="red">
+                <Button onClick={handleCloseModal} color="red">
                     Delete
                 </Button>
             </Group>
         </Box>
-            
     )
 })
