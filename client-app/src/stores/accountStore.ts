@@ -64,9 +64,7 @@ export default class AccountStore {
         if (account.accountType === Savings ||
             account.accountType === Checking) {
             this.cashBalance -= parseFloat(account.balance.toString())
-        }
-
-        if (account.accountType === Credit) {
+        } else if (account.accountType === Credit) {
             this.creditBalance -= parseFloat(account.balance.toString())
         } else if (account.accountType === Loan) {
             this.loanBalance -= parseFloat(account.balance.toString())
@@ -91,6 +89,17 @@ export default class AccountStore {
             this.addSumToAccountBalance(account);
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    editAccount = async (account: Account) => {
+        try {
+            await agent.FinanceAccounts.editAccount(account);
+            runInAction(() => {
+                this.accountRegistry.set(account.id, account);
+            })
+        } catch (error) {
+            console.log(error);
         }
     }
 

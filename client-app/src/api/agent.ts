@@ -25,6 +25,7 @@ const FinanceAccounts = {
     getAllAccounts: () => requests.get<Account[]>('/Account'),
     getAccount: (id: string) => requests.get<Account>(`/Account/${id}`),
     createAccount: (account: Account) => requests.post('/Account', account),
+    editAccount: (account: Account) => requests.put('/Account', account),
     deleteAccount: (id: string) => requests.del(`/Account/${id}`),
 }
 
