@@ -1,6 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import {BudgetCategory} from "../models/budgetCategory.ts";
 import {Account} from "../models/account.ts";
+import {Transaction} from "../models/transaction.ts";
 
 axios.defaults.baseURL = 'http://localhost:5241/api';
 
@@ -29,9 +30,15 @@ const FinanceAccounts = {
     deleteAccount: (id: string) => requests.del(`/Account/${id}`),
 }
 
+const Transactions = {
+    deleteTransaction: (id: string) => requests.del(`/Transaction/${id}`),
+    addTransaction: (transaction: Transaction) => requests.post('/Transaction', transaction)
+}
+
 const agent = {
     BudgetCategories,
-    FinanceAccounts
+    FinanceAccounts,
+    Transactions
 }
 
 export default agent;

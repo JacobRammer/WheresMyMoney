@@ -2,23 +2,26 @@ import {observer} from "mobx-react-lite";
 import {useStore} from "../../stores/store.ts";
 import {useParams} from "react-router-dom";
 import Sidebar from "../sidebar/sidebar.tsx";
-import {Box, Flex, MantineProvider, Text, Title, Tooltip} from "@mantine/core";
+import {Box, Flex, MantineProvider, Modal, Text, Title, Tooltip} from "@mantine/core";
 import {CircleHelp, CirclePlus} from "lucide-react";
 import {useEffect, useState} from "react";
 import {Account} from "../../models/account.ts";
+import AccountTransactionDetails from "./transactions/accountTransactionDetails.tsx";
+import AddTransactionForm from "./transactions/addTransactionForm.tsx";
 
 export default observer(function AccountDetails() {
     const {accountStore} = useStore();
-    const {accountRegistry} = accountStore;
+    const {accountRegistry, numberOfTransactions} = accountStore;
     const {id} = useParams()
 
+    const [addTransactionSate, setAddTransactionModalState] = useState(false);
     const [account, setAccount] = useState(new Account("", "", 0, "", ""));
 
     useEffect(() => {
         const tempAccount = accountRegistry.get(id!);
         if (id !== undefined && tempAccount !== undefined)
             setAccount(tempAccount!);
-    }, [id, accountRegistry.size]);
+    }, [id, accountRegistry.size, numberOfTransactions]);
     return (
         <MantineProvider>
             <Flex>
@@ -40,11 +43,20 @@ export default observer(function AccountDetails() {
                             </Flex>
                         </Box>
                     </Box>
+
+                    <AccountTransactionDetails account={account}/>
                 </Box>
 
                 <Tooltip label="Add Transaction" position="top-start">
-                    <CirclePlus size={40} className="AddActionCircle"/>
+                    <CirclePlus size={40} className="AddActionCircle"
+                                onClick={() => setAddTransactionModalState(true)}/>
                 </Tooltip>
+
+                <Modal opened={addTransactionSate} onClose={() => setAddTransactionModalState(false)}
+                       title="Add Transaction" centered>
+                    <AddTransactionForm onCloseModal={() => setAddTransactionModalState(false)} transaction={undefined}
+                                        accountId={account.id}/>
+                </Modal>
             </Flex>
         </MantineProvider>
     )

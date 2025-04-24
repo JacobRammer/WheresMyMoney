@@ -71,7 +71,7 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
 
     return (
         <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
-            <TextInput name="fuckoff_safaris_search"
+            <TextInput name="account"
                        withAsterisk
                        label="Account Name"
                        placeholder="Checking Account"
