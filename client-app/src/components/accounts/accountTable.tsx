@@ -50,7 +50,7 @@ export default observer(function accountTable() {
                 useBoxForNavigation(account)
             }} style={{cursor: "pointer"}}>
                 <Text fw={500} c={account.balance < 0 ? 'red' : 'black'}>
-                    {account.balance}
+                    ${account.balance}
                 </Text>
             </Table.Td>
             <Table.Td ta="right" width={50}>
@@ -75,7 +75,6 @@ export default observer(function accountTable() {
 
     return (
         <Box>
-            <Text></Text>
             <Table horizontalSpacing="lg" verticalSpacing="xs" striped highlightOnHover withColumnBorders
                    withTableBorder>
                 <Table.Thead>

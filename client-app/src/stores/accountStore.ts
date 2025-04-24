@@ -1,6 +1,7 @@
 import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent.ts";
 import {Account} from "../models/account.ts";
+import {Transaction} from "../models/transaction.ts";
 
 const Savings = "Savings";
 const Checking = "Checking";
@@ -11,6 +12,7 @@ export default class AccountStore {
     cashBalance: number = 0;
     creditBalance: number = 0;
     loanBalance: number = 0;
+    numberOfTransactions: number = 0;
 
 
     constructor() {
@@ -31,7 +33,7 @@ export default class AccountStore {
             account.forEach((account: Account) => {
                 this.setAccountRegistry(account);
                 runInAction(() => {
-                    this.addSumToAccountBalance(account);
+                    this.sumAccountBalances(account);
                 });
             })
             // this.setLoadingInitial(false);
@@ -41,7 +43,7 @@ export default class AccountStore {
         }
     }
 
-    private addSumToAccountBalance = (account: Account) => {
+    private sumAccountBalances = (account: Account) => {
         // Why JS concatenates numbers instead of adding, I got no fucking clue
         // So we have to convert to a string for it to actually add, lmfao
 
@@ -86,7 +88,7 @@ export default class AccountStore {
         try {
             await agent.FinanceAccounts.createAccount(account);
             runInAction(() => this.accountRegistry.set(account.id, account));
-            this.addSumToAccountBalance(account);
+            this.sumAccountBalances(account);
         } catch (error) {
             console.log(error)
         }
@@ -116,6 +118,24 @@ export default class AccountStore {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    // Delete the transaction from the account and update the registry
+    deleteTransaction = async (accountId: string, transaction: Transaction) => {
+        try {
+            await agent.Transactions.deleteTransaction(transaction.id);
+            const updatedAccount = await agent.FinanceAccounts.getAccount(accountId);
+            runInAction(() => {
+                this.accountRegistry.set(accountId, updatedAccount);
+                this.numberOfTransactions++;
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    createTransaction = async (transaction: Transaction) => {
+
     }
 
     getCashAccounts = () => {

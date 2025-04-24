@@ -1,3 +1,5 @@
+import {Transaction} from "./transaction.ts";
+
 export interface Account {
     id: string;
     name: string;
@@ -6,6 +8,7 @@ export interface Account {
     accountType: string;
     interestRate?: number;
     monthlyPayment?: number;
+    transactions: Transaction[];
 }
 
 export class Account implements Account {
@@ -17,7 +20,8 @@ export class Account implements Account {
         accountType: string,
         description?: string,
         interestRate?: number,
-        monthlyPayment?: number
+        monthlyPayment?: number,
+        transactions?: Transaction[],
     ) {
         this.id = id;
         this.name = name;
@@ -26,5 +30,6 @@ export class Account implements Account {
         this.interestRate = interestRate;
         this.monthlyPayment = monthlyPayment;
         this.accountType = accountType;
+        this.transactions = transactions ?? [];
     }
 }
