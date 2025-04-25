@@ -1,7 +1,8 @@
 import {observer} from "mobx-react-lite";
 import "./styling/styles.css";
-import {MantineProvider, Center, Button} from "@mantine/core";
+import {Button, Center, MantineProvider} from "@mantine/core";
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 
 
 export default observer(function App() {

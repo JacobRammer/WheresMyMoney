@@ -27,9 +27,11 @@ export default observer(function Sidebar() {
                     <Box className='SidebarLinkComponent'>
                         <Links/>
                     </Box>
-                    {getCashAccounts().length !== 0 &&
-                        <AccountList header="Cash" accounts={getCashAccounts()} balance={cashBalance}/>
-                        }
+                    {getCashAccounts().length !== 0 && (
+                        <>
+                            <AccountList header="Cash" accounts={getCashAccounts()} balance={cashBalance}/>
+                        </>
+                    )}
                     {getCreditAccounts().length !== 0 &&
                         <AccountList header="Credit" accounts={getCreditAccounts()} balance={creditBalance}/>
                         }

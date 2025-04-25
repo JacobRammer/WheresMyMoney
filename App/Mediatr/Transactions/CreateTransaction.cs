@@ -31,8 +31,6 @@ public class CreateTransaction
             Account account = await _context.Accounts.Include(t => t.Transactions)
                 .FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
 
-            request.Transaction.Id = Guid.NewGuid();
-
             account.AddTransaction(request.Transaction);
             _context.Transactions.Add(request.Transaction);
             await _context.SaveChangesAsync(cancellationToken);

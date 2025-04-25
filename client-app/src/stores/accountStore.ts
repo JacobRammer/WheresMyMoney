@@ -134,8 +134,17 @@ export default class AccountStore {
         }
     }
 
-    createTransaction = async (transaction: Transaction) => {
-
+    createTransaction = async (account: Account, transaction: Transaction) => {
+        try {
+            await agent.Transactions.addTransaction(transaction);
+            const updatedAccount = await agent.FinanceAccounts.getAccount(account.id);
+            runInAction(() => {
+                this.accountRegistry.set(account.id, updatedAccount);
+                this.numberOfTransactions++;
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     getCashAccounts = () => {

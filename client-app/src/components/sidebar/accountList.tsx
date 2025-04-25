@@ -1,8 +1,9 @@
 import {observer} from "mobx-react-lite";
 import {ChevronDown, ChevronRight} from "lucide-react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Account} from "../../models/account.ts";
 import {Box, Collapse, MantineProvider, NavLink, Text} from "@mantine/core";
+import {useStore} from "../../stores/store.ts";
 
 interface Props {
     accounts: Account[];
@@ -13,6 +14,13 @@ interface Props {
 export default observer(function AccountList({accounts, header, balance}: Props) {
     const [show, setShow] = useState(true);
     const handleToggle = () => setShow(!show);
+
+    const {accountStore} = useStore();
+    const {numberOfTransactions} = accountStore;
+
+    useEffect(() => {
+
+    }, [numberOfTransactions]);
     return (
         <MantineProvider >
             <Box className='SidebarLinkComponent'>

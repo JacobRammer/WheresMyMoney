@@ -55,7 +55,7 @@ export default observer(function AccountDetails() {
                 <Modal opened={addTransactionSate} onClose={() => setAddTransactionModalState(false)}
                        title="Add Transaction" centered>
                     <AddTransactionForm onCloseModal={() => setAddTransactionModalState(false)} transaction={undefined}
-                                        accountId={account.id}/>
+                                        account={account}/>
                 </Modal>
             </Flex>
         </MantineProvider>

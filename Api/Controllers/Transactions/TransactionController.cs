@@ -55,12 +55,12 @@ public class TransactionController : BaseApiController
         }));
     }
 
-    [HttpPost("{id}")]
-    public async Task<IActionResult> CreateTransaction(Guid id, Transaction transaction)
+    [HttpPost]
+    public async Task<IActionResult> CreateTransaction(Transaction transaction)
     {
         return HandleResults(await Mediator.Send(new CreateTransaction.Command
         {
-            Id = id,
+            Id = transaction.AccountId,
             Transaction = transaction
         }));
     }
