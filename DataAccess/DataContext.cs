@@ -1,5 +1,6 @@
 using Domain.Models.Accounts;
 using Domain.Models.BudgetGroup;
+using Domain.Models.Category;
 using Domain.Models.Transactions;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,4 +24,14 @@ public class DataContext(DbContextOptions options) : DbContext(options)
     /// The <see cref="Transaction"/> db table
     /// </summary>
     public DbSet<Transaction> Transactions { get; set; }
+
+    /// <summary>
+    /// The <see cref="Category"/> db table
+    /// </summary>
+    public DbSet<BudgetGroup> BudgetGroups { get; set; }
+
+    /// <summary>
+    /// The <see cref="Category"/> db table
+    /// </summary>
+    public DbSet<Category> Categories { get; set; }
 }

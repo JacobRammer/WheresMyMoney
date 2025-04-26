@@ -64,7 +64,31 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("BudgetGroup");
+                });
+
+            modelBuilder.Entity("Domain.Models.Category.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Inflow")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Outflow")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Target")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>
