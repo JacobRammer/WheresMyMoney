@@ -1,6 +1,7 @@
 using App.Core;
 using AutoMapper;
 using DataAccess;
+using Domain.Models.Accounts;
 using Domain.Models.Transactions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +36,28 @@ public class UpdateTransaction
                 await _context.Transactions.FirstOrDefaultAsync(t => t.Id == request.Transaction.Id,
                     cancellationToken: cancellationToken);
 
+
             if (transaction != null)
+            {
+                // If the amount of the transaction changes, update the difference between the
+                // old and new amount
+
+                if (transaction.Amount != request.Transaction.Amount)
+                {
+                    Account account =
+                        await _context.Accounts.FirstOrDefaultAsync(a => a.Id == transaction.AccountId,
+                            cancellationToken);
+
+                    double difference = transaction.Amount - request.Transaction.Amount;
+
+                    if (difference < 0)
+                        account.Balance += Math.Abs(difference);
+                    else
+                        account.Balance -= Math.Abs(difference);
+                }
+
                 _mapper.Map(request.Transaction, transaction);
+            }
 
             await _context.SaveChangesAsync(cancellationToken);
 

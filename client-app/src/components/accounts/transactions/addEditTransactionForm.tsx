@@ -1,4 +1,5 @@
 import {observer} from "mobx-react-lite";
+import {runInAction} from "mobx";
 import {Transaction} from "../../../models/transaction.ts";
 import {useStore} from "../../../stores/store.ts";
 import {useForm} from "@mantine/form";
@@ -18,9 +19,9 @@ interface AddTransactionProps {
 
 export default observer(function AddTransactionForm({onCloseModal, transaction, account}: AddTransactionProps) {
     const {accountStore} = useStore();
-    const {createTransaction} = accountStore;
+    const {createTransaction, updateTransaction} = accountStore;
 
-    const [transactionDate, setTransactionDate] = useState<Date>(new Date());
+    const [transactionDate, setTransactionDate] = useState<Date>(transaction ? new Date(transaction.date) : new Date());
 
     const outflowTooltip = (
         <Tooltip
@@ -43,9 +44,9 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
-            title: '',
-            inflow: '',
-            outflow: ''
+            title: transaction?.title ?? '',
+            inflow: transaction?.amount && transaction.amount > 0 ? transaction.amount.toString() : '',
+            outflow: transaction?.amount && transaction.amount < 0 ? Math.abs(transaction.amount).toString() : ''
         },
 
         validate: {
@@ -55,15 +56,27 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
 
     function handleFormSubmit(values: any) {
         if (form.isValid()) {
-            const transaction: Transaction = {
-                id: uuidv4(),
-                title: values.title,
-                amount: values.inflow > 0 ? values.inflow : -values.outflow,
-                date: transactionDate.toJSON(),
-                accountId: account.id,
-            };
-            createTransaction(account, transaction).then(() => {
-            })
+            if (transaction === undefined) {
+                const transaction: Transaction = {
+                    id: uuidv4(),
+                    title: values.title,
+                    amount: values.inflow > 0 ? values.inflow : -values.outflow,
+                    date: transactionDate.toJSON(),
+                    accountId: account.id,
+                };
+                createTransaction(account, transaction).then(() => {
+                })
+            } else {
+                runInAction(() => {
+                    transaction.title = values.title;
+                    transaction.amount = values.inflow > 0 ? values.inflow : -values.outflow;
+                    transaction.date = transactionDate.toJSON();
+                });
+                updateTransaction(transaction).then(() => {
+                })
+            }
+            
+            
         }
     }
 
@@ -115,7 +128,9 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
                 <Button onClick={onCloseModal} variant="default">
                     Cancel
                 </Button>
-                <Button type="submit" onClick={handleCloseModal}>Create Transaction</Button>
+                <Button type="submit" onClick={handleCloseModal}>
+                    {transaction === undefined ? 'Create Transaction' : 'Update Transaction'}
+                </Button>
             </Group>
         </form>
     )
