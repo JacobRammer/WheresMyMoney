@@ -32,7 +32,8 @@ const FinanceAccounts = {
 
 const Transactions = {
     deleteTransaction: (id: string) => requests.del(`/Transaction/${id}`),
-    addTransaction: (transaction: Transaction) => requests.post('/Transaction', transaction)
+    addTransaction: (transaction: Transaction) => requests.post('/Transaction', transaction),
+    updateTransaction: (transaction: Transaction) => requests.put('/Transaction', transaction),
 }
 
 const agent = {
