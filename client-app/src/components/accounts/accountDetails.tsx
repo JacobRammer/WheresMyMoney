@@ -7,7 +7,7 @@ import {CircleHelp, CirclePlus} from "lucide-react";
 import {useEffect, useState} from "react";
 import {Account} from "../../models/account.ts";
 import AccountTransactionDetails from "./transactions/accountTransactionDetails.tsx";
-import AddTransactionForm from "./transactions/addTransactionForm.tsx";
+import AddEditTransactionForm from "./transactions/addEditTransactionForm.tsx";
 
 export default observer(function AccountDetails() {
     const {accountStore} = useStore();
@@ -54,7 +54,8 @@ export default observer(function AccountDetails() {
 
                 <Modal opened={addTransactionSate} onClose={() => setAddTransactionModalState(false)}
                        title="Add Transaction" centered>
-                    <AddTransactionForm onCloseModal={() => setAddTransactionModalState(false)} transaction={undefined}
+                    <AddEditTransactionForm onCloseModal={() => setAddTransactionModalState(false)}
+                                            transaction={undefined}
                                         account={account}/>
                 </Modal>
             </Flex>

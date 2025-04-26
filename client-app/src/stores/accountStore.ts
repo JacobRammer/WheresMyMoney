@@ -147,6 +147,19 @@ export default class AccountStore {
         }
     }
 
+    updateTransaction = async (transaction: Transaction) => {
+        try {
+            await agent.Transactions.updateTransaction(transaction);
+            const updatedAccount = await agent.FinanceAccounts.getAccount(transaction.accountId);
+            runInAction(() => {
+                this.accountRegistry.set(transaction.accountId, updatedAccount);
+                this.numberOfTransactions++;
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     getCashAccounts = () => {
         return Array.from(this.accountRegistry.values()).filter(account => account.accountType === Savings || account.accountType === Checking);
     }

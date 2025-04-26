@@ -5,6 +5,7 @@ import {Pencil, Trash2} from "lucide-react";
 import {Transaction} from "../../../models/transaction.ts";
 import {useState} from "react";
 import DeleteTransactionModal from "./deleteTransactionModal.tsx";
+import AddEditTransactionForm from "./addEditTransactionForm.tsx";
 
 interface Props {
     account: Account
@@ -12,17 +13,24 @@ interface Props {
 
 export default observer(function AccountTransactionDetails({account}: Props) {
     const [deleteModalState, setDeleteModalState] = useState(false);
+    const [editModalState, setEditModalState] = useState(false);
     const [transaction, setTransaction] = useState<Transaction>({
         id: '',
         title: '',
         amount: 0,
-        date: new Date(),
+        date: new Date().toString(),
+        accountId: ''
     });
 
     // Sets the delete modal open state and sets the current account
     function SetupDeleteAccountModal(transactionToDelete: Transaction) {
         setTransaction(transactionToDelete);
         setDeleteModalState(true);
+    }
+
+    function SetupEditAccountModal(transactionToEdit: Transaction) {
+        setTransaction(transactionToEdit);
+        setEditModalState(true);
     }
 
     const rows = account.transactions.map((transaction: Transaction) => (
@@ -53,7 +61,8 @@ export default observer(function AccountTransactionDetails({account}: Props) {
 
                     <Tooltip label="Edit transaction" position="top-start">
                         <ActionIcon size={30}>
-                            <Pencil style={{width: '70%', height: '70%'}}/>
+                            <Pencil style={{width: '70%', height: '70%'}}
+                                    onClick={() => SetupEditAccountModal(transaction)}/>
                         </ActionIcon>
                     </Tooltip>
                 </Box>
@@ -80,6 +89,12 @@ export default observer(function AccountTransactionDetails({account}: Props) {
                    centered>
                 <DeleteTransactionModal transaction={transaction} accountId={account.id}
                                         oncloseModal={() => setDeleteModalState(false)}/>
+            </Modal>
+
+            <Modal opened={editModalState} onClose={() => setEditModalState(false)} title="Edit Transaction"
+                   centered>
+                <AddEditTransactionForm transaction={transaction} account={account}
+                                        onCloseModal={() => setEditModalState(false)}/>
             </Modal>
         </Box>
     )
