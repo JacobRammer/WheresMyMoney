@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250426233449_added id key")]
+    partial class addedidkey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,6 +55,21 @@ namespace DataAccess.Migrations
                     b.ToTable("Accounts");
                 });
 
+            modelBuilder.Entity("Domain.Models.BudgetGroup.BudgetGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BudgetGroup");
+                });
+
             modelBuilder.Entity("Domain.Models.Category.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -76,24 +94,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryGroupId");
-
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Domain.Models.Category.CategoryGroup", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CategoryGroups");
                 });
 
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>
@@ -122,15 +123,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("Domain.Models.Category.Category", b =>
-                {
-                    b.HasOne("Domain.Models.Category.CategoryGroup", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("CategoryGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>
                 {
                     b.HasOne("Domain.Models.Accounts.Account", null)
@@ -143,11 +135,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Domain.Models.Accounts.Account", b =>
                 {
                     b.Navigation("Transactions");
-                });
-
-            modelBuilder.Entity("Domain.Models.Category.CategoryGroup", b =>
-                {
-                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }

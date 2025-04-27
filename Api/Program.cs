@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using App.Core;
-using App.Mediatr.BudgetCategory;
+using App.Mediatr.Accounts.CashAccounts;
 using DataAccess;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +29,7 @@ conStrBuilder.Password = builder.Configuration["DbPassword"];
 var connection = conStrBuilder.ConnectionString;
 builder.Services.AddDbContext<DataContext>(opt => { opt.UseSqlServer(connection); });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAll.Handler).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAccount.Handler).Assembly));
 // Register MediatR services
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 

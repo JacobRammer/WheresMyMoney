@@ -1,5 +1,4 @@
 using Domain.Models.Accounts;
-using Domain.Models.BudgetGroup;
 using Domain.Models.Category;
 using Domain.Models.Transactions;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +8,6 @@ namespace DataAccess;
 public class DataContext(DbContextOptions options) : DbContext(options)
 {
     private readonly DbContextOptions _options = options;
-
-    /// <summary>
-    /// The <see cref="BudgetGroup"/> db table
-    /// </summary>
-    public DbSet<BudgetGroup> Groups { get; set; }
 
     /// <summary>
     /// The <see cref="Account"/> db table
@@ -28,7 +22,7 @@ public class DataContext(DbContextOptions options) : DbContext(options)
     /// <summary>
     /// The <see cref="Category"/> db table
     /// </summary>
-    public DbSet<BudgetGroup> BudgetGroups { get; set; }
+    public DbSet<CategoryGroup> CategoryGroups { get; set; }
 
     /// <summary>
     /// The <see cref="Category"/> db table

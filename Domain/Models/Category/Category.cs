@@ -34,4 +34,9 @@ public class Category
     /// How much has been assigned to this <see cref="Category"/>
     /// </summary>
     public double Inflow { get; set; }
+
+    /// <summary>
+    /// the <see cref="CategoryGroup.Id"/> of this <see cref="Category"/>
+    /// </summary>
+    public Guid CategoryGroupId { get; set; }
 }

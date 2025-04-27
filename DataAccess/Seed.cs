@@ -1,5 +1,6 @@
 using Domain.Enums;
 using Domain.Models.Accounts;
+using Domain.Models.Category;
 using Domain.Models.Transactions;
 
 namespace DataAccess;
@@ -140,11 +141,49 @@ public class Seed
                 account4
             };
 
+
+            var monthlyBills = new CategoryGroup
+            {
+                Id = Guid.NewGuid(),
+                Title = "Monthly Bills",
+                Categories = new List<Category>
+                {
+                    new() { Id = Guid.NewGuid(), Title = "Rent", Target = 1200, Outflow = 0, Inflow = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Utilities", Target = 200, Outflow = 0, Inflow = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Internet", Target = 80, Outflow = 0, Inflow = 0 }
+                }
+            };
+
+            var everydayExpenses = new CategoryGroup
+            {
+                Id = Guid.NewGuid(),
+                Title = "Everyday Expenses",
+                Categories = new List<Category>
+                {
+                    new() { Id = Guid.NewGuid(), Title = "Groceries", Target = 600, Outflow = 0, Inflow = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Transportation", Target = 150, Outflow = 0, Inflow = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Entertainment", Target = 200, Outflow = 0, Inflow = 0 }
+                }
+            };
+
+            var goals = new CategoryGroup
+            {
+                Id = Guid.NewGuid(),
+                Title = "Goals",
+                Categories = new List<Category>
+                {
+                    new() { Id = Guid.NewGuid(), Title = "Emergency Fund", Target = 5000, Outflow = 0, Inflow = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Vacation", Target = 2000, Outflow = 0, Inflow = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "New Car", Target = 15000, Outflow = 0, Inflow = 0 }
+                }
+            };
+
             await context.Accounts.AddRangeAsync(accounts);
             await context.Transactions.AddRangeAsync(account1Transactions);
             await context.Transactions.AddRangeAsync(account2Transactions);
             await context.Transactions.AddRangeAsync(account3Transactions);
             await context.Transactions.AddRangeAsync(account4Transactions);
+            await context.CategoryGroups.AddRangeAsync(new[] { monthlyBills, everydayExpenses, goals });
             await context.SaveChangesAsync();
         }
     }
