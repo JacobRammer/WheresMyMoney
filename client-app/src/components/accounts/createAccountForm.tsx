@@ -72,12 +72,12 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
     return (
         <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
             <TextInput name="account"
-                       withAsterisk
-                       label="Account Name"
-                       placeholder="Checking Account"
-                       key={form.key('accountName')}
-                       type="text" autoComplete="off"
-                       {...form.getInputProps('accountName')}
+                    withAsterisk
+                    label="Account Name"
+                    placeholder="Checking Account"
+                    key={form.key('accountName')}
+                    type="text" autoComplete="off"
+                    {...form.getInputProps('accountName')}
             />
 
             <TextInput

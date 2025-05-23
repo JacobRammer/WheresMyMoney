@@ -16,4 +16,13 @@ public class CategoryGroup
     /// The list of <see cref="Category"/> in this <see cref="CategoryGroup"/>
     /// </summary>
     public ICollection<Category> Categories { get; set; } = new List<Category>();
+
+    /// <summary>
+    /// Adds a <see cref="Category"/> to the <see cref="Categories"/> list
+    /// </summary>
+    /// <param name="category"></param>
+    public void AddCategory(Category category)
+    {
+        Categories.Add(category);
+    }
 }

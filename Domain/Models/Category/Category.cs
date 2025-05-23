@@ -33,7 +33,7 @@ public class Category
     /// <summary>
     /// How much has been assigned to this <see cref="Category"/>
     /// </summary>
-    public double Inflow { get; set; }
+    public double Assigned { get; set; }
 
     /// <summary>
     /// the <see cref="CategoryGroup.Id"/> of this <see cref="Category"/>

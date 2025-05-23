@@ -16,11 +16,6 @@ export default observer(function AccountDashboard() {
     const {cashBalance, totalBalance} = accountStore;
 
     const [opened, { open, close }] = useDisclosure(false);
-
-
-    useEffect(() => {
-        
-    }, [cashBalance]);
     
     return (
         <MantineProvider >

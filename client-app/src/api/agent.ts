@@ -1,7 +1,8 @@
 import axios, {AxiosResponse} from "axios";
-import {BudgetCategory} from "../models/budgetCategory.ts";
 import {Account} from "../models/account.ts";
 import {Transaction} from "../models/transaction.ts";
+import {BudgetGroup} from "../models/budgetGroup.ts";
+import {Category} from "../models/Category.ts";
 
 axios.defaults.baseURL = 'http://localhost:5241/api';
 
@@ -12,14 +13,6 @@ const requests = {
     post: <T> (url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
     put: <T> (url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
     del: <T> (url: string) => axios.delete<T>(url).then(responseBody),
-}
-
-const BudgetCategories = {
-    list: () => requests.get<BudgetCategory[]>('/BudgetGroup'),
-    details: (id: string) => requests.get<BudgetCategory>(`/BudgetGroup/${id}`),
-    // create: (activity: ActivityFormValues) => requests.post('/BudgetGroup', activity),
-    // update: (activity: ActivityFormValues) => requests.put(`/BudgetGroup/${activity.id}`, activity),
-    delete: (id: string) => requests.del(`/BudgetGroup/${id}`),
 }
 
 const FinanceAccounts = {
@@ -36,10 +29,21 @@ const Transactions = {
     updateTransaction: (transaction: Transaction) => requests.put('/Transaction', transaction),
 }
 
+const CategoryGroup = {
+    getBudgetGroups: () => requests.get<BudgetGroup[]>('/CategoryGroup'),
+    getBudgetGroupById: (id: string) => requests.get<BudgetGroup[]>(`/CategoryGroup/${id}`),
+}
+
+const Categories = {
+    updateCategory: (category: Category) => requests.put<Category>('/Category', category),
+    createCategory: (category: Category) => requests.post<Category>('/Category', category),
+}
+
 const agent = {
-    BudgetCategories,
+    CategoryGroup,
     FinanceAccounts,
-    Transactions
+    Transactions,
+    Categories,
 }
 
 export default agent;

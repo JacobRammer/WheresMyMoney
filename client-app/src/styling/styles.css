@@ -9,13 +9,29 @@ body, html {
 
 :root {
     --backgroundColor: rgb(121, 173, 220);
+    --underLineColor: rgb(151, 155, 141);
+    --sidebarWidth: max(11vw, 260px);
+    --categoryWidth: 400px;
+    --dashboardHeaderHeight: 143px;
+}
+
+.blueBackgroundColor {
+    color: var(--backgroundColor);
 }
 
 .sidebar {
     background-color: var(--backgroundColor);
-    width: 260px;
+    width: var(--sidebarWidth);
     height: 100vh;
     /*overflow-y: scroll;*/
+}
+
+.fullWidth {
+    width: calc(100vw - var(--sidebarWidth) - 500px)
+}
+
+.date { 
+    width: 350px
 }
 
 .sidebar-list li {
@@ -37,15 +53,80 @@ body, html {
 }
 
 .DetailHeaderWithUnderline {
-    border-bottom: 1px solid rgb(238, 224, 203);
+    border-bottom: 1px solid var(--underLineColor);
+}
+
+.budgetCategoryGroupDashboardHeader {
+    width: var( --categoryWidth);
+    background-color: rgba(202,230,233,255);
+}
+
+.dashboardBudgetGroupFormat {
+    width: var( --categoryWidth);
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.categoryGroupItemFlex {
+    align-content: center;
+    justify-content: space-between;
+    background-color: rgba(202,230,233,255);
+    border-bottom: 1px solid var(--underLineColor);
+    border-top: 1px solid var(--underLineColor);
+    align-items: center;
+    height: 40px;
+
+}
+
+.dashboardFlexFormatWithUnderline {
+    align-content: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--underLineColor);
+}
+
+.categoryItem {
+    /*refer to dashboardFlexFormatWithUnderline*/
+    align-content: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    height: 30px;
+}
+
+.dashboardBudgetCategoryFinalFlexItem {
+    margin-right: 50px;
+}
+
+.Dashboard {
+    max-height: 100vh;
+    overflow: hidden
 }
 
 .DetailHeaderDetailsWithMargin {
     margin: 10px;
 }
 
-.DetailsPage {
+.CategoryTableHeader {
+    margin-top: 10px;
+    border-bottom: 1px solid var(--underLineColor);
+}
+
+.CategoryTableFlex {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.BoxFlexGrow {
     flex-grow: 1;
+}
+
+.DashboardHeaderBox{
+    flex-grow: 1;
+    height: --var(--dashboardHeaderHeight);
+}
+
+.CategoriesScrollArea {
+    height: calc(100vh - var(--dashboardHeaderHeight) - 15px);
 }
 
 .PageHeader {
@@ -79,4 +160,13 @@ body, html {
     bottom: 30px;
     right: 30px;
     color: var(--backgroundColor)
+}
+
+.noSelect {
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

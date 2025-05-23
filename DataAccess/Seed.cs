@@ -148,9 +148,9 @@ public class Seed
                 Title = "Monthly Bills",
                 Categories = new List<Category>
                 {
-                    new() { Id = Guid.NewGuid(), Title = "Rent", Target = 1200, Outflow = 0, Inflow = 0 },
-                    new() { Id = Guid.NewGuid(), Title = "Utilities", Target = 200, Outflow = 0, Inflow = 0 },
-                    new() { Id = Guid.NewGuid(), Title = "Internet", Target = 80, Outflow = 0, Inflow = 0 }
+                    new() { Id = Guid.NewGuid(), Title = "Rent", Target = 1200, Outflow = 0, Assigned = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Utilities", Target = 200, Outflow = 0, Assigned = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Internet", Target = 80, Outflow = 0, Assigned = 0 }
                 }
             };
 
@@ -160,9 +160,9 @@ public class Seed
                 Title = "Everyday Expenses",
                 Categories = new List<Category>
                 {
-                    new() { Id = Guid.NewGuid(), Title = "Groceries", Target = 600, Outflow = 0, Inflow = 0 },
-                    new() { Id = Guid.NewGuid(), Title = "Transportation", Target = 150, Outflow = 0, Inflow = 0 },
-                    new() { Id = Guid.NewGuid(), Title = "Entertainment", Target = 200, Outflow = 0, Inflow = 0 }
+                    new() { Id = Guid.NewGuid(), Title = "Groceries", Target = 600, Outflow = 0, Assigned = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Transportation", Target = 150, Outflow = 0, Assigned = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Entertainment", Target = 200, Outflow = 0, Assigned = 0 }
                 }
             };
 
@@ -172,9 +172,9 @@ public class Seed
                 Title = "Goals",
                 Categories = new List<Category>
                 {
-                    new() { Id = Guid.NewGuid(), Title = "Emergency Fund", Target = 5000, Outflow = 0, Inflow = 0 },
-                    new() { Id = Guid.NewGuid(), Title = "Vacation", Target = 2000, Outflow = 0, Inflow = 0 },
-                    new() { Id = Guid.NewGuid(), Title = "New Car", Target = 15000, Outflow = 0, Inflow = 0 }
+                    new() { Id = Guid.NewGuid(), Title = "Emergency Fund", Target = 5000, Outflow = 0, Assigned = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "Vacation", Target = 2000, Outflow = 0, Assigned = 0 },
+                    new() { Id = Guid.NewGuid(), Title = "New Car", Target = 15000, Outflow = 0, Assigned = 0 }
                 }
             };
 
