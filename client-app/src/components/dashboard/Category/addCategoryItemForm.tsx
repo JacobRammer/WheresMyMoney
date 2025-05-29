@@ -3,7 +3,6 @@ import { useForm } from "@mantine/form";
 import {observer} from "mobx-react-lite";
 import { useStore } from "../../../stores/store";
 import { Category } from "../../../models/Category";
-import { BudgetGroup } from "../../../models/budgetGroup";
 import { v4 as uuidv4 } from "uuid";
 
 interface AddBudgetItemProps {

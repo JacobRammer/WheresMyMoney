@@ -1,6 +1,6 @@
 using Domain.Enums;
 using Domain.Models.Accounts;
-using Domain.Models.Category;
+using Domain.Models.Budgets;
 using Domain.Models.Transactions;
 
 namespace DataAccess;
@@ -142,11 +142,11 @@ public class Seed
             };
 
 
-            var monthlyBills = new CategoryGroup
+            var monthlyBills = new BudgetGroup
             {
                 Id = Guid.NewGuid(),
                 Title = "Monthly Bills",
-                Categories = new List<Category>
+                Categories = new List<Budget>
                 {
                     new() { Id = Guid.NewGuid(), Title = "Rent", Target = 1200, Outflow = 0, Assigned = 0 },
                     new() { Id = Guid.NewGuid(), Title = "Utilities", Target = 200, Outflow = 0, Assigned = 0 },
@@ -154,11 +154,11 @@ public class Seed
                 }
             };
 
-            var everydayExpenses = new CategoryGroup
+            var everydayExpenses = new BudgetGroup
             {
                 Id = Guid.NewGuid(),
                 Title = "Everyday Expenses",
-                Categories = new List<Category>
+                Categories = new List<Budget>
                 {
                     new() { Id = Guid.NewGuid(), Title = "Groceries", Target = 600, Outflow = 0, Assigned = 0 },
                     new() { Id = Guid.NewGuid(), Title = "Transportation", Target = 150, Outflow = 0, Assigned = 0 },
@@ -166,11 +166,11 @@ public class Seed
                 }
             };
 
-            var goals = new CategoryGroup
+            var goals = new BudgetGroup
             {
                 Id = Guid.NewGuid(),
                 Title = "Goals",
-                Categories = new List<Category>
+                Categories = new List<Budget>
                 {
                     new() { Id = Guid.NewGuid(), Title = "Emergency Fund", Target = 5000, Outflow = 0, Assigned = 0 },
                     new() { Id = Guid.NewGuid(), Title = "Vacation", Target = 2000, Outflow = 0, Assigned = 0 },

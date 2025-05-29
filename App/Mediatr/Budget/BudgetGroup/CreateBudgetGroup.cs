@@ -1,15 +1,14 @@
 using App.Core;
 using DataAccess;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
-namespace App.Mediatr.Budget.CategoryGroup;
+namespace App.Mediatr.Budget.BudgetGroup;
 
-public class DeleteCategoryGroup
+public class CreateBudgetGroup
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Guid Id { get; set; }
+        public Domain.Models.Budgets.BudgetGroup TheBudgetGroup { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -21,12 +20,7 @@ public class DeleteCategoryGroup
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            Domain.Models.Category.CategoryGroup categoryGroupToDelete = await _context.CategoryGroups.FirstOrDefaultAsync(
-                c => c.Id == request.Id, cancellationToken: cancellationToken);
-
-            if (categoryGroupToDelete != null)
-                _context.Remove(categoryGroupToDelete);
-            
+            await _context.AddAsync(request.TheBudgetGroup, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);

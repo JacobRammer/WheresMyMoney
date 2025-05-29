@@ -1,8 +1,6 @@
-using Domain.Models.Budgets;
+namespace Domain.Models.Budgets;
 
-namespace Domain.Models.DTOs.Category;
-
-public class CategoryGroupDto
+public class BudgetGroup
 {
     /// <summary>
     /// The <see cref="BudgetGroup.Id"/> of this <see cref="BudgetGroup"/>
@@ -13,15 +11,18 @@ public class CategoryGroupDto
     /// The title of this <see cref="BudgetGroup"/>
     /// </summary>
     public required string Title { get; set; }
-    
-    public double Assigned => this.Categories.Sum(x => x.Assigned);
-
-    public double Outflow => this.Categories.Sum(x => x.Outflow);
-
-    public double Available => Assigned - Outflow;
 
     /// <summary>
-    /// The list of <see cref="Category"/> in this <see cref="BudgetGroup"/>
+    /// The list of <see cref="Budget"/> in this <see cref="BudgetGroup"/>
     /// </summary>
     public ICollection<Budget> Categories { get; set; } = new List<Budget>();
+
+    /// <summary>
+    /// Adds a <see cref="Budget"/> to the <see cref="Categories"/> list
+    /// </summary>
+    /// <param name="budget"></param>
+    public void AddCategory(Budget budget)
+    {
+        Categories.Add(budget);
+    }
 }

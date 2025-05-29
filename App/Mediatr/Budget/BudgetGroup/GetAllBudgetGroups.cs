@@ -6,9 +6,9 @@ using Domain.Models.DTOs.Category;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Mediatr.Budget.CategoryGroup;
+namespace App.Mediatr.Budget.BudgetGroup;
 
-public class GetAllCategoryGroups
+public class GetAllBudgetGroups
 {
     public class Query : IRequest<Result<List<CategoryGroupDto>>>
     {
