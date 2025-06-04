@@ -7,36 +7,38 @@ namespace Domain.Models.Budgets;
 /// such as I want to save 200 a bucks a month, or have
 /// a budget of $600 a month for groceries.
 /// </summary>
-public class Budget
+public class BudgetItem
 {
     /// <summary>
-    /// The <see cref="Budget.Id"/>
+    /// The <see cref="BudgetItem.Id"/>
     /// </summary>
     [Required]
     public Guid Id { get; set; }
 
     /// <summary>
-    /// The <see cref="Budget.Title"/>
+    /// The <see cref="BudgetItem.Title"/>
     /// </summary>
     public required string Title { get; set; }
 
     /// <summary>
-    /// How much to assign to this <see cref="Budget"/>
+    /// How much to assign to this <see cref="BudgetItem"/>
     /// </summary>
     public double Target { get; set; }
 
     /// <summary>
-    /// How much has been spent on this <see cref="Budget"/>
+    /// How much has been spent on this <see cref="BudgetItem"/>
     /// </summary>
     public double Outflow { get; set; }
 
     /// <summary>
-    /// How much has been assigned to this <see cref="Budget"/>
+    /// How much has been assigned to this <see cref="BudgetItem"/>
     /// </summary>
     public double Assigned { get; set; }
 
     /// <summary>
-    /// the <see cref="BudgetGroup.Id"/> of this <see cref="Budget"/>
+    /// the <see cref="BudgetGroup.Id"/> of this <see cref="BudgetItem"/>
     /// </summary>
-    public Guid CategoryGroupId { get; set; }
+    public Guid BudgetGroupId { get; set; }
+
+    public DateTime DateCreated { get; set; }
 }

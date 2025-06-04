@@ -1,5 +1,5 @@
 import {observer} from "mobx-react-lite";
-import {Box, Button, Center, Flex, Text, Title, Tooltip} from "@mantine/core";
+import {Box, Button, Center, Flex, NumberFormatter, Text, Title, Tooltip} from "@mantine/core";
 import {CircleArrowLeft, CircleArrowRight} from "lucide-react";
 import {useStore} from "../../stores/store.ts";
 import {useState} from "react";
@@ -58,8 +58,11 @@ export default observer(function DashboardHeader() {
 
             <Flex style={{marginLeft: '250px'}} align='center'>
                 <Box style={{backgroundColor: cashBalance > 0 ? 'rgba(16, 219, 89)' : 'rgba(255, 99, 99)', borderRadius: '10px'}} >
-                    <Center w={200} h={50}>
-                        <Text size='xl' fw={800}>Available: ${cashBalance}</Text>
+                    <Center w="auto" h={50}>
+                        <Text size='xl' fw={800} style={{marginLeft: '10px', marginRight: '10px'}}>Available:
+                            <NumberFormatter prefix=" $" value={cashBalance} decimalScale={2} fixedDecimalScale={true}
+                                             thousandSeparator/>
+                        </Text>
                     </Center>
                 </Box>
             </Flex>

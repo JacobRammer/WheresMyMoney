@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetApp.Controllers.Budget.Category;
 
-public class CategoryGroupController : BaseApiController
+public class BudgetItemGroupController : BaseApiController
 {
     /// <summary>
     /// Gets all <see cref="BudgetGroup"/>s
@@ -15,7 +15,7 @@ public class CategoryGroupController : BaseApiController
     {
         return HandleResults(await Mediator.Send(new GetAllBudgetGroups.Query()));
     }
-    
+
     /// <summary>
     /// Creates a new <see cref="BudgetGroup"/>
     /// </summary>
@@ -26,10 +26,10 @@ public class CategoryGroupController : BaseApiController
     {
         return HandleResults(await Mediator.Send(new CreateBudgetGroup.Command
         {
-            TheBudgetGroup = budgetGroup
+            BudgetGrouop = budgetGroup
         }));
     }
-    
+
     /// <summary>
     /// Deletes a <see cref="Budget"/> by its <see cref="Budget.Id"/>
     /// </summary>

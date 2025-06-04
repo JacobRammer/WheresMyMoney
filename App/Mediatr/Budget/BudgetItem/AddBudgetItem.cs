@@ -8,7 +8,7 @@ public class AddBudgetItem
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Domain.Models.Budgets.Budget BudgetToAdd { get; set; }
+        public Domain.Models.Budgets.BudgetItem BudgetToAdd { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -20,14 +20,11 @@ public class AddBudgetItem
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            
-            await _context.Categories.AddAsync(request.BudgetToAdd, cancellationToken);
-            
+            await _context.BudgetItems.AddAsync(request.BudgetToAdd, cancellationToken);
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);
         }
-
     }
-
 }

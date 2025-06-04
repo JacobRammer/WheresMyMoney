@@ -21,17 +21,15 @@ public class DeleteBudgetGroup
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            Domain.Models.Budgets.BudgetGroup budgetGroupToDelete = await _context.CategoryGroups.FirstOrDefaultAsync(
+            Domain.Models.Budgets.BudgetGroup budgetGroupToDelete = await _context.BudgetGroups.FirstOrDefaultAsync(
                 c => c.Id == request.Id, cancellationToken: cancellationToken);
 
             if (budgetGroupToDelete != null)
                 _context.Remove(budgetGroupToDelete);
-            
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);
         }
-
     }
-
 }

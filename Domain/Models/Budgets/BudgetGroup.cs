@@ -13,15 +13,20 @@ public class BudgetGroup
     public required string Title { get; set; }
 
     /// <summary>
-    /// The list of <see cref="Budget"/> in this <see cref="BudgetGroup"/>
+    /// The list of <see cref="BudgetItem"/> in this <see cref="BudgetGroup"/>
     /// </summary>
-    public ICollection<Budget> Categories { get; set; } = new List<Budget>();
+    public ICollection<BudgetItem> Categories { get; set; } = new List<BudgetItem>();
 
     /// <summary>
-    /// Adds a <see cref="Budget"/> to the <see cref="Categories"/> list
+    /// The date this <see cref="BudgetGroup"/> was created
+    /// </summary>
+    public DateTime DateCreated { get; set; }
+
+    /// <summary>
+    /// Adds a <see cref="BudgetItem"/> to the <see cref="Categories"/> list
     /// </summary>
     /// <param name="budget"></param>
-    public void AddCategory(Budget budget)
+    public void AddCategory(BudgetItem budget)
     {
         Categories.Add(budget);
     }

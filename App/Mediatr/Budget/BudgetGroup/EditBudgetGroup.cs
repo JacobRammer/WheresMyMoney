@@ -27,17 +27,15 @@ public class EditBudgetGroup
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            Domain.Models.Budgets.BudgetGroup budgetGroupToUpdate = await _context.CategoryGroups.FirstOrDefaultAsync(
+            Domain.Models.Budgets.BudgetGroup budgetGroupToUpdate = await _context.BudgetGroups.FirstOrDefaultAsync(
                 c => c.Id == request.UpdatedBudgetGroup.Id, cancellationToken: cancellationToken);
-            
+
             if (budgetGroupToUpdate != null)
                 _mapper.Map(request.UpdatedBudgetGroup, budgetGroupToUpdate);
-            
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);
         }
-
     }
-
 }

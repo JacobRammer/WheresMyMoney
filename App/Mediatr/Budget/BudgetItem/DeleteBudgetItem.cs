@@ -21,14 +21,13 @@ public class DeleteBudgetItem
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            Domain.Models.Budgets.Budget budgetToRemove = await _context.Categories.FirstOrDefaultAsync(
+            Domain.Models.Budgets.BudgetItem budgetToRemove = await _context.BudgetItems.FirstOrDefaultAsync(
                 c => c.Id == request.Id, cancellationToken: cancellationToken);
-            
+
             _context.Remove(budgetToRemove);
             await _context.SaveChangesAsync(cancellationToken: cancellationToken);
-            
+
             return Result<Unit>.Success(Unit.Value);
         }
-
     }
 }

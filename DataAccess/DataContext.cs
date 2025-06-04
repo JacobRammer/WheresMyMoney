@@ -20,12 +20,12 @@ public class DataContext(DbContextOptions options) : DbContext(options)
     public DbSet<Transaction> Transactions { get; set; }
 
     /// <summary>
-    /// The <see cref="Budget"/> db table
+    /// The <see cref="BudgetItem"/> db table
     /// </summary>
-    public DbSet<BudgetGroup> CategoryGroups { get; set; }
+    public DbSet<BudgetGroup> BudgetGroups { get; set; }
 
     /// <summary>
-    /// The <see cref="Budget"/> db table
+    /// The <see cref="BudgetItem"/> db table
     /// </summary>
-    public DbSet<Budget> Categories { get; set; }
+    public DbSet<BudgetItem> BudgetItems { get; set; }
 }

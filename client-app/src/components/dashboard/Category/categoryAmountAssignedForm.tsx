@@ -1,15 +1,15 @@
 import {observer} from "mobx-react-lite";
 import {v4 as uuidv4} from "uuid";
 import {Input} from "@mantine/core";
-import {Category} from "../../../models/Category.ts";
 import {useClickOutside} from "@mantine/hooks";
 import {useStore} from "../../../stores/store.ts";
 import {useForm} from "@mantine/form";
+import {BudgetItem} from "../../../models/budgetItem.ts";
 
 interface Props {
     onClick: () => void;
     closeForm: () => void;
-    category: Category;
+    category: BudgetItem;
 }
 
 export default observer(function CategoryAmountAssignedForm({ category, onClick, closeForm}: Props) {
@@ -27,11 +27,12 @@ export default observer(function CategoryAmountAssignedForm({ category, onClick,
     function handleInputSubmit() {
         closeForm();
         form.onSubmit((values) => {
-            const updatedCategory = new Category
+            const updatedCategory = new BudgetItem
             (
                 category.id,
-                category.title, 
-                category.categoryGroupId,
+                category.title,
+                category.budgetGroupId,
+                category.dateCreated,
                 parseFloat(values.amountAssigned), 
                 category.target,
                 category.outflow,

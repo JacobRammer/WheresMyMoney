@@ -1,13 +1,13 @@
 import {observer} from "mobx-react-lite";
-import {ActionIcon, Box, Center, Divider, Flex, Menu, NumberFormatter, Text, Tooltip} from "@mantine/core";
+import {ActionIcon, Box, Center, Flex, Menu, NumberFormatter, Text, Tooltip} from "@mantine/core";
 import {BudgetGroup} from "../../models/budgetGroup.ts";
 import CategoryItem from "./Category/categoryItem.tsx";
 import {v4 as uuidv4} from "uuid";
-import {Category} from "../../models/Category.ts";
-import { act, useState } from "react";
-import { CirclePlus } from "lucide-react";
-import { useHover } from "@mantine/hooks";
+import {useState} from "react";
+import {CirclePlus} from "lucide-react";
+import {useHover} from "@mantine/hooks";
 import AddCategoryItemForm from "./Category/addCategoryItemForm.tsx";
+import {BudgetItem} from "../../models/budgetItem.ts";
 
 interface Props {
     budgetGroup: BudgetGroup;
@@ -53,12 +53,12 @@ export default observer(function CategoryGroupItem({budgetGroup}: Props) {
                 <NumberFormatter value={budgetGroup.available} prefix="$" decimalScale={2} fixedDecimalScale={true}/>
             </Center>
         </Flex>
-            {budgetGroup.categories.map((category: Category) => (
-                <Box key={uuidv4()}>
-                    <CategoryItem category={category}/>
-                </Box>
-            ))}
-            <Box style={{marginTop: '10px'}}/>
+            {budgetGroup.categories.length !== 0 ?
+                budgetGroup.categories.map((category: BudgetItem) => (
+                    <Box key={uuidv4()}>
+                        <CategoryItem category={category}/>
+                    </Box>
+                )) : <Text style={{margin: '10px'}}>No budget items</Text>}
         </Box>
     )
 })

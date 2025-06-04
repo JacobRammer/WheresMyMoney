@@ -14,7 +14,7 @@ public class MappingProfiles : Profile
         CreateMap<Account, AccountDto>().ReverseMap();
         CreateMap<Account, Account>().ReverseMap();
         CreateMap<Transaction, Transaction>().ReverseMap();
-        CreateMap<Budget, Budget>().ReverseMap();
+        CreateMap<BudgetItem, BudgetItem>().ReverseMap();
         CreateMap<BudgetGroup, CategoryGroupDto>().ReverseMap();
     }
 }

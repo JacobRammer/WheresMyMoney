@@ -32,37 +32,39 @@ export default observer(function Dashboard() {
                                 <DashboardHeader/>
                             </Box>
                         </Box>
-                        <CategoryTable/>
-                        <CategoryGroupHeader/>
-                    </Box>
-                    <ScrollArea className="CategoriesScrollArea" overscrollBehavior="contain">
-                        {
-                            getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
-                            <Box key={budgetGroup.id}>
-                                <CategoryGroupItem budgetGroup={budgetGroup}/>
-                            </Box>))
-                        }
 
-                        {
-                            getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
-                                <Box key={budgetGroup.id}>
-                                    <CategoryGroupItem budgetGroup={budgetGroup}/>
-                                </Box>))
-                        }
-
-                        {
-                            getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
-                                <Box key={budgetGroup.id}>
-                                    <CategoryGroupItem budgetGroup={budgetGroup}/>
-                                </Box>))
-                        }
-                    </ScrollArea>
                     </Box>
-                
-                
-                
+                    <Flex className='BoxFlexGrow'>
+                        <Box className='BudgetTable'>
+                            <CategoryTable/>
+                            <CategoryGroupHeader/>
+                            <ScrollArea className="CategoriesScrollArea" overscrollBehavior="contain">
+                                {
+                                    getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
+                                        <Box key={budgetGroup.id}>
+                                            <CategoryGroupItem budgetGroup={budgetGroup}/>
+                                        </Box>))
+                                }
+
+                                {
+                                    getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
+                                        <Box key={budgetGroup.id}>
+                                            <CategoryGroupItem budgetGroup={budgetGroup}/>
+                                        </Box>))
+                                }
+
+                                {
+                                    getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
+                                        <Box key={budgetGroup.id}>
+                                            <CategoryGroupItem budgetGroup={budgetGroup}/>
+                                        </Box>))
+                                }
+                            </ScrollArea>
+                        </Box>
+                        <Box h={500} w={400} style={{backgroundColor: 'red'}}/>
+                    </Flex>
+                </Box>
             </Flex>
-            
         </MantineProvider>
     )
 })

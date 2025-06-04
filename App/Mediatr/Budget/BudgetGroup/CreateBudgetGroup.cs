@@ -8,7 +8,7 @@ public class CreateBudgetGroup
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Domain.Models.Budgets.BudgetGroup TheBudgetGroup { get; set; }
+        public Domain.Models.Budgets.BudgetGroup BudgetGrouop { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -20,12 +20,10 @@ public class CreateBudgetGroup
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            await _context.AddAsync(request.TheBudgetGroup, cancellationToken);
+            await _context.AddAsync(request.BudgetGrouop, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);
         }
-
     }
-
 }

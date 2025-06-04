@@ -146,7 +146,7 @@ public class Seed
             {
                 Id = Guid.NewGuid(),
                 Title = "Monthly Bills",
-                Categories = new List<Budget>
+                Categories = new List<BudgetItem>
                 {
                     new() { Id = Guid.NewGuid(), Title = "Rent", Target = 1200, Outflow = 0, Assigned = 0 },
                     new() { Id = Guid.NewGuid(), Title = "Utilities", Target = 200, Outflow = 0, Assigned = 0 },
@@ -158,7 +158,7 @@ public class Seed
             {
                 Id = Guid.NewGuid(),
                 Title = "Everyday Expenses",
-                Categories = new List<Budget>
+                Categories = new List<BudgetItem>
                 {
                     new() { Id = Guid.NewGuid(), Title = "Groceries", Target = 600, Outflow = 0, Assigned = 0 },
                     new() { Id = Guid.NewGuid(), Title = "Transportation", Target = 150, Outflow = 0, Assigned = 0 },
@@ -170,7 +170,7 @@ public class Seed
             {
                 Id = Guid.NewGuid(),
                 Title = "Goals",
-                Categories = new List<Budget>
+                Categories = new List<BudgetItem>
                 {
                     new() { Id = Guid.NewGuid(), Title = "Emergency Fund", Target = 5000, Outflow = 0, Assigned = 0 },
                     new() { Id = Guid.NewGuid(), Title = "Vacation", Target = 2000, Outflow = 0, Assigned = 0 },
@@ -183,7 +183,7 @@ public class Seed
             await context.Transactions.AddRangeAsync(account2Transactions);
             await context.Transactions.AddRangeAsync(account3Transactions);
             await context.Transactions.AddRangeAsync(account4Transactions);
-            await context.CategoryGroups.AddRangeAsync(new[] { monthlyBills, everydayExpenses, goals });
+            await context.BudgetGroups.AddRangeAsync(new[] { monthlyBills, everydayExpenses, goals });
             await context.SaveChangesAsync();
         }
     }

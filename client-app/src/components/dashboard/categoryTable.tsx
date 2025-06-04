@@ -2,7 +2,7 @@ import {Box, Button, Flex, Menu, Text} from "@mantine/core";
 import {observer} from "mobx-react-lite";
 import {CirclePlus} from "lucide-react";
 import {useState} from "react";
-import AddCategoryForm from "./addCategoryForm.tsx";
+import AddBudgetGroupForm from "./addBudgetGroupForm.tsx";
 
 export default observer(function CategoryTable() {
     
@@ -23,7 +23,7 @@ export default observer(function CategoryTable() {
                     <Menu.Dropdown>
                         <Menu.Label>Create Budget Category</Menu.Label>
                         <Box style={{margin: '10px'}}>
-                            <AddCategoryForm createCategorySubmit={() => console.log("hut")} updateMenuState={() => setIsMenuOpen(false)}/>
+                            <AddBudgetGroupForm updateMenuState={() => setIsMenuOpen(false)}/>
                         </Box>
                     </Menu.Dropdown>
                 </Menu>

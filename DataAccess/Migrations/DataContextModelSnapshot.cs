@@ -52,7 +52,25 @@ namespace DataAccess.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("Domain.Models.Category.Category", b =>
+            modelBuilder.Entity("Domain.Models.Budgets.BudgetGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BudgetGroups");
+                });
+
+            modelBuilder.Entity("Domain.Models.Budgets.BudgetItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,8 +79,11 @@ namespace DataAccess.Migrations
                     b.Property<double>("Assigned")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("CategoryGroupId")
+                    b.Property<Guid>("BudgetGroupId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<double>("Outflow")
                         .HasColumnType("float");
@@ -76,24 +97,9 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryGroupId");
+                    b.HasIndex("BudgetGroupId");
 
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Domain.Models.Category.CategoryGroup", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CategoryGroups");
+                    b.ToTable("BudgetItems");
                 });
 
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>
@@ -122,11 +128,11 @@ namespace DataAccess.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("Domain.Models.Category.Category", b =>
+            modelBuilder.Entity("Domain.Models.Budgets.BudgetItem", b =>
                 {
-                    b.HasOne("Domain.Models.Category.CategoryGroup", null)
+                    b.HasOne("Domain.Models.Budgets.BudgetGroup", null)
                         .WithMany("Categories")
-                        .HasForeignKey("CategoryGroupId")
+                        .HasForeignKey("BudgetGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -145,7 +151,7 @@ namespace DataAccess.Migrations
                     b.Navigation("Transactions");
                 });
 
-            modelBuilder.Entity("Domain.Models.Category.CategoryGroup", b =>
+            modelBuilder.Entity("Domain.Models.Budgets.BudgetGroup", b =>
                 {
                     b.Navigation("Categories");
                 });
