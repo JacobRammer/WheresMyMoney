@@ -6,13 +6,12 @@ using Domain.Models.DTOs.Category;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Mediatr.Budget.CategoryGroup;
+namespace App.Mediatr.Budget.BudgetGroup;
 
-public class GetAllCategoryGroups
+public class GetAllBudgetGroups
 {
     public class Query : IRequest<Result<List<CategoryGroupDto>>>
     {
-
     }
 
     public class Handler : IRequestHandler<Query, Result<List<CategoryGroupDto>>>
@@ -29,11 +28,11 @@ public class GetAllCategoryGroups
         // Access the db to get items
         public async Task<Result<List<CategoryGroupDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            List<CategoryGroupDto> categoryGroups=
-                await _context.CategoryGroups.Include(c => c.Categories)
+            List<CategoryGroupDto> categoryGroups =
+                await _context.BudgetGroups.Include(c => c.Categories)
                     .ProjectTo<CategoryGroupDto>(_mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken: cancellationToken);
-            
+
             return Result<List<CategoryGroupDto>>.Success(categoryGroups);
         }
     }

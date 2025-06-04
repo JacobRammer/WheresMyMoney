@@ -4,6 +4,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250529005203_added time property")]
+    partial class addedtimeproperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,16 +61,13 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BudgetGroups");
+                    b.ToTable("CategoryGroups");
                 });
 
             modelBuilder.Entity("Domain.Models.Budgets.BudgetItem", b =>
@@ -79,7 +79,10 @@ namespace DataAccess.Migrations
                     b.Property<double>("Assigned")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("BudgetGroupId")
+                    b.Property<Guid?>("BudgetGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreated")
@@ -99,7 +102,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("BudgetGroupId");
 
-                    b.ToTable("BudgetItems");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>
@@ -132,9 +135,7 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Domain.Models.Budgets.BudgetGroup", null)
                         .WithMany("Categories")
-                        .HasForeignKey("BudgetGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BudgetGroupId");
                 });
 
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>

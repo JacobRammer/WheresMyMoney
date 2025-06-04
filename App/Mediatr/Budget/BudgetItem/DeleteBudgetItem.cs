@@ -3,13 +3,13 @@ using DataAccess;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Mediatr.Budget.Category;
+namespace App.Mediatr.Budget.BudgetItem;
 
-public class AddCategory
+public class DeleteBudgetItem
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Domain.Models.Category.Category CategoryToAdd { get; set; }
+        public Guid Id { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -21,14 +21,13 @@ public class AddCategory
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            
-            await _context.Categories.AddAsync(request.CategoryToAdd, cancellationToken);
-            
-            await _context.SaveChangesAsync(cancellationToken);
+            Domain.Models.Budgets.BudgetItem budgetToRemove = await _context.BudgetItems.FirstOrDefaultAsync(
+                c => c.Id == request.Id, cancellationToken: cancellationToken);
+
+            _context.Remove(budgetToRemove);
+            await _context.SaveChangesAsync(cancellationToken: cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);
         }
-
     }
-
 }

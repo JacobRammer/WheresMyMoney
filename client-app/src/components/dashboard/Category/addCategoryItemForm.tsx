@@ -1,10 +1,9 @@
-import { Button, Flex, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import {Button, Flex, TextInput} from "@mantine/core";
+import {useForm} from "@mantine/form";
 import {observer} from "mobx-react-lite";
-import { useStore } from "../../../stores/store";
-import { Category } from "../../../models/Category";
-import { BudgetGroup } from "../../../models/budgetGroup";
-import { v4 as uuidv4 } from "uuid";
+import {useStore} from "../../../stores/store";
+import {v4 as uuidv4} from "uuid";
+import {BudgetItem} from "../../../models/budgetItem.ts";
 
 interface AddBudgetItemProps {
     budgetGroupId: string;
@@ -12,7 +11,7 @@ interface AddBudgetItemProps {
 }
 export default observer(function AddCategoryItemForm({ updateMenuState, budgetGroupId }: AddBudgetItemProps) {
     const {budgetStore} = useStore();
-    const { createCategory } = budgetStore;
+    const {createBudgetItem} = budgetStore;
 
     function CreateNewCategory() {
         if (form.isValid()) {
@@ -33,15 +32,16 @@ export default observer(function AddCategoryItemForm({ updateMenuState, budgetGr
 
     function handleFormSubmit(values: any) {
 
-        const budgetItem = new Category(
+        const budgetItem = new BudgetItem(
             uuidv4(), // Generate a unique ID
             values.budgetTitle,
             budgetGroupId,
+            new Date().toJSON(),
             0,
             0,
             0,
         );
-        createCategory(budgetItem).then(() => {
+        createBudgetItem(budgetItem).then(() => {
             updateMenuState()
         });
     }

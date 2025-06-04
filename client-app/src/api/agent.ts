@@ -2,7 +2,7 @@ import axios, {AxiosResponse} from "axios";
 import {Account} from "../models/account.ts";
 import {Transaction} from "../models/transaction.ts";
 import {BudgetGroup} from "../models/budgetGroup.ts";
-import {Category} from "../models/Category.ts";
+import {BudgetItem} from "../models/budgetItem.ts";
 
 axios.defaults.baseURL = 'http://localhost:5241/api';
 
@@ -30,20 +30,21 @@ const Transactions = {
 }
 
 const CategoryGroup = {
-    getBudgetGroups: () => requests.get<BudgetGroup[]>('/CategoryGroup'),
-    getBudgetGroupById: (id: string) => requests.get<BudgetGroup[]>(`/CategoryGroup/${id}`),
+    getBudgetGroups: () => requests.get<BudgetGroup[]>('/BudgetItemGroup'),
+    getBudgetGroupById: (id: string) => requests.get<BudgetGroup[]>(`/BudgetItemGroup/${id}`),
 }
 
-const Categories = {
-    updateCategory: (category: Category) => requests.put<Category>('/Category', category),
-    createCategory: (category: Category) => requests.post<Category>('/Category', category),
+const Budgets = {
+    updateBudgetItem: (budgetItem: BudgetItem) => requests.put<BudgetItem>('/BudgetItem', budgetItem),
+    createBudgetItem: (budgetItem: BudgetItem) => requests.post<BudgetItem>('/BudgetItem', budgetItem),
+    createBudgetGroup: (budgetGroup: BudgetGroup) => requests.post<BudgetGroup>('/BudgetItemGroup', budgetGroup),
 }
 
 const agent = {
     CategoryGroup,
     FinanceAccounts,
     Transactions,
-    Categories,
+    Budgets,
 }
 
 export default agent;

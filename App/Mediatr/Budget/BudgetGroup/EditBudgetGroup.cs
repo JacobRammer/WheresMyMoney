@@ -4,13 +4,13 @@ using DataAccess;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Mediatr.Budget.CategoryGroup;
+namespace App.Mediatr.Budget.BudgetGroup;
 
-public class EditCategoryGroup
+public class EditBudgetGroup
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Domain.Models.Category.CategoryGroup UpdatedCategoryGroup { get; set; }
+        public Domain.Models.Budgets.BudgetGroup UpdatedBudgetGroup { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -27,17 +27,15 @@ public class EditCategoryGroup
         // save changes to the db
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            Domain.Models.Category.CategoryGroup categoryGroupToUpdate = await _context.CategoryGroups.FirstOrDefaultAsync(
-                c => c.Id == request.UpdatedCategoryGroup.Id, cancellationToken: cancellationToken);
-            
-            if (categoryGroupToUpdate != null)
-                _mapper.Map(request.UpdatedCategoryGroup, categoryGroupToUpdate);
-            
+            Domain.Models.Budgets.BudgetGroup budgetGroupToUpdate = await _context.BudgetGroups.FirstOrDefaultAsync(
+                c => c.Id == request.UpdatedBudgetGroup.Id, cancellationToken: cancellationToken);
+
+            if (budgetGroupToUpdate != null)
+                _mapper.Map(request.UpdatedBudgetGroup, budgetGroupToUpdate);
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);
         }
-
     }
-
 }

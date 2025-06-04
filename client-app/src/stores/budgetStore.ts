@@ -1,7 +1,7 @@
 import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent.ts";
 import {BudgetGroup} from "../models/budgetGroup.ts";
-import {Category} from "../models/Category.ts";
+import {BudgetItem} from "../models/budgetItem.ts";
 
 export default class BudgetCategoryStore {
     budgetCategories = new Map<string, BudgetGroup>();
@@ -13,14 +13,17 @@ export default class BudgetCategoryStore {
     loadBudgetCategories = async () => {
         try {
             const budgetCategories = await agent.CategoryGroup.getBudgetGroups();
+            budgetCategories.sort((a, b) => a.dateCreated.localeCompare(b.dateCreated));
             runInAction(() => {
                 budgetCategories.forEach((budgetCategory: BudgetGroup) => {
                     // Convert plain categories to Category instances
-                    budgetCategory.categories = budgetCategory.categories.map(cat => 
-                        new Category(
+                    budgetCategory.categories.sort((a, b) => a.dateCreated.localeCompare(b.dateCreated));
+                    budgetCategory.categories = budgetCategory.categories.map(cat =>
+                        new BudgetItem(
                             cat.id,
                             cat.title,
-                            cat.categoryGroupId,
+                            cat.budgetGroupId,
+                            cat.dateCreated,
                             cat.assigned,
                             cat.target,
                             cat.outflow
@@ -33,10 +36,10 @@ export default class BudgetCategoryStore {
             console.log(error)
         }
     }
-    
-    updateCategory = async (category: Category) => {
+
+    updateCategory = async (category: BudgetItem) => {
         try {
-            const categoryGroup = this.budgetCategories.get(category.categoryGroupId);
+            const categoryGroup = this.budgetCategories.get(category.budgetGroupId);
             
             if (categoryGroup === undefined) {
                 console.log('Budget category group not found');
@@ -51,8 +54,8 @@ export default class BudgetCategoryStore {
             }
             const assignedDifference = category.assigned - budgetCategory.assigned;
             const availableDifference = category.available - budgetCategory.available;
-            
-            await agent.Categories.updateCategory(category);
+
+            await agent.Budgets.updateBudgetItem(category);
             
             runInAction(() => {
                 categoryGroup.assigned += assignedDifference;
@@ -73,7 +76,7 @@ export default class BudgetCategoryStore {
     }
 
     // Are the budget items the same?
-    isCategoryItemTheSame = (itemOne: Category, itemTwo: Category) => {
+    isCategoryItemTheSame = (itemOne: BudgetItem, itemTwo: BudgetItem) => {
 
         return itemOne.assigned === itemTwo.assigned &&
             itemOne.outflow === itemTwo.outflow &&
@@ -81,11 +84,22 @@ export default class BudgetCategoryStore {
             itemOne.title === itemTwo.title;
     }
 
-    createCategory = async (category: Category) => {
+    createBudgetItem = async (category: BudgetItem) => {
         try {
-            await agent.Categories.createCategory(category);
+            await agent.Budgets.createBudgetItem(category);
             runInAction(() => {
-                this.budgetCategories.get(category.categoryGroupId)?.categories.push(category);
+                this.budgetCategories.get(category.budgetGroupId)?.categories.push(category);
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    createBudgetGroup = async (budgetGroup: BudgetGroup) => {
+        try {
+            await agent.Budgets.createBudgetGroup(budgetGroup);
+            runInAction(() => {
+                this.budgetCategories.set(budgetGroup.id, budgetGroup);
             })
         } catch (error) {
             console.log(error)

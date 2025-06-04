@@ -1,18 +1,18 @@
 import {observer} from "mobx-react-lite";
 import {Button, Flex, TextInput} from "@mantine/core";
 import {useForm} from "@mantine/form";
-import {v4 as uuidv4} from "uuid";
 import {BudgetGroup} from "../../models/budgetGroup.ts";
+import {v4 as uuidv4} from 'uuid';
+import {useStore} from "../../stores/store.ts";
 
 interface AddCategoryFormProps {
-    createCategorySubmit: () => void
     updateMenuState: () => void;
 }
 
-export default observer(function AddCategoryForm({createCategorySubmit, updateMenuState}: AddCategoryFormProps) {
+export default observer(function AddBudgetGroupForm({updateMenuState}: AddCategoryFormProps) {
 
-    // const {budgetStore} = useStore();
-    // const {createAccount} = budgetStore;
+    const {budgetStore} = useStore();
+    const {createBudgetGroup} = budgetStore;
 
     function CreateNewCategory() {
         if (form.isValid()) {
@@ -32,13 +32,14 @@ export default observer(function AddCategoryForm({createCategorySubmit, updateMe
     });
 
     function handleFormSubmit(values: any) {
-        const account = new BudgetGroup(
+        const budgetGroup = new BudgetGroup(
             uuidv4(), // Generate a unique ID
             values.categoryTitle,
+            new Date().toJSON(),
         );
-        console.log(account.title);
-        // createAccount(account).then(() => {
-        // })
+        console.log(budgetGroup.title);
+        createBudgetGroup(budgetGroup).then(() => {
+        })
     }
     
     return (
