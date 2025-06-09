@@ -22,7 +22,6 @@ body, html {
 
 .sidebar {
     background-color: var(--backgroundColor);
-    width: var(--sidebarWidth);
     height: 100vh;
     /*overflow-y: scroll;*/
 }
@@ -128,7 +127,7 @@ body, html {
 }
 
 .CategoriesScrollArea {
-    height: calc(100vh - var(--dashboardHeaderHeight) - 93px);
+    height: calc(100vh - var(--dashboardHeaderHeight) - 82px);
 }
 
 .PageHeader {
