@@ -73,26 +73,26 @@ export default observer(function AccountTransactionDetails({account}: Props) {
     return (
         <Box>
             <Table horizontalSpacing="lg" verticalSpacing="xs" striped withColumnBorders withTableBorder
-                layout={"fixed"}>
+                   layout={"fixed"}>
                 <Table.Thead>
                     <Table.Tr>
                         <Table.Th w={300}>Date</Table.Th>
                         <Table.Th>Title</Table.Th>
                         <Table.Th w={100}>Amount</Table.Th>
-                        <Table.Th w={100}>Actions</Table.Th>
+                        <Table.Th w={100}></Table.Th>
                     </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>{rows}</Table.Tbody>
             </Table>
 
             <Modal opened={deleteModalState} onClose={() => setDeleteModalState(false)} title="Delete Transaction"
-                centered>
+                   centered>
                 <DeleteTransactionModal transaction={transaction} accountId={account.id}
                                         oncloseModal={() => setDeleteModalState(false)}/>
             </Modal>
 
             <Modal opened={editModalState} onClose={() => setEditModalState(false)} title="Edit Transaction"
-                centered>
+                   centered>
                 <AddEditTransactionForm transaction={transaction} account={account}
                                         onCloseModal={() => setEditModalState(false)}/>
             </Modal>

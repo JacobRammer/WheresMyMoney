@@ -25,7 +25,7 @@ export default observer(function DashboardHeader() {
     
     return (
             <Flex align='center'>
-                <Flex w={240} align='center'>
+                <Flex w={240}>
                     <Center className='noSelect'>
                         <Tooltip label={monthNames[Math.abs(date.getMonth() - 1 < 0 ? 11 : date.getMonth() - 1)]}>
                                 <CircleArrowLeft size={40} style={{marginRight: '10px'}} onClick={() => dateChange(-1)}
@@ -56,12 +56,12 @@ export default observer(function DashboardHeader() {
                     }
                 </Box>
 
-            <Flex style={{marginLeft: '250px'}} >
+            <Flex style={{marginLeft: '250px'}} align='center'>
                 <Box style={{backgroundColor: cashBalance > 0 ? 'rgba(16, 219, 89)' : 'rgba(255, 99, 99)', borderRadius: '10px'}} >
                     <Center w="auto" h={50}>
                         <Text size='xl' fw={800} style={{marginLeft: '10px', marginRight: '10px'}}>Available:
                             <NumberFormatter prefix=" $" value={cashBalance} decimalScale={2} fixedDecimalScale={true}
-                                thousandSeparator/>
+                                             thousandSeparator/>
                         </Text>
                     </Center>
                 </Box>
