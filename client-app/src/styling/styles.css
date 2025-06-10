@@ -14,6 +14,8 @@ body, html {
     --categoryWidth: 400px;
     --dashboardHeaderHeight: 61px;
     --BudgetGroupWidth: 70%;
+    --BudgetGroupAndItemBorderRadius: 10px;
+    --SelectedBudgetItemPadding: 15px;
 }
 
 .blueBackgroundColor {
@@ -75,6 +77,9 @@ body, html {
     border-top: 1px solid var(--underLineColor);
     align-items: center;
     height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: var(--BudgetGroupAndItemBorderRadius);
     /*margin-bottom: 10px;*/
 
 }
@@ -91,7 +96,10 @@ body, html {
     justify-content: space-between;
     margin-bottom: 10px;
     margin-top: 10px;
-    height: 30px;
+    height: 40px;
+    border-radius: var(--BudgetGroupAndItemBorderRadius);
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .dashboardBudgetCategoryFinalFlexItem {
@@ -175,4 +183,33 @@ body, html {
 .BudgetTable {
     width: var(--BudgetGroupWidth);
     border-right: 1px solid var(--underLineColor);
+}
+
+.SelectedBudgetItemOuterBox {
+    background-color:aliceblue;
+    border-radius: var(--BudgetGroupAndItemBorderRadius);
+    padding: var(--SelectedBudgetItemPadding);
+    margin-top: 10px;
+}
+
+.SelectedBudgetItemInnerBox {
+    background-color: aquamarine;
+    border-radius: var(--BudgetGroupAndItemBorderRadius);
+    padding: var(--SelectedBudgetItemPadding);
+}
+
+.SelectedBudgetItemFundingOptions {
+    margin-top: 20px;
+    background-color: aliceblue;
+    padding: var(--SelectedBudgetItemPadding);
+    border-radius: var(--BudgetGroupAndItemBorderRadius);
+}
+
+.SelectedBudgetItemFundingOptionsButton {
+    margin-bottom: 10px; 
+}
+
+.selectedBudgetItemInfoFlex {
+    justify-content: space-between;
+    margin-top: 10px;
 }

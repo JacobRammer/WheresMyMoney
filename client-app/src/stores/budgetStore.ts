@@ -6,8 +6,14 @@ import {BudgetItem} from "../models/budgetItem.ts";
 export default class BudgetCategoryStore {
     budgetCategories = new Map<string, BudgetGroup>();
 
+    selectedBudgetItem: BudgetItem | undefined = undefined;
+
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setSelectedBudgetItem = (budgetItem: BudgetItem | undefined) => {
+        runInAction(() => this.selectedBudgetItem = budgetItem)
     }
     
     loadBudgetCategories = async () => {
@@ -37,7 +43,7 @@ export default class BudgetCategoryStore {
         }
     }
 
-    updateCategory = async (category: BudgetItem) => {
+    updateBudgetItem = async (category: BudgetItem) => {
         try {
             const categoryGroup = this.budgetCategories.get(category.budgetGroupId);
             
@@ -54,7 +60,6 @@ export default class BudgetCategoryStore {
             }
             const assignedDifference = category.assigned - budgetCategory.assigned;
             const availableDifference = category.available - budgetCategory.available;
-
             await agent.Budgets.updateBudgetItem(category);
             
             runInAction(() => {
@@ -63,6 +68,7 @@ export default class BudgetCategoryStore {
                 const categoryIndex = categoryGroup.categories.findIndex(c => c.id === category.id);
                 if (categoryIndex !== -1) {
                     categoryGroup.categories[categoryIndex] = category;
+                    this.selectedBudgetItem = category;
                     
                 }
             })

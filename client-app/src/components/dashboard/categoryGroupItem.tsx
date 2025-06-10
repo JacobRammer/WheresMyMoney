@@ -56,7 +56,7 @@ export default observer(function CategoryGroupItem({budgetGroup}: Props) {
             {budgetGroup.categories.length !== 0 ?
                 budgetGroup.categories.map((category: BudgetItem) => (
                     <Box key={uuidv4()}>
-                        <CategoryItem category={category}/>
+                        <CategoryItem budgetItem={category}/>
                     </Box>
                 )) : <Text style={{margin: '10px'}}>No budget items</Text>}
         </Box>

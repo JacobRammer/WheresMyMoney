@@ -7,16 +7,16 @@ import {useForm} from "@mantine/form";
 import {BudgetItem} from "../../../models/budgetItem.ts";
 
 interface Props {
-    onClick: () => void;
-    closeForm: () => void;
     category: BudgetItem;
+
+    handleClickOutside: () => void;
 }
 
-export default observer(function CategoryAmountAssignedForm({ category, onClick, closeForm}: Props) {
+export default observer(function CategoryAmountAssignedForm({ category, handleClickOutside }: Props) {
     const hep = useClickOutside(() => handleInputSubmit());
 
     const {budgetStore} = useStore();
-    const { updateCategory } = budgetStore;
+    const { updateBudgetItem: updateCategory, setSelectedBudgetItem } = budgetStore;
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -25,7 +25,11 @@ export default observer(function CategoryAmountAssignedForm({ category, onClick,
         }})
         
     function handleInputSubmit() {
-        closeForm();
+        handleClickOutside();
+        // If the user hasn't modified the assigned, then nothing to do
+        if (!form.isDirty()) {
+            return;
+        }
         form.onSubmit((values) => {
             const updatedCategory = new BudgetItem
             (
@@ -38,19 +42,17 @@ export default observer(function CategoryAmountAssignedForm({ category, onClick,
                 category.outflow,
             );
 
-            // If the user hasn't modified the assigned, then nothing to do
-            if (!form.isDirty()) {
-                return;
-            }
             updateCategory(updatedCategory).catch(error => {
                 console.error('Error updating category:', error);
             });
+
+            setSelectedBudgetItem(updatedCategory);
         })();
         
     }
     return (
         <form>
-            <Input id={uuidv4()} ref={hep} size="sm" onClick={() => onClick()} color="red"
+            <Input id={uuidv4()} ref={hep} size="sm" color="red"
                 defaultValue={category.assigned !== null ? category.assigned.toFixed(2) : 0}
                 key={form.key('amountAssigned')} {...form.getInputProps('amountAssigned')}
                 onFocus={(event) => event.target.select()}
