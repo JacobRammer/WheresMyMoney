@@ -1,4 +1,5 @@
 using Domain.Enums;
+using Domain.Enums.Transactions;
 using Domain.Models.Accounts;
 using Domain.Models.Budgets;
 using Domain.Models.Transactions;
@@ -11,6 +12,7 @@ public class Seed
     {
         if (!context.Accounts.Any())
         {
+
             Account account1 = new Account
             {
                 Name = "Checking",
@@ -55,6 +57,24 @@ public class Seed
                 MonthlyPayment = 0
             };
 
+            Payee payee1 = new Payee
+            {
+                Id = Guid.NewGuid(),
+                PayeeName = "Walmart"
+            };
+
+            Payee payee2 = new Payee
+            {
+                Id = Guid.NewGuid(),
+                PayeeName = "Employer Inc."
+            };
+
+            Payee payee3 = new Payee
+            {
+                Id = Guid.NewGuid(),
+                PayeeName = "Bank of Example"
+            };
+
 
             List<Transaction> account1Transactions = new()
             {
@@ -63,14 +83,16 @@ public class Seed
                     Id = Guid.NewGuid(),
                     Title = "Groceries Payment",
                     Amount = -20.5,
-                    Date = DateTime.Now.AddDays(-5)
+                    Date = DateTime.Now.AddDays(-5),
+                    Payee = payee1,
                 },
                 new Transaction
                 {
                     Id = Guid.NewGuid(),
                     Title = "Salary Deposit",
                     Amount = 150.0,
-                    Date = DateTime.Now.AddMonths(-1)
+                    Date = DateTime.Now.AddMonths(-1),
+                    Payee = payee2,
                 }
             };
 
@@ -81,7 +103,8 @@ public class Seed
                     Id = Guid.NewGuid(),
                     Title = "Savings Interest",
                     Amount = 5.0,
-                    Date = DateTime.Now.AddDays(-30)
+                    Date = DateTime.Now.AddDays(-30),
+                    Payee = payee3,
                 },
                 new Transaction
                 {
@@ -99,14 +122,16 @@ public class Seed
                     Id = Guid.NewGuid(),
                     Title = "Credit Card Payment",
                     Amount = 75,
-                    Date = DateTime.Now.AddDays(-15)
+                    Date = DateTime.Now.AddDays(-15),
+                    Payee = payee1,
                 },
                 new Transaction
                 {
                     Id = Guid.NewGuid(),
                     Title = "Credit Card Fee",
                     Amount = -25,
-                    Date = DateTime.Now.AddDays(-20)
+                    Date = DateTime.Now.AddDays(-20),
+                    Payee = payee3,
                 }
             };
 
@@ -117,14 +142,16 @@ public class Seed
                     Id = Guid.NewGuid(),
                     Title = "Loan Payment",
                     Amount = 100,
-                    Date = DateTime.Now.AddMonths(-1)
+                    Date = DateTime.Now.AddMonths(-1),
+                    Payee = payee2,
                 },
                 new Transaction
                 {
                     Id = Guid.NewGuid(),
                     Title = "Loan Adjustment",
                     Amount = -50,
-                    Date = DateTime.Now.AddMonths(-3)
+                    Date = DateTime.Now.AddMonths(-3),
+                    Payee = payee3,
                 }
             };
 

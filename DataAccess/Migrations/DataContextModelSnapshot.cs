@@ -22,6 +22,20 @@ namespace DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Domain.Enums.Transactions.Payee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PayeeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Payees");
+                });
+
             modelBuilder.Entity("Domain.Models.Accounts.Account", b =>
                 {
                     b.Property<Guid>("Id")
@@ -117,6 +131,12 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("PayeeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -124,6 +144,8 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("PayeeId");
 
                     b.ToTable("Transactions");
                 });
@@ -144,6 +166,12 @@ namespace DataAccess.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Enums.Transactions.Payee", "Payee")
+                        .WithMany()
+                        .HasForeignKey("PayeeId");
+
+                    b.Navigation("Payee");
                 });
 
             modelBuilder.Entity("Domain.Models.Accounts.Account", b =>

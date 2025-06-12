@@ -29,6 +29,8 @@ public class GetAllAccounts
         public async Task<Result<List<AccountDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
             List<AccountDto> accounts = await _context.Accounts
+                .Include(a => a.Transactions)
+                    .ThenInclude(t => t.Payee)
                 .ProjectTo<AccountDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken: cancellationToken);
             return Result<List<AccountDto>>.Success(accounts);

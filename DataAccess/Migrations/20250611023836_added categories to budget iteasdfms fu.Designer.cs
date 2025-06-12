@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250426233449_added id key")]
-    partial class addedidkey
+    [Migration("20250611023836_added categories to budget iteasdfms fu")]
+    partial class addedcategoriestobudgetiteasdfmsfu
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,32 +55,41 @@ namespace DataAccess.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("Domain.Models.BudgetGroup.BudgetGroup", b =>
+            modelBuilder.Entity("Domain.Models.Budgets.BudgetGroup", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BudgetGroup");
+                    b.ToTable("BudgetGroups");
                 });
 
-            modelBuilder.Entity("Domain.Models.Category.Category", b =>
+            modelBuilder.Entity("Domain.Models.Budgets.BudgetItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryGroupId")
+                    b.Property<double>("Assigned")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("BudgetGroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Inflow")
-                        .HasColumnType("float");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<double>("Outflow")
                         .HasColumnType("float");
@@ -94,7 +103,26 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.HasIndex("BudgetGroupId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("BudgetItems");
+                });
+
+            modelBuilder.Entity("Domain.Models.Budgets.BudgetItemCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BudgetItemCategories");
                 });
 
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>
@@ -123,6 +151,23 @@ namespace DataAccess.Migrations
                     b.ToTable("Transactions");
                 });
 
+            modelBuilder.Entity("Domain.Models.Budgets.BudgetItem", b =>
+                {
+                    b.HasOne("Domain.Models.Budgets.BudgetGroup", null)
+                        .WithMany("Categories")
+                        .HasForeignKey("BudgetGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Budgets.BudgetItemCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>
                 {
                     b.HasOne("Domain.Models.Accounts.Account", null)
@@ -135,6 +180,11 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Domain.Models.Accounts.Account", b =>
                 {
                     b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("Domain.Models.Budgets.BudgetGroup", b =>
+                {
+                    b.Navigation("Categories");
                 });
 #pragma warning restore 612, 618
         }

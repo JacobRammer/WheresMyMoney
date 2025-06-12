@@ -1,3 +1,4 @@
+using Domain.Enums.Transactions;
 using Domain.Models.Accounts;
 using Domain.Models.Budgets;
 using Domain.Models.Transactions;
@@ -28,4 +29,9 @@ public class DataContext(DbContextOptions options) : DbContext(options)
     /// The <see cref="BudgetItem"/> db table
     /// </summary>
     public DbSet<BudgetItem> BudgetItems { get; set; }
+
+    /// <summary>
+    /// The db table for categories
+    /// </summary>
+    public DbSet<Payee> Payees { get; set; }
 }

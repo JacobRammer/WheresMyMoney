@@ -64,7 +64,7 @@ body, html {
 }
 
 .dashboardBudgetGroupFormat {
-    width: var( --categoryWidth);
+    width: 380px;
     margin-right: 10px;
     margin-left: 10px;
 }

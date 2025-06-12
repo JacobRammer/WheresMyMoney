@@ -1,5 +1,5 @@
 import {observer} from "mobx-react-lite";
-import {ActionIcon, Box, Center, Flex, Menu, NumberFormatter, Text, Tooltip} from "@mantine/core";
+import {ActionIcon, Box, Center, Flex, Menu, NumberFormatter, RingProgress, Text, Tooltip} from "@mantine/core";
 import {BudgetGroup} from "../../models/budgetGroup.ts";
 import CategoryItem from "./Category/categoryItem.tsx";
 import {v4 as uuidv4} from "uuid";

@@ -9,6 +9,7 @@ import {DatePickerInput} from '@mantine/dates';
 import {useState} from "react";
 import {CalendarSearch, CircleHelp} from "lucide-react";
 import {Account} from "../../../models/account.ts";
+import { Payee } from "../../../models/payee.ts";
 
 
 interface AddTransactionProps {
@@ -63,6 +64,7 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
                     amount: values.inflow > 0 ? values.inflow : -values.outflow,
                     date: transactionDate.toJSON(),
                     accountId: account.id,
+                    payee: new Payee(uuidv4())
                 };
                 createTransaction(account, transaction).then(() => {
                 })

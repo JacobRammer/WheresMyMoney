@@ -28,7 +28,7 @@ public class GetTransaction
         // Access the db to get items
         public async Task<Result<Transaction>> Handle(Query request, CancellationToken cancellationToken)
         {
-            Transaction transaction = await _context.Transactions
+            Transaction transaction = await _context.Transactions.Include(t => t.Payee)
                 .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken: cancellationToken);
 
             return Result<Transaction>.Success(transaction);

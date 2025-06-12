@@ -37,10 +37,6 @@ export default observer(function SelectedBudgetItemInfo() {
                         <NumberFormatter value={selectedBudgetItem?.outflow} prefix="$ " decimalScale={2} fixedDecimalScale={true} />
                     </Flex>
                     <Flex className="selectedBudgetItemInfoFlex" >
-                        <Text>Monthly Target</Text>
-                        <NumberFormatter value={selectedBudgetItem?.target} prefix="$ " decimalScale={2} fixedDecimalScale={true} />
-                    </Flex>
-                    <Flex className="selectedBudgetItemInfoFlex" >
                         <Text>Spent Last Month</Text>
                         <NumberFormatter value='0' prefix="$ " decimalScale={2} fixedDecimalScale={true} />
                     </Flex>

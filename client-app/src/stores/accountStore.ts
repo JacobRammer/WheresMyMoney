@@ -2,6 +2,7 @@ import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent.ts";
 import {Account} from "../models/account.ts";
 import {Transaction} from "../models/transaction.ts";
+import { Payee } from "../models/payee.ts";
 
 const Savings = "Savings";
 const Checking = "Checking";
@@ -9,14 +10,59 @@ const Credit = "Credit";
 const Loan = "Loan";
 export default class AccountStore {
     accountRegistry = new Map<string, Account>();
-    cashBalance: number = 0;
+
+    payeeMap: Map<string, Payee> = new Map();
+    
+    /**
+     * This is the primary balance where the assigned amounts for budget 
+     * items will get taken out of
+     *
+     * @type {number}
+     */
+    checkingBalance: number = 0;
+    savingsBalance: number = 0;
     creditBalance: number = 0;
     loanBalance: number = 0;
     numberOfTransactions: number = 0;
+    
 
 
     constructor() {
         makeAutoObservable(this);
+    }
+
+    /**
+     * Loads all of the payees from the DB
+     */
+    loadPayees = async () => {
+        try {
+            const payees = await agent.Payees.GetAllPayees();
+
+            runInAction(() => {
+                this.payeeMap = new Map();
+                payees.forEach((payee: Payee) => {
+                    this.payeeMap.set(payee.payeeName, payee);
+                })
+            })
+        } catch (error) {
+            console.log(error); 
+        }
+    }
+
+    createPayee = async (payee: Payee) => {
+
+        try {
+
+            if (this.payeeMap.has(payee.payeeName)) {
+                return;
+            }
+
+            this.payeeMap.set(payee.payeeName, payee);
+            await agent.Payees.CreatePayee(payee);
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     loadAccounts = async () => {
@@ -26,9 +72,10 @@ export default class AccountStore {
             
             // Reset the cash balance on load
             runInAction(() => {
-                this.cashBalance = 0;
+                this.savingsBalance = 0;
                 this.loanBalance = 0;
                 this.creditBalance = 0;
+                this.checkingBalance = 0;
             })
             account.forEach((account: Account) => {
                 this.setAccountRegistry(account);
@@ -47,14 +94,19 @@ export default class AccountStore {
         // Why JS concatenates numbers instead of adding, I got no fucking clue
         // So we have to convert to a string for it to actually add, lmfao
 
-        if (account.accountType === Savings ||
-            account.accountType === Checking) {
-            this.cashBalance += parseFloat(account.balance.toString())
+        if (account.accountType === Savings) {
+            this.savingsBalance += parseFloat(account.balance.toString())
         }
 
-        if (account.accountType === Credit) {
+        else if (account.accountType == Checking) {
+            this.checkingBalance += parseFloat(account.balance.toString())
+        }
+
+        else if (account.accountType === Credit) {
             this.creditBalance += parseFloat(account.balance.toString())
-        } else if (account.accountType === Loan) {
+        } 
+        
+        else if (account.accountType === Loan) {
             this.loanBalance += parseFloat(account.balance.toString())
         }
     }
@@ -63,12 +115,19 @@ export default class AccountStore {
         // Why JS concatenates numbers instead of adding, I got no fucking clue
         // So we have to convert to a string for it to actually add, lmfao
 
-        if (account.accountType === Savings ||
-            account.accountType === Checking) {
-            this.cashBalance -= parseFloat(account.balance.toString())
-        } else if (account.accountType === Credit) {
+        if (account.accountType === Savings) {
+            this.savingsBalance -= parseFloat(account.balance.toString())
+        } 
+
+        else if (account.accountType == Checking) {
+            this.checkingBalance -= parseFloat(account.balance.toString())
+        }
+        
+        else if (account.accountType === Credit) {
             this.creditBalance -= parseFloat(account.balance.toString())
-        } else if (account.accountType === Loan) {
+        } 
+        
+        else if (account.accountType === Loan) {
             this.loanBalance -= parseFloat(account.balance.toString())
         }
     }
@@ -82,7 +141,7 @@ export default class AccountStore {
     }
     
     totalBalance = () => {
-        return this.cashBalance + this.loanBalance + this.creditBalance;
+        return this.savingsBalance + this.loanBalance + this.creditBalance + this.checkingBalance;
     }
     createAccount = async (account: Account) => {
         try {
@@ -150,9 +209,18 @@ export default class AccountStore {
     updateTransaction = async (transaction: Transaction) => {
         try {
             await agent.Transactions.updateTransaction(transaction);
-            const updatedAccount = await agent.FinanceAccounts.getAccount(transaction.accountId);
+            const account = this.accountRegistry.get(transaction.accountId);
+            if (account) {
+                const idx = account.transactions.findIndex(t => t.id === transaction.id);
+                if (idx !== -1) {
+                    account.transactions[idx] = { ...account.transactions[idx], ...transaction };
+                }
+            }
+            const updatedAccount = account;
             runInAction(() => {
-                this.accountRegistry.set(transaction.accountId, updatedAccount);
+                if (updatedAccount) {
+                    this.accountRegistry.set(transaction.accountId, updatedAccount);
+                }
                 this.numberOfTransactions++;
             })
         } catch (error) {
@@ -174,5 +242,12 @@ export default class AccountStore {
 
     getAllAccounts = () => {
         return Array.from(this.accountRegistry.values());
+    }
+
+    /**
+     * Returns the total cash balance (checking + savings)
+     */
+    get cashBalance(): number {
+        return this.checkingBalance + this.savingsBalance;
     }
 }

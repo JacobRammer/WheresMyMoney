@@ -3,6 +3,7 @@ export const BudgetItemAvailableStyling = {
         RED: 'rgba(255, 0, 0, .6)',
         GREYISH: 'rgba(153, 153, 102, .6)',
         GREEN: 'rgba(51, 204, 51, .6)',
+        YELLOW: 'rgba(255, 153, 102, .6)'
     }
 
 } as const;

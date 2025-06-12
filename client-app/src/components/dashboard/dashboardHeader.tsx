@@ -8,7 +8,7 @@ export default observer(function DashboardHeader() {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
     const {accountStore} = useStore();
-    const {cashBalance} = accountStore
+    const {checkingBalance} = accountStore
     const [date, setDate] = useState(new Date());
 
     function dateChange(direction: number) {
@@ -57,10 +57,10 @@ export default observer(function DashboardHeader() {
                 </Box>
 
             <Flex style={{marginLeft: '250px'}} >
-                <Box style={{backgroundColor: cashBalance > 0 ? 'rgba(16, 219, 89)' : 'rgba(255, 99, 99)', borderRadius: '10px'}} >
+                <Box style={{ backgroundColor: checkingBalance > 0 ? 'rgba(16, 219, 89)' : 'rgba(255, 99, 99)', borderRadius: '10px'}} >
                     <Center w="auto" h={50}>
                         <Text size='xl' fw={800} style={{marginLeft: '10px', marginRight: '10px'}}>Available:
-                            <NumberFormatter prefix=" $" value={cashBalance} decimalScale={2} fixedDecimalScale={true}
+                            <NumberFormatter prefix=" $" value={checkingBalance} decimalScale={2} fixedDecimalScale={true}
                                 thousandSeparator/>
                         </Text>
                     </Center>

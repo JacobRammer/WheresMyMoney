@@ -15,16 +15,28 @@ export default observer(function SelectedBudgetItemFundingOptions() {
             selectedBudgetItem!.outflow);
     }
 
-    function FundBudgetItem(amountToAssign: number) {
+    function FundBudgetItem() {
         const updatedBudgetItem = BudgetItem.fromBudgetItem(selectedBudgetItem!);
-        updatedBudgetItem.assigned = amountToAssign;
+        const amountNeeded = amountNeededToReachTarget();
+        if (amountNeeded == 0)
+            return;
+        updatedBudgetItem.assigned += amountNeeded;
+        updateBudgetItem(updatedBudgetItem);
+    }
+
+    function UnfundBudgetItem()
+    {
+        const updatedBudgetItem = BudgetItem.fromBudgetItem(selectedBudgetItem!);
+        if (updatedBudgetItem.assigned === 0)
+            return;
+        updatedBudgetItem.assigned = 0;
         updateBudgetItem(updatedBudgetItem);
     }
 
     return (
         <Box className='SelectedBudgetItemFundingOptions'>
             <Box className="SelectedBudgetItemFundingOptionsButton">
-                <Button onClick={() => FundBudgetItem(amountNeededToReachTarget())}
+                <Button onClick={FundBudgetItem} disabled={amountNeededToReachTarget() <= 0}
                     variant="light"
                     fullWidth
                     leftSection={<Text>Underfunded</Text>}
@@ -42,7 +54,7 @@ export default observer(function SelectedBudgetItemFundingOptions() {
             <Box>
                 <Button variant="light" justify="space-between" fullWidth leftSection={<Text>Reset Assigned</Text>}
                     rightSection={<NumberFormatter value='0' prefix="$ " decimalScale={2} fixedDecimalScale={true} />} 
-                    onClick={() => FundBudgetItem(0)}/>
+                    onClick={UnfundBudgetItem} disabled={selectedBudgetItem!.assigned <= 0}/>
             </Box>
         </Box>
     )

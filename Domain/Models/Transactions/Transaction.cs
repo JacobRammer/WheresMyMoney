@@ -1,3 +1,5 @@
+using Domain.Enums.Transactions;
+
 namespace Domain.Models.Transactions;
 
 public class Transaction
@@ -22,5 +24,15 @@ public class Transaction
     /// </summary>
     public DateTime Date { get; set; }
 
+    /// <summary>
+    /// The id of the account
+    /// </summary>
     public Guid AccountId { get; set; }
+
+    public int MyProperty { get; set; }
+
+    /// <summary>
+    /// The <see cref="Payee"/> of this transaction
+    /// </summary>
+    public Payee? Payee { get; set; }
 }

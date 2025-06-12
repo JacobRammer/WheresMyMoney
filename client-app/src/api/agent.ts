@@ -3,6 +3,7 @@ import {Account} from "../models/account.ts";
 import {Transaction} from "../models/transaction.ts";
 import {BudgetGroup} from "../models/budgetGroup.ts";
 import {BudgetItem} from "../models/budgetItem.ts";
+import { Payee } from "../models/payee.ts";
 
 axios.defaults.baseURL = 'http://localhost:5241/api';
 
@@ -40,11 +41,18 @@ const Budgets = {
     createBudgetGroup: (budgetGroup: BudgetGroup) => requests.post<BudgetGroup>('/BudgetItemGroup', budgetGroup),
 }
 
+const Payees = {
+    CreatePayee: (payee: Payee) => requests.post<Payee>('/Payee', payee),
+    DeletePayee: (id: string) => requests.del<Payee>(`/Payee/${id}`),
+    GetAllPayees: () => requests.get<Payee[]>('/Payee')
+}
+
 const agent = {
     CategoryGroup,
     FinanceAccounts,
     Transactions,
     Budgets,
+    Payees,
 }
 
 export default agent;

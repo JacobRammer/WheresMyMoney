@@ -30,7 +30,7 @@ public class GetAllAccountTransactions
         public async Task<Result<List<Transaction>>> Handle(Query request, CancellationToken cancellationToken)
         {
             List<Transaction> transactions =
-                await _context.Transactions.Where(t => t.AccountId == request.AccountId)
+                await _context.Transactions.Where(t => t.AccountId == request.AccountId).Include(t => t.Payee)
                     .ToListAsync(cancellationToken: cancellationToken);
 
             return Result<List<Transaction>>.Success(transactions);

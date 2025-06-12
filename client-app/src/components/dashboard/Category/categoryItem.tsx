@@ -1,11 +1,12 @@
 import {observer} from "mobx-react-lite";
-import {Box, Center, Flex, NumberFormatter, Progress, Text, Tooltip} from "@mantine/core"
+import {Box, Center, Flex, NumberFormatter, Progress, RingProgress, Text, Tooltip} from "@mantine/core"
 import {useHover} from "@mantine/hooks";
 import {useState} from "react";
 import CategoryAmountAssignedForm from "./categoryAmountAssignedForm.tsx";
 import {BudgetItem} from "../../../models/budgetItem.ts";
 import { useStore } from "../../../stores/store.ts";
 import { getBudgetItemColor } from "../../../utils/budgetHelpers.ts";
+import { BudgetItemAvailableStyling } from "../../../constants/budgetItemAvailableStyling.ts";
 
 interface Props {
     budgetItem: BudgetItem;
@@ -45,12 +46,33 @@ export default observer(function CategoryItem({budgetItem}: Props) {
                 </Tooltip>
             </Box>
         </Box>
-            <Center w={100} ref={ref} onClick={() => setShowAssignedInputForm(true)}>
-                {hovered || showAssignedInputForm  ?  
-                    <CategoryAmountAssignedForm handleClickOutside={() => setShowAssignedInputForm(false)} category={budgetItem} />               
-                :
-                    <NumberFormatter value={budgetItem.assigned} prefix="$" decimalScale={2} fixedDecimalScale={true}/>
-            }
+            <Center w={100} onClick={() => setShowAssignedInputForm(true)}>
+                
+                {!hovered && !showAssignedInputForm &&
+                    <Tooltip label={<Text>You have assigned&nbsp;
+                        <NumberFormatter value={budgetItem.assigned} prefix="$" decimalScale={2} fixedDecimalScale={true} />
+                        &nbsp;of your
+                        <NumberFormatter value={budgetItem.target} prefix=" $" decimalScale={2} fixedDecimalScale={true} />
+                        &nbsp;monthly target.
+                    </Text>}>
+                        <RingProgress size={20} thickness={2} style={{ marginRight: '10px' }}
+                            sections={[{ value: (budgetItem.assigned / budgetItem.target) * 100, 
+                                color: budgetItem.assigned >= budgetItem.target ? 
+                                BudgetItemAvailableStyling.COLOR.GREEN : BudgetItemAvailableStyling.COLOR.YELLOW }]}
+                        transitionDuration={250}
+                    /></Tooltip>
+                    
+                }
+                <Box ref={ref}>{hovered || showAssignedInputForm ?
+                    <CategoryAmountAssignedForm handleClickOutside={() => setShowAssignedInputForm(false)} category={budgetItem} />
+                    :
+                    <Flex>
+                        <Center>
+                            <NumberFormatter value={budgetItem.assigned} prefix="$" decimalScale={2} fixedDecimalScale={true} />
+                        </Center>
+                    </Flex>
+                }</Box>
+                
         </Center>
         <Center w={100}>
                 <NumberFormatter value={budgetItem.outflow} prefix="$" decimalScale={2} fixedDecimalScale={true}/>

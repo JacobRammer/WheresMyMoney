@@ -40,5 +40,8 @@ public class BudgetItem
     /// </summary>
     public Guid BudgetGroupId { get; set; }
 
+    /// <summary>
+    /// The date when
+    /// </summary>
     public DateTime DateCreated { get; set; }
 }

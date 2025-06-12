@@ -9,7 +9,7 @@ export default observer(function Sidebar() {
     const {accountStore} = useStore();
     const {
         accountRegistry, loadAccounts, getCashAccounts, getLoanAccounts, getCreditAccounts,
-        cashBalance, loanBalance, creditBalance
+        cashBalance, creditBalance, loanBalance
     } = accountStore;
 
     useEffect(() => {
