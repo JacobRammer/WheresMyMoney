@@ -46,21 +46,25 @@ export default observer(function CategoryItem({budgetItem}: Props) {
                 </Tooltip>
             </Box>
         </Box>
-            <Center w={100} onClick={() => setShowAssignedInputForm(true)}>
+            <Flex w={120} onClick={() => setShowAssignedInputForm(true)} align='center'>
                 
                 {!hovered && !showAssignedInputForm &&
-                    <Tooltip label={<Text>You have assigned&nbsp;
-                        <NumberFormatter value={budgetItem.assigned} prefix="$" decimalScale={2} fixedDecimalScale={true} />
-                        &nbsp;of your
-                        <NumberFormatter value={budgetItem.target} prefix=" $" decimalScale={2} fixedDecimalScale={true} />
-                        &nbsp;monthly target.
-                    </Text>}>
-                        <RingProgress size={20} thickness={2} style={{ marginRight: '10px' }}
-                            sections={[{ value: (budgetItem.assigned / budgetItem.target) * 100, 
-                                color: budgetItem.assigned >= budgetItem.target ? 
-                                BudgetItemAvailableStyling.COLOR.GREEN : BudgetItemAvailableStyling.COLOR.YELLOW }]}
-                        transitionDuration={250}
-                    /></Tooltip>
+                    <Box >
+                        <Tooltip label={<Text>You have assigned&nbsp;
+                            <NumberFormatter value={budgetItem.assigned} prefix="$" decimalScale={2} fixedDecimalScale={true} />
+                            &nbsp;of your
+                            <NumberFormatter value={budgetItem.target} prefix=" $" decimalScale={2} fixedDecimalScale={true} />
+                            &nbsp;monthly target.
+                        </Text>}>
+                            <RingProgress size={20} thickness={2} style={{ marginRight: '10px' }}
+                                sections={[{
+                                    value: (budgetItem.assigned / budgetItem.target) * 100,
+                                    color: budgetItem.assigned >= budgetItem.target ?
+                                        BudgetItemAvailableStyling.COLOR.GREEN : BudgetItemAvailableStyling.COLOR.YELLOW
+                                }]}
+                                transitionDuration={250}/>
+                            </Tooltip>
+                        </Box>
                     
                 }
                 <Box ref={ref}>{hovered || showAssignedInputForm ?
@@ -73,7 +77,7 @@ export default observer(function CategoryItem({budgetItem}: Props) {
                     </Flex>
                 }</Box>
                 
-        </Center>
+        </Flex>
         <Center w={100}>
                 <NumberFormatter value={budgetItem.outflow} prefix="$" decimalScale={2} fixedDecimalScale={true}/>
         </Center>

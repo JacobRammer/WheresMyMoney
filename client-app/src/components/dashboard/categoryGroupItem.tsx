@@ -41,7 +41,7 @@ export default observer(function CategoryGroupItem({budgetGroup}: Props) {
                         </Center>
                 </Flex>
             </Box>
-            <Center w={100}> 
+            <Center w={100} style={{marginLeft: '10px'}}> 
                 <NumberFormatter value={budgetGroup.assigned} prefix="$" decimalScale={2} fixedDecimalScale={true}/>
             </Center>
             <Center w={100}>

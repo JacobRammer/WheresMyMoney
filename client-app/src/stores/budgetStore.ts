@@ -8,6 +8,8 @@ export default class BudgetCategoryStore {
 
     selectedBudgetItem: BudgetItem | undefined = undefined;
 
+    loading = false;
+
     constructor() {
         makeAutoObservable(this)
     }
@@ -17,12 +19,12 @@ export default class BudgetCategoryStore {
     }
     
     loadBudgetCategories = async () => {
+        this.loading = true;
         try {
             const budgetCategories = await agent.CategoryGroup.getBudgetGroups();
             budgetCategories.sort((a, b) => a.dateCreated.localeCompare(b.dateCreated));
             runInAction(() => {
                 budgetCategories.forEach((budgetCategory: BudgetGroup) => {
-                    // Convert plain categories to Category instances
                     budgetCategory.categories.sort((a, b) => a.dateCreated.localeCompare(b.dateCreated));
                     budgetCategory.categories = budgetCategory.categories.map(cat =>
                         new BudgetItem(
@@ -36,10 +38,14 @@ export default class BudgetCategoryStore {
                         )
                     );
                     this.budgetCategories.set(budgetCategory.id, budgetCategory);
-                })
-            })
+                });
+                this.loading = false;
+            });
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            runInAction(() => {
+                this.loading = false;
+            });
         }
     }
 
@@ -110,5 +116,11 @@ export default class BudgetCategoryStore {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    getBudgetItemById = (id: string) => {
+        if (this.budgetCategories.size === 0)
+            this.loadBudgetCategories()
+        return this.budgetCategories.get(id);
     }
 }

@@ -1,20 +1,27 @@
 import {observer} from "mobx-react-lite";
-import {ActionIcon, Box, Center, Modal, Table, Text, Tooltip} from "@mantine/core";
+import {ActionIcon, Box, Center, Loader, LoadingOverlay, Modal, Table, Text, Tooltip} from "@mantine/core";
 import {Account} from "../../../models/account.ts";
 import {Pencil, Trash2} from "lucide-react";
 import {Transaction} from "../../../models/transaction.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import DeleteTransactionModal from "./deleteTransactionModal.tsx";
 import AddEditTransactionForm from "./addEditTransactionForm.tsx";
 import { Payee } from "../../../models/payee.ts";
 import { v4 as uuidv4 } from "uuid";
 import TransactionPayeeSelector from "./transactionPayeeSelector.tsx";
+import { useStore } from "../../../stores/store.ts";
 
 interface Props {
     account: Account
 }
 
 export default observer(function AccountTransactionDetails({account}: Props) {
+    const {accountStore} = useStore();
+    const { getPayeeBudgetItem } = accountStore;
+
+    const {budgetStore} = useStore();
+    const { loadBudgetCategories, budgetCategories, loading } = budgetStore;
+
     const [deleteModalState, setDeleteModalState] = useState(false);
     const [editModalState, setEditModalState] = useState(false);
     const [transaction, setTransaction] = useState<Transaction>({
@@ -53,6 +60,13 @@ export default observer(function AccountTransactionDetails({account}: Props) {
                 <Text fw={500}>{transaction.title}</Text>
             </Table.Td>
             <Table.Td>
+                <Text fw={500}>
+                    {
+                        getPayeeBudgetItem(account.id, transaction.payee.lastBudgetItem)
+                    }
+                </Text>
+            </Table.Td>
+            <Table.Td>
                 <Center><Text fw={500}>
                     ${transaction.amount}
                 </Text></Center>
@@ -76,8 +90,10 @@ export default observer(function AccountTransactionDetails({account}: Props) {
             </Table.Td>
         </Table.Tr>
     ));
+    
 
     return (
+        (loading ? <Loader/> : 
         <Box w='100%'>
             <Table horizontalSpacing="lg" verticalSpacing="xs" striped withColumnBorders withTableBorder
                 layout={"fixed"}>
@@ -86,6 +102,7 @@ export default observer(function AccountTransactionDetails({account}: Props) {
                         <Table.Th w={150}>Date</Table.Th>
                         <Table.Th w={200}>Payee</Table.Th>
                         <Table.Th >Title</Table.Th>               
+                        <Table.Th >Budget</Table.Th>               
                         <Table.Th w={125}>Amount</Table.Th>
                         <Table.Th w={100}>Actions</Table.Th>
                     </Table.Tr>
@@ -104,6 +121,6 @@ export default observer(function AccountTransactionDetails({account}: Props) {
                 <AddEditTransactionForm transaction={transaction} account={account}
                                         onCloseModal={() => setEditModalState(false)}/>
             </Modal>
-        </Box>
+        </Box>)
     )
 })

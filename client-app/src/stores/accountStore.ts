@@ -3,6 +3,9 @@ import agent from "../api/agent.ts";
 import {Account} from "../models/account.ts";
 import {Transaction} from "../models/transaction.ts";
 import { Payee } from "../models/payee.ts";
+import BudgetCategoryStore from "./budgetStore.ts";
+
+const budgetCategoryStore = new BudgetCategoryStore();
 
 const Savings = "Savings";
 const Checking = "Checking";
@@ -242,6 +245,24 @@ export default class AccountStore {
 
     getAllAccounts = () => {
         return Array.from(this.accountRegistry.values());
+    }
+
+    getPayeeBudgetItem = (accountId: string, budgetId: string) => {
+
+        if (accountId === null || budgetId === null)
+            return;
+        const account = this.accountRegistry.get(accountId);
+
+        if (account === undefined)
+            return;
+
+        const budgetItem = budgetCategoryStore.getBudgetItemById(budgetId);
+
+        if (budgetItem === undefined)
+            return;
+
+        return budgetItem.title;
+
     }
 
     /**

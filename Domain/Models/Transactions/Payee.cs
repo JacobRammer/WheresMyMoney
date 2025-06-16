@@ -18,5 +18,10 @@ namespace Domain.Enums.Transactions
         /// The title of the <seealso cref="Payee"/>
         /// </summary>
         public string? PayeeName { get; set; }
+
+        /// <summary>
+        /// The last <see cref="BudgetItem"/> associated with this <see cref="Payee"/>
+        /// </summary>
+        public Guid? LastBudgetItem { get; set; }
     }
 }
