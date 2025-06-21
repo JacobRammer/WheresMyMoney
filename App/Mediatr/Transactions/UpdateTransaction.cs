@@ -57,11 +57,13 @@ public class UpdateTransaction
                 }
 
                 _mapper.Map(request.Transaction, transaction);
+
+                await _context.SaveChangesAsync(cancellationToken);
+
+                return Result<Unit>.Success(Unit.Value);
             }
 
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return Result<Unit>.Success(Unit.Value);
+            return Result<Unit>.NotFound("Not found");
         }
     }
 }

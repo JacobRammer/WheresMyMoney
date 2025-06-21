@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250611023836_added categories to budget iteasdfms fu")]
-    partial class addedcategoriestobudgetiteasdfmsfu
+    [Migration("20250617013034_as")]
+    partial class @as
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,20 @@ namespace DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Enums.Transactions.Payee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PayeeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Payees");
+                });
 
             modelBuilder.Entity("Domain.Models.Accounts.Account", b =>
                 {
@@ -85,9 +99,6 @@ namespace DataAccess.Migrations
                     b.Property<Guid>("BudgetGroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -105,24 +116,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("BudgetGroupId");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("BudgetItems");
-                });
-
-            modelBuilder.Entity("Domain.Models.Budgets.BudgetItemCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BudgetItemCategories");
                 });
 
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>
@@ -140,6 +134,9 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("PayeeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -147,6 +144,8 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("PayeeId");
 
                     b.ToTable("Transactions");
                 });
@@ -158,14 +157,6 @@ namespace DataAccess.Migrations
                         .HasForeignKey("BudgetGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Models.Budgets.BudgetItemCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Domain.Models.Transactions.Transaction", b =>
@@ -175,6 +166,12 @@ namespace DataAccess.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Enums.Transactions.Payee", "Payee")
+                        .WithMany()
+                        .HasForeignKey("PayeeId");
+
+                    b.Navigation("Payee");
                 });
 
             modelBuilder.Entity("Domain.Models.Accounts.Account", b =>

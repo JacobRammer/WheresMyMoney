@@ -131,9 +131,6 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MyProperty")
-                        .HasColumnType("int");
-
                     b.Property<Guid?>("PayeeId")
                         .HasColumnType("uniqueidentifier");
 

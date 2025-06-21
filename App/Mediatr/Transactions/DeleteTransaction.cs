@@ -31,7 +31,7 @@ public class DeleteTransaction
                     cancellationToken: cancellationToken);
 
             if (transaction == null)
-                return Result<Unit>.Failure($"Could not find transaction by id {request.Id}");
+                return Result<Unit>.NotFound("Not found");
 
             _context.Remove(transaction);
 
@@ -43,6 +43,7 @@ public class DeleteTransaction
                 account.Balance += Math.Abs(transaction.Amount);
             else
                 account.Balance -= Math.Abs(transaction.Amount);
+
 
             await _context.SaveChangesAsync(cancellationToken);
 

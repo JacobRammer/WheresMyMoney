@@ -9,12 +9,14 @@ import AddEditTransactionForm from "./addEditTransactionForm.tsx";
 import { Payee } from "../../../models/payee.ts";
 import { v4 as uuidv4 } from "uuid";
 import TransactionPayeeSelector from "./transactionPayeeSelector.tsx";
+import {useStore} from "../../../stores/store.ts";
 
 interface Props {
     account: Account
 }
 
 export default observer(function AccountTransactionDetails({account}: Props) {
+    
     const [deleteModalState, setDeleteModalState] = useState(false);
     const [editModalState, setEditModalState] = useState(false);
     const [transaction, setTransaction] = useState<Transaction>({
@@ -85,7 +87,7 @@ export default observer(function AccountTransactionDetails({account}: Props) {
                     <Table.Tr>
                         <Table.Th w={150}>Date</Table.Th>
                         <Table.Th w={200}>Payee</Table.Th>
-                        <Table.Th >Title</Table.Th>               
+                        <Table.Th >Title</Table.Th>
                         <Table.Th w={125}>Amount</Table.Th>
                         <Table.Th w={100}>Actions</Table.Th>
                     </Table.Tr>
@@ -96,14 +98,15 @@ export default observer(function AccountTransactionDetails({account}: Props) {
             <Modal opened={deleteModalState} onClose={() => setDeleteModalState(false)} title="Delete Transaction"
                 centered>
                 <DeleteTransactionModal transaction={transaction} accountId={account.id}
-                                        oncloseModal={() => setDeleteModalState(false)}/>
+                    oncloseModal={() => setDeleteModalState(false)} />
             </Modal>
 
             <Modal opened={editModalState} onClose={() => setEditModalState(false)} title="Edit Transaction"
                 centered>
                 <AddEditTransactionForm transaction={transaction} account={account}
-                                        onCloseModal={() => setEditModalState(false)}/>
+                    onCloseModal={() => setEditModalState(false)} />
             </Modal>
         </Box>
+        
     )
 })

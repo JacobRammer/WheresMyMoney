@@ -39,8 +39,12 @@ using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<DataContext>();
 
-await context.Database.MigrateAsync();
-await Seed.SeedData(context);
+
+if (Environment.GetEnvironmentVariable("Testing") == null)
+{
+    await context.Database.MigrateAsync();
+    await Seed.SeedData(context);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -55,3 +59,4 @@ app.UseCors("CorsPolicy");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+public partial class Program { }

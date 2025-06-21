@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class addedcategoriestobudgetiteasdfmsfu : Migration
+    public partial class @as : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,36 +42,15 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BudgetItemCategories",
+                name: "Payees",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PayeeName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BudgetItemCategories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Transactions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Amount = table.Column<double>(type: "float", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transactions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Payees", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,8 +63,7 @@ namespace DataAccess.Migrations
                     Outflow = table.Column<double>(type: "float", nullable: false),
                     Assigned = table.Column<double>(type: "float", nullable: false),
                     BudgetGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,12 +74,33 @@ namespace DataAccess.Migrations
                         principalTable: "BudgetGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PayeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BudgetItems_BudgetItemCategories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "BudgetItemCategories",
+                        name: "FK_Transactions_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Payees_PayeeId",
+                        column: x => x.PayeeId,
+                        principalTable: "Payees",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -110,14 +109,14 @@ namespace DataAccess.Migrations
                 column: "BudgetGroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BudgetItems_CategoryId",
-                table: "BudgetItems",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_AccountId",
                 table: "Transactions",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_PayeeId",
+                table: "Transactions",
+                column: "PayeeId");
         }
 
         /// <inheritdoc />
@@ -133,10 +132,10 @@ namespace DataAccess.Migrations
                 name: "BudgetGroups");
 
             migrationBuilder.DropTable(
-                name: "BudgetItemCategories");
+                name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "Payees");
         }
     }
 }

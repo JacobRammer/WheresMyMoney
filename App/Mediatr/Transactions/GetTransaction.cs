@@ -31,6 +31,8 @@ public class GetTransaction
             Transaction transaction = await _context.Transactions.Include(t => t.Payee)
                 .FirstOrDefaultAsync(t => t.Id == request.Id, cancellationToken: cancellationToken);
 
+            if (transaction == null)
+                return Result<Transaction>.NotFound("not found");
             return Result<Transaction>.Success(transaction);
         }
     }

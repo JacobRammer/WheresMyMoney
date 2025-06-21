@@ -38,20 +38,35 @@ export default observer(function TransactionPayeeSelector({transaction}: Props) 
         });
         updateTransaction(transaction);
     }
+    
+    function test() {
+        if (transaction.payee === null)
+            return []
+        return [transaction.payee.payeeName]
+    }
+
+    function test2() {
+        if (transaction.payee === undefined)
+            return ['placehsolder']
+        return payeeNames.filter(name => name !== transaction.payee?.payeeName)
+    }
 
     useEffect(() => {
         if (payeeMap.size === 0)
             loadPayees();
-    }, [payeeMap])
+    }, [payeeMap.size])
 
     return (
         <Select name="dropdown"
             placeholder="Select Payee"
             data={[
-                { group: "Selected", items: [transaction.payee?.payeeName] },
                 {
-                    group: "Saved Payees", items: payeeNames.filter(
-                        name => name !== transaction.payee?.payeeName)
+                    group: "Selected",
+                    items: test()
+                },
+                {
+                    group: "Saved Payees",
+                    items: test2()
                 }
             ]}
             value={transaction.payee?.payeeName}

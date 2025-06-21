@@ -213,7 +213,9 @@ export default class AccountStore {
             if (account) {
                 const idx = account.transactions.findIndex(t => t.id === transaction.id);
                 if (idx !== -1) {
-                    account.transactions[idx] = { ...account.transactions[idx], ...transaction };
+                    runInAction(() => {
+                        account.transactions[idx] = { ...account.transactions[idx], ...transaction };
+                    })
                 }
             }
             const updatedAccount = account;
