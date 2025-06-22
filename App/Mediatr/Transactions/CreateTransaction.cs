@@ -31,6 +31,8 @@ public class CreateTransaction
             Account account = await _context.Accounts.Include(t => t.Transactions)
                 .FirstOrDefaultAsync(a => a.Id == request.Id, cancellationToken: cancellationToken);
 
+            if (account == null)
+                return Result<Unit>.Success(Unit.Value);
             account.AddTransaction(request.Transaction);
             _context.Transactions.Add(request.Transaction);
             await _context.SaveChangesAsync(cancellationToken);

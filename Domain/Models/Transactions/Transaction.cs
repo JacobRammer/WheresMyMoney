@@ -29,8 +29,6 @@ public class Transaction
     /// </summary>
     public Guid AccountId { get; set; }
 
-    public int MyProperty { get; set; }
-
     /// <summary>
     /// The <see cref="Payee"/> of this transaction
     /// </summary>

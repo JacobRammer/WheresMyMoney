@@ -60,13 +60,6 @@ export default observer(function AccountTransactionDetails({account}: Props) {
                 <Text fw={500}>{transaction.title}</Text>
             </Table.Td>
             <Table.Td>
-                <Text fw={500}>
-                    {
-                        getPayeeBudgetItem(account.id, transaction.payee.lastBudgetItem)
-                    }
-                </Text>
-            </Table.Td>
-            <Table.Td>
                 <Center><Text fw={500}>
                     ${transaction.amount}
                 </Text></Center>
@@ -101,8 +94,7 @@ export default observer(function AccountTransactionDetails({account}: Props) {
                     <Table.Tr>
                         <Table.Th w={150}>Date</Table.Th>
                         <Table.Th w={200}>Payee</Table.Th>
-                        <Table.Th >Title</Table.Th>               
-                        <Table.Th >Budget</Table.Th>               
+                        <Table.Th >Title</Table.Th>
                         <Table.Th w={125}>Amount</Table.Th>
                         <Table.Th w={100}>Actions</Table.Th>
                     </Table.Tr>

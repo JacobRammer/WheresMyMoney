@@ -48,7 +48,7 @@ export default observer(function TransactionPayeeSelector({transaction}: Props) 
         <Select name="dropdown"
             placeholder="Select Payee"
             data={[
-                { group: "Selected", items: [transaction.payee?.payeeName] },
+                { group: "Selected", items: transaction.payee ? [transaction.payee.payeeName] : [] },
                 {
                     group: "Saved Payees", items: payeeNames.filter(
                         name => name !== transaction.payee?.payeeName)

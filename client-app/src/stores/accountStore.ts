@@ -198,6 +198,9 @@ export default class AccountStore {
 
     createTransaction = async (account: Account, transaction: Transaction) => {
         try {
+            runInAction(() => {
+                transaction.payee = null;
+            })
             await agent.Transactions.addTransaction(transaction);
             const updatedAccount = await agent.FinanceAccounts.getAccount(account.id);
             runInAction(() => {

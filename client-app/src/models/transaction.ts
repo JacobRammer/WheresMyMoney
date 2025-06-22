@@ -7,7 +7,7 @@ export interface Transaction {
     date: string;
     accountId: string;
 
-    payee: Payee;
+    payee: Payee | null;
 }
 
 export class Transaction implements Transaction {
