@@ -32,7 +32,8 @@ export default observer(function SelectedBudgetItemFundingOptions() {
         updatedBudgetItem.assigned = 0;
         updateBudgetItem(updatedBudgetItem);
     }
-
+    
+    
     return (
         <Box className='SelectedBudgetItemFundingOptions'>
             <Box className="SelectedBudgetItemFundingOptionsButton">

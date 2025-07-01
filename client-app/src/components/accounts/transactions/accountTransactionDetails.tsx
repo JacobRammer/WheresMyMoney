@@ -6,10 +6,9 @@ import {Transaction} from "../../../models/transaction.ts";
 import {useEffect, useState} from "react";
 import DeleteTransactionModal from "./deleteTransactionModal.tsx";
 import AddEditTransactionForm from "./addEditTransactionForm.tsx";
-import { Payee } from "../../../models/payee.ts";
-import { v4 as uuidv4 } from "uuid";
 import TransactionPayeeSelector from "./transactionPayeeSelector.tsx";
 import { useStore } from "../../../stores/store.ts";
+import TransactionBudgetItemSelector from "./transactionBudgetItemSelector.tsx";
 
 interface Props {
     account: Account
@@ -20,7 +19,7 @@ export default observer(function AccountTransactionDetails({account}: Props) {
     const { getPayeeBudgetItem } = accountStore;
 
     const {budgetStore} = useStore();
-    const { loadBudgetCategories, budgetCategories, loading } = budgetStore;
+    const { loadBudgetCategories, budgetCategories, loading, getBudgetGroupFromMap: getBudgetItemFromMap } = budgetStore;
 
     const [deleteModalState, setDeleteModalState] = useState(false);
     const [editModalState, setEditModalState] = useState(false);
@@ -30,7 +29,8 @@ export default observer(function AccountTransactionDetails({account}: Props) {
         amount: 0,
         date: new Date().toString(),
         accountId: '',
-        payee: new Payee(uuidv4())
+        payee: null,
+        budgetItemId: undefined,
     });
 
     // Sets the delete modal open state and sets the current account
@@ -60,6 +60,9 @@ export default observer(function AccountTransactionDetails({account}: Props) {
                 <Text fw={500}>{transaction.title}</Text>
             </Table.Td>
             <Table.Td>
+                <TransactionBudgetItemSelector transaction={transaction}/>
+            </Table.Td>
+            <Table.Td>
                 <Center><Text fw={500}>
                     ${transaction.amount}
                 </Text></Center>
@@ -83,6 +86,12 @@ export default observer(function AccountTransactionDetails({account}: Props) {
             </Table.Td>
         </Table.Tr>
     ));
+
+    useEffect(() => {
+        if (budgetCategories.size === 0)
+            loadBudgetCategories();
+
+    }, [budgetCategories.size, budgetCategories]);
     
 
     return (
@@ -95,6 +104,7 @@ export default observer(function AccountTransactionDetails({account}: Props) {
                         <Table.Th w={150}>Date</Table.Th>
                         <Table.Th w={200}>Payee</Table.Th>
                         <Table.Th >Title</Table.Th>
+                        <Table.Th>Associated Budget</Table.Th>
                         <Table.Th w={125}>Amount</Table.Th>
                         <Table.Th w={100}>Actions</Table.Th>
                     </Table.Tr>

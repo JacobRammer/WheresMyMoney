@@ -35,14 +35,14 @@ export default observer(function CategoryItem({budgetItem}: Props) {
             </Flex>
             <Box>
                 <Tooltip label={<Text>You have spent
-                        <NumberFormatter value={budgetItem.outflow} prefix=" $" thousandSeparator decimalScale={2}
+                        <NumberFormatter value={Math.abs(budgetItem.outflow)} prefix=" $" thousandSeparator decimalScale={2}
                         fixedDecimalScale/>
                     &nbsp;of your monthly budget of
                         <NumberFormatter value={budgetItem.target} prefix=" $" thousandSeparator decimalScale={2}
                         fixedDecimalScale/>
                 </Text>} withArrow arrowPosition="side" position="top-start">
-                        <Progress radius="xl" value={(budgetItem.outflow / budgetItem.target) * 100}
-                            color={budgetItem.outflow > budgetItem.target? 'red' : 'green'}/>
+                        <Progress radius="xl" value={Math.abs(budgetItem.outflow)}
+                            color={Math.abs(budgetItem.outflow) > budgetItem.target ? 'red' : 'green'}/>
                 </Tooltip>
             </Box>
         </Box>

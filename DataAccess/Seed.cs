@@ -111,7 +111,8 @@ public class Seed
                     Id = Guid.NewGuid(),
                     Title = "Savings Deposit",
                     Amount = 50.0,
-                    Date = DateTime.Now.AddMonths(-2)
+                    Date = DateTime.Now.AddMonths(-2),
+                    Payee = payee2,
                 }
             };
 

@@ -1,7 +1,7 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent.ts";
-import {BudgetGroup} from "../models/budgetGroup.ts";
-import {BudgetItem} from "../models/budgetItem.ts";
+import { BudgetGroup } from "../models/budgetGroup.ts";
+import { BudgetItem } from "../models/budgetItem.ts";
 
 export default class BudgetCategoryStore {
     budgetCategories = new Map<string, BudgetGroup>();
@@ -10,14 +10,36 @@ export default class BudgetCategoryStore {
 
     loading = false;
 
+
+    /**
+     * The month of the current budget
+     *
+     * @type {number}
+     */
+    activeDate: number = new Date().getMonth();
+
     constructor() {
         makeAutoObservable(this)
+    }
+
+    /**
+     * Sets the activeDate
+     * @param dateToSet the month as an int
+     */
+    setActiveDate = (dateToSet: number) => {
+        runInAction(() => {
+            this.activeDate = dateToSet;
+        })
+    }
+
+    getBudgetItemsByMonth = (budgetGroup: BudgetGroup) => {
+        return budgetGroup.categories;
     }
 
     setSelectedBudgetItem = (budgetItem: BudgetItem | undefined) => {
         runInAction(() => this.selectedBudgetItem = budgetItem)
     }
-    
+
     loadBudgetCategories = async () => {
         this.loading = true;
         try {
@@ -52,14 +74,14 @@ export default class BudgetCategoryStore {
     updateBudgetItem = async (category: BudgetItem) => {
         try {
             const categoryGroup = this.budgetCategories.get(category.budgetGroupId);
-            
+
             if (categoryGroup === undefined) {
                 console.log('Budget category group not found');
                 return;
             }
-            
+
             const budgetCategory = categoryGroup.categories.find(budgetCategory => budgetCategory.id === category.id);
-            
+
             if (budgetCategory === undefined) {
                 console.log('Budget category not found');
                 return;
@@ -67,7 +89,7 @@ export default class BudgetCategoryStore {
             const assignedDifference = category.assigned - budgetCategory.assigned;
             const availableDifference = category.available - budgetCategory.available;
             await agent.Budgets.updateBudgetItem(category);
-            
+
             runInAction(() => {
                 categoryGroup.assigned += assignedDifference;
                 categoryGroup.available += availableDifference;
@@ -75,7 +97,7 @@ export default class BudgetCategoryStore {
                 if (categoryIndex !== -1) {
                     categoryGroup.categories[categoryIndex] = category;
                     this.selectedBudgetItem = category;
-                    
+
                 }
             })
         } catch (error) {
@@ -122,5 +144,44 @@ export default class BudgetCategoryStore {
         if (this.budgetCategories.size === 0)
             this.loadBudgetCategories()
         return this.budgetCategories.get(id);
+    }
+
+    getBudgetGroupByBudgetItem = (id: string) => {
+        for (const [groupId, group] of this.budgetCategories.entries()) {
+            if (group.categories.find(category => category.id === id)) {
+                return this.budgetCategories.get(groupId);
+            }
+        }
+        return undefined
+    }
+
+    getBudgetGroupFromMap = (id: string | undefined) => {
+        if (id === undefined)
+            return;
+        for (const [groupId, group] of this.budgetCategories.entries()) {
+            if (group.categories.find(category => category.id === id)) {
+                const budgetGroup = this.budgetCategories.get(groupId);
+                return budgetGroup?.categories.find(c => c.id === id);
+            }
+        }
+        return undefined
+    }
+
+    getBudgetGroupFromMapByName = (id: string) => {
+        for (const [groupId, group] of this.budgetCategories.entries()) {
+            if (group.categories.find(category => category.title === id)) {
+                const budgetGroup = this.budgetCategories.get(groupId);
+                return budgetGroup?.categories.find(c => c.title === id);
+            }
+        }
+        return undefined
+    }
+
+    getAllBudgetItems = (): BudgetItem[] => {
+        const items: BudgetItem[] = [];
+        this.budgetCategories.forEach(group => {
+            items.push(...group.categories);
+        });
+        return items;
     }
 }

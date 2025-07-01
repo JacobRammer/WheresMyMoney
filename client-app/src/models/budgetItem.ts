@@ -18,7 +18,7 @@ export class BudgetItem {
     }
 
     private calculateAvailable(): number {
-        return this.assigned - this.outflow;
+        return this.assigned - (-this.outflow);
     }
 
     // Getter for available

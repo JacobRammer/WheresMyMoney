@@ -64,7 +64,8 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
                     amount: values.inflow > 0 ? values.inflow : -values.outflow,
                     date: transactionDate.toJSON(),
                     accountId: account.id,
-                    payee: new Payee(uuidv4())
+                    payee: null,
+                    budgetItemId : undefined
                 };
                 createTransaction(account, transaction).then(() => {
                 })
@@ -76,9 +77,7 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
                 });
                 updateTransaction(transaction).then(() => {
                 })
-            }
-            
-            
+            }            
         }
     }
 
