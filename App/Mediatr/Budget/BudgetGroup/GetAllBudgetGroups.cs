@@ -1,4 +1,6 @@
 using App.Core;
+using App.Extensions;
+using App.Mediatr.Budget.BudgetItem;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DataAccess;
@@ -33,6 +35,9 @@ public class GetAllBudgetGroups
                     .ProjectTo<CategoryGroupDto>(_mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken: cancellationToken);
 
+            // Get all transactions associated with each budget item
+            categoryGroups.ForEach(c => c.GetTransactionsAndCalculateSpending(_context));
+            
             return Result<List<CategoryGroupDto>>.Success(categoryGroups);
         }
     }
