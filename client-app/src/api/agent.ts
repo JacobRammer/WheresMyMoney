@@ -1,19 +1,20 @@
-import axios, {AxiosResponse} from "axios";
-import {Account} from "../models/account.ts";
-import {Transaction} from "../models/transaction.ts";
-import {BudgetGroup} from "../models/budgetGroup.ts";
-import {BudgetItem} from "../models/budgetItem.ts";
+import axios, { AxiosResponse } from "axios";
+import { Account } from "../models/account.ts";
+import { Transaction } from "../models/transaction.ts";
+import { BudgetGroup } from "../models/budgetGroup.ts";
+import { BudgetItem } from "../models/budgetItem.ts";
 import { Payee } from "../models/payee.ts";
+import AssignedTransaction from "../models/assignedTransaction.ts";
 
 axios.defaults.baseURL = 'http://localhost:5241/api';
 
-const responseBody =  <T> (response: AxiosResponse<T>) => response.data;
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
-    get: <T> (url: string) => axios.get<T>(url).then(responseBody),
-    post: <T> (url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
-    put: <T> (url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
-    del: <T> (url: string) => axios.delete<T>(url).then(responseBody),
+    get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+    post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
+    put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
+    del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 }
 
 const FinanceAccounts = {
@@ -39,6 +40,7 @@ const Budgets = {
     updateBudgetItem: (budgetItem: BudgetItem) => requests.put<BudgetItem>('/BudgetItem', budgetItem),
     createBudgetItem: (budgetItem: BudgetItem) => requests.post<BudgetItem>('/BudgetItem', budgetItem),
     createBudgetGroup: (budgetGroup: BudgetGroup) => requests.post<BudgetGroup>('/BudgetItemGroup', budgetGroup),
+    updateBudgetItemAssigned: (assignedTransaction: AssignedTransaction) => requests.post<AssignedTransaction>('UpdateAssigned', assignedTransaction),
 }
 
 const Payees = {

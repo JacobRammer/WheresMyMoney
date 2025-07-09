@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent.ts";
 import { BudgetGroup } from "../models/budgetGroup.ts";
 import { BudgetItem } from "../models/budgetItem.ts";
+import AssignedTransaction from "../models/assignedTransaction.ts";
 
 export default class BudgetCategoryStore {
     budgetCategories = new Map<string, BudgetGroup>();
@@ -183,5 +184,12 @@ export default class BudgetCategoryStore {
             items.push(...group.categories);
         });
         return items;
+    }
+
+    updateBudgetItemFunding = async (budgetItem: BudgetItem, assignedTransaction: AssignedTransaction) => {
+        runInAction(() => {
+            budgetItem.assigned += assignedTransaction.amount;
+        })
+        await this.updateBudgetItem(budgetItem);
     }
 }
