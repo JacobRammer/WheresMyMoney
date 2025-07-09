@@ -37,6 +37,8 @@ public class DataContext(DbContextOptions options) : DbContext(options)
     /// </summary>
     public DbSet<Payee> Payees { get; set; }
 
+    public DbSet<AssignedTransaction> AssignedTransactions { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Payee>().HasIndex(p => new { p.PayeeName }).IsUnique();

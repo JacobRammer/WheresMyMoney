@@ -33,10 +33,7 @@ public class GetAllBudgetItems
             List<Domain.Models.Budgets.BudgetItem> categories = await _context.BudgetItems
                 .Where(c => c.BudgetGroupId == request.CategoryGroupId)
                 .ToListAsync(cancellationToken: cancellationToken);
-            
-            
-            
-            
+
             return Result<List<Domain.Models.Budgets.BudgetItem>>.Success(categories);
         }
     }
