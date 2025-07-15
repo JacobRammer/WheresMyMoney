@@ -122,13 +122,13 @@ export default observer(function DashboardHeader() {
               fw={800}
               style={{ marginLeft: "10px", marginRight: "10px" }}
             >
-              Available:
+              Available:&nbsp;
               <NumberFormatter
-                prefix=" $"
-                value={checkingBalance}
-                decimalScale={2}
-                fixedDecimalScale={true}
-                thousandSeparator
+              prefix="$"
+              value={checkingBalance}
+              decimalScale={2}
+              fixedDecimalScale={true}
+              thousandSeparator
               />
             </Text>
           </Center>
