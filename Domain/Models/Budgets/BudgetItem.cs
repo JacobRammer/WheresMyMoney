@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.Budgets;
 
@@ -28,11 +29,13 @@ public class BudgetItem
     /// <summary>
     /// How much has been spent on this <see cref="BudgetItem"/>
     /// </summary>
+    [NotMapped]
     public double Outflow { get; set; }
 
     /// <summary>
     /// How much has been assigned to this <see cref="BudgetItem"/>
     /// </summary>
+    [NotMapped]
     public double Assigned { get; set; }
 
     /// <summary>

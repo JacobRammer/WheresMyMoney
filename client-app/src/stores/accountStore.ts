@@ -4,6 +4,7 @@ import {Account} from "../models/account.ts";
 import {Transaction} from "../models/transaction.ts";
 import { Payee } from "../models/payee.ts";
 import BudgetCategoryStore from "./budgetStore.ts";
+import { BudgetItem } from "../models/budgetItem.ts";
 
 const budgetCategoryStore = new BudgetCategoryStore();
 
@@ -27,6 +28,7 @@ export default class AccountStore {
     creditBalance: number = 0;
     loanBalance: number = 0;
     numberOfTransactions: number = 0;
+    
     
 
 
@@ -198,9 +200,6 @@ export default class AccountStore {
 
     createTransaction = async (account: Account, transaction: Transaction) => {
         try {
-            runInAction(() => {
-                transaction.payee = null;
-            })
             await agent.Transactions.addTransaction(transaction);
             const updatedAccount = await agent.FinanceAccounts.getAccount(account.id);
             runInAction(() => {
@@ -219,7 +218,9 @@ export default class AccountStore {
             if (account) {
                 const idx = account.transactions.findIndex(t => t.id === transaction.id);
                 if (idx !== -1) {
-                    account.transactions[idx] = { ...account.transactions[idx], ...transaction };
+                    runInAction(() => {
+                        account.transactions[idx] = { ...account.transactions[idx], ...transaction };
+                    });
                 }
             }
             const updatedAccount = account;
@@ -232,6 +233,21 @@ export default class AccountStore {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    addBudgetToTransaction = async (transaction: Transaction, budgetItem: BudgetItem) => {
+        runInAction(() => {
+            transaction.budgetItemId = budgetItem.id;
+            budgetItem.outflow += transaction.amount;
+            this.updateTransaction(transaction);
+        });
+
+        // try {
+        //     await this.updateTransaction(transaction);
+        // } catch (error) {
+        //     console.log(error);
+        // }
+        return budgetItem;
     }
 
     getCashAccounts = () => {

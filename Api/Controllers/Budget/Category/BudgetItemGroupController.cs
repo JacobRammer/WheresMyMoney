@@ -10,10 +10,13 @@ public class BudgetItemGroupController : BaseApiController
     /// Gets all <see cref="BudgetGroup"/>s
     /// </summary>
     /// <returns>A list of all <see cref="BudgetGroup"/>s</returns>
-    [HttpGet]
-    public async Task<IActionResult> GetAllCategoryGroups()
+    [HttpGet("{month}")]
+    public async Task<IActionResult> GetAllCategoryGroups(int month)
     {
-        return HandleResults(await Mediator.Send(new GetAllBudgetGroups.Query()));
+        return HandleResults(await Mediator.Send(new GetAllBudgetGroups.Query
+        {
+            Month = month,
+        }));
     }
 
     /// <summary>

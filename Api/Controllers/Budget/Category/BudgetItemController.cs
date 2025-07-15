@@ -54,4 +54,13 @@ public class BudgetItemController : BaseApiController
             BudgetToAdd = budget
         }));
     }
+
+    [HttpPost("/api/UpdateAssigned")]
+    public async Task<IActionResult> UpdateAssigned(AssignedTransaction assignedTransaction)
+    {
+        return HandleResults(await Mediator.Send(new AddAssignedTransaction.Command
+        {
+            AssignedTransaction = assignedTransaction
+        }));
+    }
 }

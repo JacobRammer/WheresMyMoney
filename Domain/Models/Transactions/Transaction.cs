@@ -33,4 +33,9 @@ public class Transaction
     /// The <see cref="Payee"/> of this transaction
     /// </summary>
     public Payee? Payee { get; set; }
+
+    /// <summary>
+    /// The <see cref="BudgetItem"/> that is associated with this <see cref="Transaction"/>
+    /// </summary>
+    public Guid? BudgetItemId { get; set; }
 }

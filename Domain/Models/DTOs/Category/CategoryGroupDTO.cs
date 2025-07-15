@@ -1,3 +1,4 @@
+using System.Collections;
 using Domain.Models.Budgets;
 
 namespace Domain.Models.DTOs.Category;
@@ -18,7 +19,7 @@ public class CategoryGroupDto
 
     public double Outflow => this.Categories.Sum(x => x.Outflow);
 
-    public double Available => Assigned - Outflow;
+    public double Available => Assigned - (-Outflow);
 
     /// <summary>
     /// The list of <see cref="Category"/> in this <see cref="BudgetGroup"/>

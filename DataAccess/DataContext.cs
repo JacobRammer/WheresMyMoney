@@ -32,6 +32,16 @@ public class DataContext(DbContextOptions options) : DbContext(options)
 
     /// <summary>
     /// The db table for categories
+    /// https://learn.microsoft.com/en-us/answers/questions/1188216/is-there-a-way-to-say-an-entry-is-unique-across-2
+    /// refer to that later when these are all tied to a user id
     /// </summary>
     public DbSet<Payee> Payees { get; set; }
+
+    public DbSet<AssignedTransaction> AssignedTransactions { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Payee>().HasIndex(p => new { p.PayeeName }).IsUnique();
+        base.OnModelCreating(modelBuilder);
+    }
 }
