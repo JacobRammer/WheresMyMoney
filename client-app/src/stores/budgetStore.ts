@@ -11,13 +11,12 @@ export default class BudgetCategoryStore {
 
     loading = false;
 
-
     /**
      * The month of the current budget
      *
      * @type {number}
      */
-    activeDate: number = new Date().getMonth();
+    activeDate: Date = new Date();
 
     constructor() {
         makeAutoObservable(this)
@@ -27,7 +26,7 @@ export default class BudgetCategoryStore {
      * Sets the activeDate
      * @param dateToSet the month as an int
      */
-    setActiveDate = (dateToSet: number) => {
+    setActiveDate = (dateToSet: Date) => {
         runInAction(() => {
             this.activeDate = dateToSet;
         })
@@ -44,9 +43,11 @@ export default class BudgetCategoryStore {
     loadBudgetCategories = async () => {
         this.loading = true;
         try {
-            const budgetCategories = await agent.CategoryGroup.getBudgetGroups();
+            console.log(this.activeDate.getMonth() + 1);
+            const budgetCategories = await agent.CategoryGroup.getBudgetGroups(this.activeDate.getMonth() + 1);
             budgetCategories.sort((a, b) => a.dateCreated.localeCompare(b.dateCreated));
             runInAction(() => {
+                this.budgetCategories.clear();
                 budgetCategories.forEach((budgetCategory: BudgetGroup) => {
                     budgetCategory.categories.sort((a, b) => a.dateCreated.localeCompare(b.dateCreated));
                     budgetCategory.categories = budgetCategory.categories.map(cat =>
@@ -61,8 +62,8 @@ export default class BudgetCategoryStore {
                         )
                     );
                     this.budgetCategories.set(budgetCategory.id, budgetCategory);
+                    this.loading = false;
                 });
-                this.loading = false;
             });
         } catch (error) {
             console.log(error);
@@ -70,6 +71,11 @@ export default class BudgetCategoryStore {
                 this.loading = false;
             });
         }
+
+    }
+
+    sleep = async (msec: number) => {
+        return new Promise(resolve => setTimeout(resolve, msec));
     }
 
     updateBudgetItem = async (category: BudgetItem) => {
@@ -190,6 +196,8 @@ export default class BudgetCategoryStore {
         runInAction(() => {
             budgetItem.assigned += assignedTransaction.amount;
         })
+
         await this.updateBudgetItem(budgetItem);
+        await agent.Budgets.updateBudgetItemAssigned(assignedTransaction);
     }
 }

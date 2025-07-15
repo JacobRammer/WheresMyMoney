@@ -32,7 +32,7 @@ const Transactions = {
 }
 
 const CategoryGroup = {
-    getBudgetGroups: () => requests.get<BudgetGroup[]>('/BudgetItemGroup'),
+    getBudgetGroups: (month: number) => requests.get<BudgetGroup[]>(`/BudgetItemGroup/${month}`),
     getBudgetGroupById: (id: string) => requests.get<BudgetGroup[]>(`/BudgetItemGroup/${id}`),
 }
 

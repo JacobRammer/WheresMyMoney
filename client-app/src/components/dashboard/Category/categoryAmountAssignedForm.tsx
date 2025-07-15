@@ -5,22 +5,18 @@ import { useClickOutside } from "@mantine/hooks";
 import { useStore } from "../../../stores/store.ts";
 import { useForm } from "@mantine/form";
 import { BudgetItem } from "../../../models/budgetItem.ts";
+import AssignedTransaction from "../../../models/assignedTransaction.ts";
 
 interface Props {
   category: BudgetItem;
-
   handleClickOutside: () => void;
 }
 
-export default observer(function CategoryAmountAssignedForm({
-  category,
-  handleClickOutside,
-}: Props) {
+export default observer(function CategoryAmountAssignedForm({category, handleClickOutside,}: Props) {
   const hep = useClickOutside(() => handleInputSubmit());
 
   const { budgetStore } = useStore();
-  const { updateBudgetItem: updateCategory, setSelectedBudgetItem } =
-    budgetStore;
+  const { selectedBudgetItem, updateBudgetItemFunding } = budgetStore;
 
   const form = useForm({
     mode: "uncontrolled",
@@ -36,23 +32,24 @@ export default observer(function CategoryAmountAssignedForm({
       return;
     }
     form.onSubmit((values) => {
-      const updatedCategory = new BudgetItem(
-        category.id,
-        category.title,
-        category.budgetGroupId,
-        category.dateCreated,
-        parseFloat(values.amountAssigned),
-        category.target,
-        category.outflow
+      const currentAssigned = category.assigned;
+      const formAssigned = parseFloat(values.amountAssigned);
+      const assignedDiff = formAssigned - currentAssigned;
+
+      const budgetItem = BudgetItem.fromBudgetItem(selectedBudgetItem!);
+
+      const tempAssigned = new AssignedTransaction(
+        uuidv4(),
+        budgetItem.id,
+        new Date(),
+        assignedDiff
       );
 
       // Instead of updating the transaction, just create a new
       // assigned transaction and update the assigned property only
-      updateCategory(updatedCategory).catch((error) => {
+      updateBudgetItemFunding(budgetItem, tempAssigned).catch((error) => {
         console.error("Error updating category:", error);
       });
-
-      setSelectedBudgetItem(updatedCategory);
     })();
   }
   return (

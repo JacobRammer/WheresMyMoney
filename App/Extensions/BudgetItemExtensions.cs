@@ -7,7 +7,7 @@ namespace App.Extensions
 {
     public static class BudgetItemExtensions
     {
-        public static void GetTransactionsAndCalculateSpending(this CategoryGroupDto dto, DataContext context)
+        public static void GetTransactionsAndCalculateSpending(this CategoryGroupDto dto, DataContext context, int month)
         {
             var transactions = context.Transactions.ToList();
             var assignedTransaction = context.AssignedTransactions.ToList();
@@ -15,7 +15,7 @@ namespace App.Extensions
             // Get the transactions
             foreach (var budget in dto.Categories)
             {
-                var budgetTransactions = transactions.Where(t => t.BudgetItemId == budget.Id).ToList();
+                var budgetTransactions = transactions.Where(t => t.BudgetItemId == budget.Id && t.Date.Month == month).ToList();
 
                 // Calculate the outflow of the budget item
                 budget.Outflow = budgetTransactions.Sum(t => t.Amount);

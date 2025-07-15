@@ -23,6 +23,7 @@ export default observer(function SelectedBudgetItemFundingOptions() {
   }
 
   function FundBudgetItem() {
+    const updatedBudgetItem = BudgetItem.fromBudgetItem(selectedBudgetItem!);
     const amountNeeded = amountNeededToReachTarget();
     if (amountNeeded == 0) return;
     const tempAssigned = new AssignedTransaction(
@@ -31,14 +32,19 @@ export default observer(function SelectedBudgetItemFundingOptions() {
       new Date(),
       amountNeeded
     );
-    updateBudgetItemFunding(selectedBudgetItem!, tempAssigned);
+    updateBudgetItemFunding(updatedBudgetItem!, tempAssigned);
   }
 
   function UnfundBudgetItem() {
     const updatedBudgetItem = BudgetItem.fromBudgetItem(selectedBudgetItem!);
     if (updatedBudgetItem.assigned === 0) return;
-    updatedBudgetItem.assigned = 0;
-    // updateBudgetItem(updatedBudgetItem);
+    const tempAssigned = new AssignedTransaction(
+      uuidv4(),
+      selectedBudgetItem!.id,
+      new Date(),
+      updatedBudgetItem.assigned * -1
+    );
+    updateBudgetItemFunding(updatedBudgetItem!, tempAssigned);
   }
 
   return (

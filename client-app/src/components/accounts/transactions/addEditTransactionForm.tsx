@@ -122,6 +122,7 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
                 placeholder="Pick date"
                 value={transactionDate}
                 key={form.key('Date')}
+                maxDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
                 onChange={(value) => setTransactionDate(value ?? new Date())}
             />
 

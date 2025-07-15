@@ -11,7 +11,7 @@ import {
 } from "@mantine/core";
 import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
 import { useStore } from "../../stores/store.ts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default observer(function DashboardHeader() {
   const monthNames = [
@@ -35,16 +35,23 @@ export default observer(function DashboardHeader() {
   const { budgetStore } = useStore();
   const { activeDate, setActiveDate } = budgetStore;
 
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(activeDate);
 
   function dateChange(direction: number) {
-    setDate(new Date(date.setMonth(date.getMonth() + direction)));
-    setActiveDate(date.getMonth());
+    const newDate = new Date(date.setMonth(date.getMonth() + direction));
+    setDate(newDate);
+    setActiveDate(newDate);
+  }
+
+  function FMe()
+  {
+    setDate(new Date());
+    setActiveDate(new Date());
   }
 
   function isActiveDateNotToday() {
     if (date.getFullYear() !== new Date().getFullYear()) return true;
-    return date.getMonth() !== new Date().getMonth();
+      return date.getMonth() !== new Date().getMonth();
   }
 
   return (
@@ -94,7 +101,7 @@ export default observer(function DashboardHeader() {
               </Text>
             }
           >
-            <Button onClick={() => setDate(new Date())} radius="lg">
+            <Button onClick={FMe} radius="lg">
               Today
             </Button>
           </Tooltip>

@@ -14,13 +14,13 @@ public class GetAllBudgetGroups
 {
     public class Query : IRequest<Result<List<CategoryGroupDto>>>
     {
+        public int Month { get; set; }
     }
 
     public class Handler : IRequestHandler<Query, Result<List<CategoryGroupDto>>>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-
         public Handler(DataContext context, IMapper mapper)
         {
             _context = context;
@@ -36,8 +36,8 @@ public class GetAllBudgetGroups
                     .ToListAsync(cancellationToken: cancellationToken);
 
             // Get all transactions associated with each budget item
-            categoryGroups.ForEach(c => c.GetTransactionsAndCalculateSpending(_context));
-            
+            categoryGroups.ForEach(c => c.GetTransactionsAndCalculateSpending(_context, request.Month));
+
             return Result<List<CategoryGroupDto>>.Success(categoryGroups);
         }
     }
