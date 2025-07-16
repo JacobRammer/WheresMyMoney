@@ -1,14 +1,14 @@
-import {observer} from "mobx-react-lite";
-import {runInAction} from "mobx";
-import {Transaction} from "../../../models/transaction.ts";
-import {useStore} from "../../../stores/store.ts";
-import {useForm} from "@mantine/form";
-import {v4 as uuidv4} from "uuid";
-import {Button, Group, TextInput, Tooltip} from "@mantine/core";
-import {DatePickerInput} from '@mantine/dates';
-import {useState} from "react";
-import {CalendarSearch, CircleHelp} from "lucide-react";
-import {Account} from "../../../models/account.ts";
+import { observer } from "mobx-react-lite";
+import { runInAction } from "mobx";
+import { Transaction } from "../../../models/transaction.ts";
+import { useStore } from "../../../stores/store.ts";
+import { useForm } from "@mantine/form";
+import { v4 as uuidv4 } from "uuid";
+import { Button, Group, TextInput, Tooltip } from "@mantine/core";
+import { DatePickerInput } from '@mantine/dates';
+import { useState } from "react";
+import { CalendarSearch, CircleHelp } from "lucide-react";
+import { Account } from "../../../models/account.ts";
 import { Payee } from "../../../models/payee.ts";
 
 
@@ -18,9 +18,9 @@ interface AddTransactionProps {
     account: Account;
 }
 
-export default observer(function AddTransactionForm({onCloseModal, transaction, account}: AddTransactionProps) {
-    const {accountStore} = useStore();
-    const {createTransaction, updateTransaction} = accountStore;
+export default observer(function AddTransactionForm({ onCloseModal, transaction, account }: AddTransactionProps) {
+    const { accountStore } = useStore();
+    const { createTransaction, updateTransaction, removeFromAccountBalance, sumAccountBalances, accountRegistry } = accountStore;
 
     const [transactionDate, setTransactionDate] = useState<Date>(transaction ? new Date(transaction.date) : new Date());
 
@@ -29,7 +29,7 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
             label="The amount leaving the account such as using your debit card at the store."
             multiline
             w={220}>
-            <CircleHelp size={15}/>
+            <CircleHelp size={15} />
         </Tooltip>
     );
 
@@ -38,7 +38,7 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
             label="This is the amount incoming into the account such as payroll."
             multiline
             w={220}>
-            <CircleHelp size={15}/>
+            <CircleHelp size={15} />
         </Tooltip>
     );
 
@@ -65,19 +65,32 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
                     date: transactionDate.toJSON(),
                     accountId: account.id,
                     payee: null,
-                    budgetItemId : undefined
+                    budgetItemId: undefined
                 };
                 createTransaction(account, transaction).then(() => {
                 })
             } else {
+
                 runInAction(() => {
+                    const currentAmount = transaction.amount;
                     transaction.title = values.title;
                     transaction.amount = values.inflow > 0 ? values.inflow : -values.outflow;
                     transaction.date = transactionDate.toJSON();
+                    removeFromAccountBalance(account);
+                    const transactionDifference = currentAmount - transaction.amount;
+                    runInAction(() => {
+                        if (transactionDifference < 0)
+                            account.balance += Math.abs(transactionDifference);
+                        else
+                            account.balance -= Math.abs(transactionDifference);
+
+                        accountRegistry.set(account.id, account);
+                        sumAccountBalances(account);
+                    })
                 });
                 updateTransaction(transaction).then(() => {
                 })
-            }            
+            }
         }
     }
 
@@ -116,7 +129,7 @@ export default observer(function AddTransactionForm({onCloseModal, transaction, 
             />
 
             <DatePickerInput
-                leftSection={<CalendarSearch size={16}/>}
+                leftSection={<CalendarSearch size={16} />}
                 leftSectionPointerEvents="none"
                 label="Transaction Date"
                 placeholder="Pick date"
