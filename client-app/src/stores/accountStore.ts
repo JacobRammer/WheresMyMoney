@@ -1,7 +1,7 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent.ts";
-import {Account} from "../models/account.ts";
-import {Transaction} from "../models/transaction.ts";
+import { Account } from "../models/account.ts";
+import { Transaction } from "../models/transaction.ts";
 import { Payee } from "../models/payee.ts";
 import BudgetCategoryStore from "./budgetStore.ts";
 import { BudgetItem } from "../models/budgetItem.ts";
@@ -16,7 +16,7 @@ export default class AccountStore {
     accountRegistry = new Map<string, Account>();
 
     payeeMap: Map<string, Payee> = new Map();
-    
+
     /**
      * This is the primary balance where the assigned amounts for budget 
      * items will get taken out of
@@ -28,8 +28,8 @@ export default class AccountStore {
     creditBalance: number = 0;
     loanBalance: number = 0;
     numberOfTransactions: number = 0;
-    
-    
+
+
 
 
     constructor() {
@@ -50,7 +50,7 @@ export default class AccountStore {
                 })
             })
         } catch (error) {
-            console.log(error); 
+            console.log(error);
         }
     }
 
@@ -71,10 +71,10 @@ export default class AccountStore {
     }
 
     loadAccounts = async () => {
-        
+
         try {
             const account = await agent.FinanceAccounts.getAllAccounts();
-            
+
             // Reset the cash balance on load
             runInAction(() => {
                 this.savingsBalance = 0;
@@ -95,56 +95,60 @@ export default class AccountStore {
         }
     }
 
-    private sumAccountBalances = (account: Account) => {
-        // Why JS concatenates numbers instead of adding, I got no fucking clue
-        // So we have to convert to a string for it to actually add, lmfao
-
+    public sumAccountBalances = (account: Account) => {
         if (account.accountType === Savings) {
-            this.savingsBalance += parseFloat(account.balance.toString())
+            runInAction(() => {
+                this.savingsBalance += parseFloat(account.balance.toString());
+            });
         }
-
-        else if (account.accountType == Checking) {
-            this.checkingBalance += parseFloat(account.balance.toString())
+        else if (account.accountType === Checking) {
+            runInAction(() => {
+                this.checkingBalance += parseFloat(account.balance.toString());
+            });
         }
-
         else if (account.accountType === Credit) {
-            this.creditBalance += parseFloat(account.balance.toString())
-        } 
-        
+            runInAction(() => {
+                this.creditBalance += parseFloat(account.balance.toString());
+            });
+        }
         else if (account.accountType === Loan) {
-            this.loanBalance += parseFloat(account.balance.toString())
+            runInAction(() => {
+                this.loanBalance += parseFloat(account.balance.toString());
+            });
         }
     }
 
-    private removeFromAccountBalance = (account: Account) => {
-        // Why JS concatenates numbers instead of adding, I got no fucking clue
-        // So we have to convert to a string for it to actually add, lmfao
-
+    public removeFromAccountBalance = (account: Account) => {
         if (account.accountType === Savings) {
-            this.savingsBalance -= parseFloat(account.balance.toString())
-        } 
-
-        else if (account.accountType == Checking) {
-            this.checkingBalance -= parseFloat(account.balance.toString())
+            runInAction(() => {
+                this.savingsBalance -= parseFloat(account.balance.toString());
+            });
         }
-        
+        else if (account.accountType === Checking) {
+            runInAction(() => {
+                this.checkingBalance -= parseFloat(account.balance.toString());
+            });
+        }
         else if (account.accountType === Credit) {
-            this.creditBalance -= parseFloat(account.balance.toString())
-        } 
-        
+            runInAction(() => {
+                this.creditBalance -= parseFloat(account.balance.toString());
+            });
+        }
         else if (account.accountType === Loan) {
-            this.loanBalance -= parseFloat(account.balance.toString())
+            runInAction(() => {
+                this.loanBalance -= parseFloat(account.balance.toString());
+            });
         }
     }
 
     private setAccountRegistry = (account: Account) => {
         this.accountRegistry.set(account.id, account);
     }
-    
+
     flattenCashAccountRegistry = () => {
         return Array.from(this.accountRegistry.values());
     }
-    
+
     totalBalance = () => {
         return this.savingsBalance + this.loanBalance + this.creditBalance + this.checkingBalance;
     }
@@ -188,9 +192,13 @@ export default class AccountStore {
     deleteTransaction = async (accountId: string, transaction: Transaction) => {
         try {
             await agent.Transactions.deleteTransaction(transaction.id);
+            const accountToDelete = this.accountRegistry.get(accountId);
+            if (accountToDelete !== undefined)
+                this.removeFromAccountBalance(accountToDelete);
             const updatedAccount = await agent.FinanceAccounts.getAccount(accountId);
             runInAction(() => {
                 this.accountRegistry.set(accountId, updatedAccount);
+                this.sumAccountBalances(updatedAccount);
                 this.numberOfTransactions++;
             })
         } catch (error) {
@@ -202,8 +210,10 @@ export default class AccountStore {
         try {
             await agent.Transactions.addTransaction(transaction);
             const updatedAccount = await agent.FinanceAccounts.getAccount(account.id);
+            this.removeFromAccountBalance(account);
             runInAction(() => {
                 this.accountRegistry.set(account.id, updatedAccount);
+                this.sumAccountBalances(updatedAccount);
                 this.numberOfTransactions++;
             })
         } catch (error) {
@@ -213,23 +223,18 @@ export default class AccountStore {
 
     updateTransaction = async (transaction: Transaction) => {
         try {
-            await agent.Transactions.updateTransaction(transaction);
             const account = this.accountRegistry.get(transaction.accountId);
+            await agent.Transactions.updateTransaction(transaction);
             if (account) {
                 const idx = account.transactions.findIndex(t => t.id === transaction.id);
                 if (idx !== -1) {
                     runInAction(() => {
                         account.transactions[idx] = { ...account.transactions[idx], ...transaction };
+                        this.accountRegistry.set(account.id, account);
+                        console.log(account.balance);
                     });
                 }
             }
-            const updatedAccount = account;
-            runInAction(() => {
-                if (updatedAccount) {
-                    this.accountRegistry.set(transaction.accountId, updatedAccount);
-                }
-                this.numberOfTransactions++;
-            })
         } catch (error) {
             console.log(error);
         }
@@ -241,12 +246,6 @@ export default class AccountStore {
             budgetItem.outflow += transaction.amount;
             this.updateTransaction(transaction);
         });
-
-        // try {
-        //     await this.updateTransaction(transaction);
-        // } catch (error) {
-        //     console.log(error);
-        // }
         return budgetItem;
     }
 
