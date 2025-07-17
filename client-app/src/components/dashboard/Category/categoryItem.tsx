@@ -9,7 +9,6 @@ import {
   Text,
   Tooltip,
 } from "@mantine/core";
-import { useHover } from "@mantine/hooks";
 import { useState } from "react";
 import CategoryAmountAssignedForm from "./categoryAmountAssignedForm.tsx";
 import { BudgetItem } from "../../../models/budgetItem.ts";
@@ -22,10 +21,9 @@ interface Props {
 }
 
 export default observer(function CategoryItem({ budgetItem }: Props) {
-  const { hovered, ref } = useHover();
   const [showAssignedInputForm, setShowAssignedInputForm] = useState(false);
   const { budgetStore } = useStore();
-  const { setSelectedBudgetItem, selectedBudgetItem } = budgetStore;
+  const { setSelectedBudgetItem, selectedBudgetItem, setHoveredBudgetItem, hoveredBudgetItem } = budgetStore;
   const isItemSelected = budgetItem.id === selectedBudgetItem?.id;
 
   function test() {
@@ -97,7 +95,7 @@ export default observer(function CategoryItem({ budgetItem }: Props) {
         onClick={() => setShowAssignedInputForm(true)}
         align="center"
       >
-        {!hovered && !showAssignedInputForm && (
+        {!showAssignedInputForm && (
           <Box>
             <Tooltip
               label={
@@ -138,8 +136,8 @@ export default observer(function CategoryItem({ budgetItem }: Props) {
             </Tooltip>
           </Box>
         )}
-        <Box ref={ref}>
-          {hovered || showAssignedInputForm ? (
+        <Box onMouseOver={() => setHoveredBudgetItem(budgetItem)} onMouseOut={() => setHoveredBudgetItem(undefined)} onClick={() => setShowAssignedInputForm(true)}>
+          {showAssignedInputForm || hoveredBudgetItem?.id === budgetItem.id ? (
             <CategoryAmountAssignedForm
               handleClickOutside={() => setShowAssignedInputForm(false)}
               category={budgetItem}

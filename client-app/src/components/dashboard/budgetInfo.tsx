@@ -13,57 +13,45 @@ import { useEffect } from 'react';
 
 export default observer(function BudgetInfo() {
 
-    const { budgetStore } = useStore();
-      const {
-        getBudgetCategoryMap,
-        selectedBudgetItem,
-      } = budgetStore;
-    
-    return (
-        <AppShell
-        layout="alt"
-        header={{ height: 60 }}
-        navbar={{ width: 250, breakpoint: "sm" }}
-        aside={{ width: 450, breakpoint: "md", collapsed: { desktop: false } }}
-      >
-        <AppShell.Header>
-          <DashboardHeader />
-        </AppShell.Header>
-        <AppShell.Navbar>
-          <Sidebar />
-        </AppShell.Navbar>
-        <AppShell.Main>
-            <Box>
-              <CategoryTable />
-              <CategoryGroupHeader />
+  const { budgetStore } = useStore();
+  const {
+    getBudgetCategoryMap,
+    selectedBudgetItem,
+  } = budgetStore;
 
-              <ScrollArea className="CategoriesScrollArea">
-                {getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
-                  <Box key={budgetGroup.id}>
-                    <CategoryGroupItem budgetGroup={budgetGroup} />
-                  </Box>
-                ))}
+  return (
+    <AppShell
+      layout="alt"
+      header={{ height: 60 }}
+      navbar={{ width: 250, breakpoint: "sm" }}
+      aside={{ width: 450, breakpoint: "md", collapsed: { desktop: false } }}
+    >
+      <AppShell.Header>
+        <DashboardHeader />
+      </AppShell.Header>
+      <AppShell.Navbar>
+        <Sidebar />
+      </AppShell.Navbar>
+      <AppShell.Main>
+        <Box>
+          <CategoryTable />
+          <CategoryGroupHeader />
 
-                {getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
-                  <Box key={budgetGroup.id}>
-                    <CategoryGroupItem budgetGroup={budgetGroup} />
-                  </Box>
-                ))}
-
-                {getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
-                  <Box key={budgetGroup.id}>
-                    <CategoryGroupItem budgetGroup={budgetGroup} />
-                  </Box>
-                ))}
-              </ScrollArea>
-            </Box>
-        </AppShell.Main>
-        <AppShell.Aside p="md">
-          {selectedBudgetItem !== undefined && <SelectedBudgetItemInfo />}
-          <Tooltip label="Help" position="top-start">
-            <CircleHelp size={40} className="AddActionCircle" />
-          </Tooltip>
-        </AppShell.Aside>
-      </AppShell>
-    );
+          <ScrollArea className="CategoriesScrollArea">
+            {getBudgetCategoryMap().map((budgetGroup: BudgetGroup) => (
+              <Box key={budgetGroup.id}>
+                <CategoryGroupItem budgetGroup={budgetGroup} />
+              </Box>
+            ))}
+          </ScrollArea>
+        </Box>
+      </AppShell.Main>
+      <AppShell.Aside p="md">
+        {selectedBudgetItem !== undefined && <SelectedBudgetItemInfo />}
+        <Tooltip label="Help" position="top-start">
+          <CircleHelp size={40} className="AddActionCircle" />
+        </Tooltip>
+      </AppShell.Aside>
+    </AppShell>
+  );
 });
