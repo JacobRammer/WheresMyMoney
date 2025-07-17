@@ -1,20 +1,20 @@
-import {observer} from "mobx-react-lite";
-import {Button, Flex, Group, Select, Text, TextInput, Tooltip} from "@mantine/core";
-import {useStore} from "../../stores/store.ts";
-import {useState} from "react";
-import {useForm} from "@mantine/form";
-import {Account} from "../../models/account.ts";
-import {v4 as uuidv4} from 'uuid';
-import {CircleHelp} from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { Button, Flex, Group, Select, Text, TextInput, Tooltip } from "@mantine/core";
+import { useStore } from "../../stores/store.ts";
+import { useState } from "react";
+import { useForm } from "@mantine/form";
+import { Account } from "../../models/account.ts";
+import { v4 as uuidv4 } from 'uuid';
+import { CircleHelp } from "lucide-react";
 
 interface CreateAccountFormProps {
     onCloseModal?: () => void
 }
 
-export default observer(function CreateAccountForm({onCloseModal}: CreateAccountFormProps) {
+export default observer(function CreateAccountForm({ onCloseModal }: CreateAccountFormProps) {
 
-    const {accountStore} = useStore();
-    const {createAccount} = accountStore;
+    const { accountStore } = useStore();
+    const { createAccount } = accountStore;
     // const {createAccount, createLoanAccount, createCreditAccount} = accountStore;
     const [interestAccount, setShowInterestAccount] = useState<boolean>(false)
 
@@ -51,7 +51,7 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
         },
     });
 
-    form.watch('accountType', ({value}) => {
+    form.watch('accountType', ({ value }) => {
         setShowInterestAccount(value === "Loan" || value === "Credit")
     });
 
@@ -72,12 +72,12 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
     return (
         <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
             <TextInput name="account"
-                    withAsterisk
-                    label="Account Name"
-                    placeholder="Checking Account"
-                    key={form.key('accountName')}
-                    type="text" autoComplete="off"
-                    {...form.getInputProps('accountName')}
+                withAsterisk
+                label="Account Name"
+                placeholder="Checking Account"
+                key={form.key('accountName')}
+                type="text" autoComplete="off"
+                {...form.getInputProps('accountName')}
             />
 
             <TextInput
@@ -111,7 +111,7 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
                             <Text>Monthly Payment</Text>
                             <Tooltip label="The monthly payment for this account. If this is a dynamic value (such 
                             as a credit card, it can be left blank as it will get set with your monthly budget.)">
-                                <CircleHelp size={15} style={{marginLeft: '10px'}}/>
+                                <CircleHelp size={15} style={{ marginLeft: '10px' }} />
                             </Tooltip>
                         </Flex>
                     }
@@ -136,7 +136,7 @@ export default observer(function CreateAccountForm({onCloseModal}: CreateAccount
                 <Button onClick={onCloseModal} variant="default">
                     Cancel
                 </Button>
-                <Button type="submit" onClick={handleCloseModal}>Create Account</Button>
+                <Button type="submit" onClick={handleCloseModal} disabled={!form.isValid()}>Create Account</Button>
             </Group>
 
         </form>
