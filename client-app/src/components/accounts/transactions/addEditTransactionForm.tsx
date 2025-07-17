@@ -143,7 +143,7 @@ export default observer(function AddTransactionForm({ onCloseModal, transaction,
                 <Button onClick={onCloseModal} variant="default">
                     Cancel
                 </Button>
-                <Button type="submit" onClick={handleCloseModal}>
+                <Button type="submit" onClick={handleCloseModal} disabled={!form.isValid()}>
                     {transaction === undefined ? 'Create Transaction' : 'Update Transaction'}
                 </Button>
             </Group>
