@@ -11,6 +11,8 @@ export default class BudgetCategoryStore {
 
     loading = false;
 
+    hoveredBudgetItem: BudgetItem | undefined;
+
     /**
      * The month of the current budget
      *
@@ -20,6 +22,12 @@ export default class BudgetCategoryStore {
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setHoveredBudgetItem = (budgetItem: BudgetItem | undefined) => {
+        runInAction(() => {
+            this.hoveredBudgetItem = budgetItem;
+        })
     }
 
     /**
