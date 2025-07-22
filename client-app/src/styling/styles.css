@@ -1,8 +1,9 @@
-body, html {
+body,
+html {
     margin: 0;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
 }
@@ -32,7 +33,7 @@ body, html {
     width: calc(100vw - var(--sidebarWidth) - 500px)
 }
 
-.date { 
+.date {
     width: 350px
 }
 
@@ -59,8 +60,8 @@ body, html {
 }
 
 .budgetCategoryGroupDashboardHeader {
-    width: var( --categoryWidth);
-    background-color: rgba(202,230,233,255);
+    width: var(--categoryWidth);
+    background-color: rgba(202, 230, 233, 255);
 }
 
 .dashboardBudgetGroupFormat {
@@ -129,13 +130,14 @@ body, html {
     flex-grow: 1;
 }
 
-.DashboardHeaderBox{
+.DashboardHeaderBox {
     flex-grow: 1;
     height: var(--dashboardHeaderHeight);
 }
 
 .CategoriesScrollArea {
-    height: calc(100vh - var(--dashboardHeaderHeight) - 82px);
+    height: calc(100vh - var(--dashboardHeaderHeight) - 92px);
+    margin-top: 10px;
 }
 
 .PageHeader {
@@ -186,7 +188,7 @@ body, html {
 }
 
 .SelectedBudgetItemOuterBox {
-    background-color:aliceblue;
+    background-color: aliceblue;
     border-radius: var(--BudgetGroupAndItemBorderRadius);
     padding: var(--SelectedBudgetItemPadding);
     margin-top: 10px;
@@ -206,7 +208,7 @@ body, html {
 }
 
 .SelectedBudgetItemFundingOptionsButton {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
 .selectedBudgetItemInfoFlex {
