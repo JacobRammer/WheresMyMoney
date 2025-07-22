@@ -43,53 +43,50 @@ export default observer(function DashboardHeader() {
     setActiveDate(newDate);
   }
 
-  function FMe()
-  {
+  function FMe() {
     setDate(new Date());
     setActiveDate(new Date());
   }
 
   function isActiveDateNotToday() {
     if (date.getFullYear() !== new Date().getFullYear()) return true;
-      return date.getMonth() !== new Date().getMonth();
+    return date.getMonth() !== new Date().getMonth();
   }
 
   return (
     <Flex align="center">
-      <Flex w={240} align="center">
-        <Center className="noSelect">
-          <Tooltip
-            label={
-              monthNames[
-                Math.abs(date.getMonth() - 1 < 0 ? 11 : date.getMonth() - 1)
-              ]
-            }
-          >
-            <CircleArrowLeft
-              size={40}
-              style={{ marginRight: "10px" }}
-              onClick={() => dateChange(-1)}
-              className="blueBackgroundColor"
-            />
-          </Tooltip>
+      <Flex w={240} align="center" style={{ marginLeft: '10px' }} className="noSelect">
+        <Tooltip
+          label={
+            monthNames[
+            Math.abs(date.getMonth() - 1 < 0 ? 11 : date.getMonth() - 1)
+            ]
+          }
+        >
+          <CircleArrowLeft
+            size={40}
+            style={{ marginRight: "10px" }}
+            onClick={() => dateChange(-1)}
+            className="blueBackgroundColor"
+          />
+        </Tooltip>
 
-          <Title order={2}>
-            {monthNames[date.getMonth()]} {date.getFullYear()}
-          </Title>
+        <Title order={2}>
+          {monthNames[date.getMonth()]} {date.getFullYear()}
+        </Title>
 
-          <Tooltip
-            label={
-              monthNames[date.getMonth() + 1 > 11 ? 0 : date.getMonth() + 1]
-            }
-          >
-            <CircleArrowRight
-              size={40}
-              style={{ marginLeft: "10px" }}
-              onClick={() => dateChange(1)}
-              className="blueBackgroundColor"
-            />
-          </Tooltip>
-        </Center>
+        <Tooltip
+          label={
+            monthNames[date.getMonth() + 1 > 11 ? 0 : date.getMonth() + 1]
+          }
+        >
+          <CircleArrowRight
+            size={40}
+            style={{ marginLeft: "10px" }}
+            onClick={() => dateChange(1)}
+            className="blueBackgroundColor"
+          />
+        </Tooltip>
       </Flex>
 
       <Box w={150}>
@@ -108,32 +105,29 @@ export default observer(function DashboardHeader() {
         )}
       </Box>
 
-      <Flex style={{ marginLeft: "250px" }}>
-        <Box
-          style={{
-            backgroundColor:
-              checkingBalance > 0 ? "rgba(16, 219, 89)" : "rgba(255, 99, 99)",
-            borderRadius: "10px",
-          }}
+      {/* height comes from budget info: header={{ height: 60 }} */}
+      <Center h={60}><Flex h={50} align='center'
+        style={{
+          backgroundColor:
+            checkingBalance > 0 ? "rgba(16, 219, 89)" : "rgba(255, 99, 99)",
+          borderRadius: "10px", marginLeft: "250px"
+        }}
+      >
+        <Text
+          size="xl"
+          fw={800}
+          style={{ marginLeft: "10px", marginRight: "10px" }}
         >
-          <Center w="auto" h={50}>
-            <Text
-              size="xl"
-              fw={800}
-              style={{ marginLeft: "10px", marginRight: "10px" }}
-            >
-              Available:&nbsp;
-              <NumberFormatter
-              prefix="$"
-              value={checkingBalance}
-              decimalScale={2}
-              fixedDecimalScale={true}
-              thousandSeparator
-              />
-            </Text>
-          </Center>
-        </Box>
-      </Flex>
+          Available:&nbsp;
+          <NumberFormatter
+            prefix="$"
+            value={checkingBalance}
+            decimalScale={2}
+            fixedDecimalScale={true}
+            thousandSeparator
+          />
+        </Text>
+      </Flex></Center>
     </Flex>
   );
 });
