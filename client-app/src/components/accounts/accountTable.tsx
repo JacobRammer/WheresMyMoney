@@ -1,9 +1,9 @@
-import {observer} from "mobx-react-lite";
-import {ActionIcon, Box, Center, Modal, NumberFormatter, Table, Text, Tooltip} from "@mantine/core";
-import {Account} from "../../models/account.ts";
-import {useStore} from "../../stores/store.ts";
-import {useState} from "react";
-import {Pencil, Trash2} from "lucide-react";
+import { observer } from "mobx-react-lite";
+import { ActionIcon, Box, Center, Modal, NumberFormatter, Table, Text, Tooltip } from "@mantine/core";
+import { Account } from "../../models/account.ts";
+import { useStore } from "../../stores/store.ts";
+import { useState } from "react";
+import { Pencil, Trash2 } from "lucide-react";
 import DeleteAccountModal from "./deleteAccountModal.tsx";
 import EditAccount from "./editAccount.tsx";
 
@@ -29,8 +29,10 @@ export default observer(function accountTable() {
         setAccount(accountToEdit);
     }
 
+    const [selectedRows, setSelectedRows] = useState<string[]>([]);
+
     const rows = getAllAccounts().map((account: Account) => (
-        <Table.Tr key={account.id}>
+        <Table.Tr key={account.id} bg={selectedRows.includes(account.id) ? 'var(--mantine-color-blue-light)' : undefined}>
             <Table.Td onClick={() => {
                 useBoxForNavigation(account)
             }} style={{ cursor: "pointer" }}>

@@ -14,13 +14,6 @@ interface Props {
 export default observer(function AccountList({ accounts, header, balance }: Props) {
     const [show, setShow] = useState(true);
     const handleToggle = () => setShow(!show);
-
-    const { accountStore } = useStore();
-    const { numberOfTransactions } = accountStore;
-
-    useEffect(() => {
-
-    }, [numberOfTransactions]);
     return (
         <MantineProvider >
             <Box className='SidebarLinkComponent'>

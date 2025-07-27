@@ -9,12 +9,19 @@ import AddEditTransactionForm from "./addEditTransactionForm.tsx";
 import TransactionPayeeSelector from "./transactionPayeeSelector.tsx";
 import { useStore } from "../../../stores/store.ts";
 import TransactionBudgetItemSelector from "./transactionBudgetItemSelector.tsx";
+import { DatePicker, DatePickerInput } from "@mantine/dates";
+import { useClickOutside } from "@mantine/hooks";
+import TransactionTitleForm from "./transactionTitleForm.tsx";
+import TransactionDatePickerInput from "./transactionDatePickerInput.tsx";
+import TransactionAmountInput from "./transactionAmountInput.tsx";
 
 interface Props {
     account: Account
+
+    setAccount: (account: Account) => void;
 }
 
-export default observer(function AccountTransactionDetails({ account }: Props) {
+export default observer(function AccountTransactionDetails({ account, setAccount }: Props) {
     const { accountStore } = useStore();
     const { getPayeeBudgetItem } = accountStore;
 
@@ -44,28 +51,61 @@ export default observer(function AccountTransactionDetails({ account }: Props) {
         setEditModalState(true);
     }
 
+    const [selectedRow, setSelectedRow] = useState<string>("");
+
+
     const rows = account.transactions.map((transaction: Transaction) => (
-        <Table.Tr key={transaction.id}>
-            <Table.Td>
-                <Text fw={500}>{new Intl.DateTimeFormat('en-US', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                }).format(new Date(transaction.date))}</Text>
+        <Table.Tr key={transaction.id}
+            bg={selectedRow === transaction.id ? 'var(--mantine-color-blue-light)' : undefined}
+            onClick={() => setSelectedRow(transaction.id)}
+            h={60}
+        >
+            <Table.Td >
+                {
+                    selectedRow !== transaction.id ? <Text className='noSelect' fw={500}>{new Intl.DateTimeFormat('en-US', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    }).format(new Date(transaction.date))}</Text>
+                        :
+                        <TransactionDatePickerInput transaction={transaction} />
+                }
+
             </Table.Td>
             <Table.Td>
-                <TransactionPayeeSelector transaction={transaction} />
+                {
+                    selectedRow !== transaction.id ? <Text>{transaction.payee?.payeeName}</Text>
+                        :
+                        <TransactionPayeeSelector transaction={transaction} />
+                }
+
             </Table.Td>
             <Table.Td>
-                <Text fw={500}>{transaction.title}</Text>
+                {
+                    selectedRow !== transaction.id ? <Text fw={500} className="noSelect">{transaction.title}</Text>
+                        :
+                        <TransactionTitleForm transaction={transaction} />
+                }
+
             </Table.Td>
             <Table.Td>
-                <TransactionBudgetItemSelector transaction={transaction} />
+                {
+                    selectedRow !== transaction.id ? <Text>{getBudgetItemFromMap(transaction.budgetItemId)?.title}</Text>
+                        :
+                        <TransactionBudgetItemSelector transaction={transaction} />
+                }
             </Table.Td>
             <Table.Td>
-                <Center><Text fw={500}>
-                    <NumberFormatter value={transaction.amount} prefix="$" decimalScale={2} fixedDecimalScale={true} />
-                </Text></Center>
+                <Center>
+                    {
+                        selectedRow !== transaction.id ?
+                            <Text fw={500} className="noSelect">
+                                <NumberFormatter value={transaction.amount} prefix="$" decimalScale={2} fixedDecimalScale={true} />
+                            </Text>
+                            :
+                            <TransactionAmountInput transaction={transaction} updateAccount={setAccount} />
+                    }
+                </Center>
             </Table.Td>
             <Table.Td ta="right" width={50} align="right">
                 <Center><Box style={{ display: "flex", zIndex: 1 }}>
@@ -73,13 +113,6 @@ export default observer(function AccountTransactionDetails({ account }: Props) {
                         <ActionIcon size={30} style={{ marginRight: "10px" }} color="red">
                             <Trash2 style={{ width: '70%', height: '70%' }}
                                 onClick={() => SetupDeleteAccountModal(transaction)} />
-                        </ActionIcon>
-                    </Tooltip>
-
-                    <Tooltip label="Edit transaction" position="top-start">
-                        <ActionIcon size={30}>
-                            <Pencil style={{ width: '70%', height: '70%' }}
-                                onClick={() => SetupEditAccountModal(transaction)} />
                         </ActionIcon>
                     </Tooltip>
                 </Box></Center>
@@ -101,7 +134,7 @@ export default observer(function AccountTransactionDetails({ account }: Props) {
                     layout={"fixed"}>
                     <Table.Thead >
                         <Table.Tr>
-                            <Table.Th w={150}>Date</Table.Th>
+                            <Table.Th w={200}>Date</Table.Th>
                             <Table.Th w={200}>Payee</Table.Th>
                             <Table.Th >Title</Table.Th>
                             <Table.Th w={300}>Associated Budget</Table.Th>
