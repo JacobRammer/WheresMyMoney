@@ -1,17 +1,8 @@
-import { observer } from "mobx-react-lite";
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  NumberFormatter,
-  Text,
-  Title,
-  Tooltip,
-} from "@mantine/core";
-import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
-import { useStore } from "../../stores/store.ts";
-import { useEffect, useState } from "react";
+import {observer} from "mobx-react-lite";
+import {Box, Button, Center, Flex, NumberFormatter, Text, Title, Tooltip,} from "@mantine/core";
+import {CircleArrowLeft, CircleArrowRight} from "lucide-react";
+import {useStore} from "../../stores/store.ts";
+import {useState} from "react";
 
 export default observer(function DashboardHeader() {
   const monthNames = [
@@ -30,7 +21,7 @@ export default observer(function DashboardHeader() {
   ];
 
   const { accountStore } = useStore();
-  const { checkingBalance } = accountStore;
+  const {balanceReadyToAssign} = accountStore;
 
   const { budgetStore } = useStore();
   const { activeDate, setActiveDate } = budgetStore;
@@ -109,7 +100,7 @@ export default observer(function DashboardHeader() {
       <Center h={60}><Flex h={50} align='center'
         style={{
           backgroundColor:
-            checkingBalance > 0 ? "rgba(16, 219, 89)" : "rgba(255, 99, 99)",
+              balanceReadyToAssign > 0 ? "rgba(16, 219, 89)" : "rgba(255, 99, 99)",
           borderRadius: "10px", marginLeft: "250px"
         }}
       >
@@ -121,7 +112,7 @@ export default observer(function DashboardHeader() {
           Available:&nbsp;
           <NumberFormatter
             prefix="$"
-            value={checkingBalance}
+            value={balanceReadyToAssign}
             decimalScale={2}
             fixedDecimalScale={true}
             thousandSeparator

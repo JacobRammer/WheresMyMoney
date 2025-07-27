@@ -17,6 +17,7 @@ export default class AssignedTransaction implements IAssignedTransaction {
     budgetItemId: string;
     date: Date;
     amount: number;
+    primaryAccountId: string;
 
     /**
      * Creates a new AssignedTransaction
@@ -25,10 +26,11 @@ export default class AssignedTransaction implements IAssignedTransaction {
      * @param date The date money was assigned
      * @param amount The amount assigned
      */
-    constructor(id: string, budgetItemId: string, date: Date, amount: number) {
+    constructor(id: string, budgetItemId: string, date: Date, amount: number, primaryAccountId: string) {
         this.id = id;
         this.budgetItemId = budgetItemId;
         this.date = date;
         this.amount = amount;
+        this.primaryAccountId = primaryAccountId;
     }
 }

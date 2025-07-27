@@ -1,11 +1,11 @@
-import { observer } from "mobx-react-lite";
-import { Button, Flex, Group, Select, Text, TextInput, Tooltip } from "@mantine/core";
-import { useStore } from "../../stores/store.ts";
-import { useState } from "react";
-import { useForm } from "@mantine/form";
-import { Account } from "../../models/account.ts";
-import { v4 as uuidv4 } from 'uuid';
-import { CircleHelp } from "lucide-react";
+import {observer} from "mobx-react-lite";
+import {Button, Flex, Group, Select, Text, TextInput, Tooltip} from "@mantine/core";
+import {useStore} from "../../stores/store.ts";
+import {useState} from "react";
+import {useForm} from "@mantine/form";
+import {Account} from "../../models/account.ts";
+import {v4 as uuidv4} from 'uuid';
+import {CircleHelp} from "lucide-react";
 
 interface CreateAccountFormProps {
     onCloseModal?: () => void
@@ -61,6 +61,7 @@ export default observer(function CreateAccountForm({ onCloseModal }: CreateAccou
             values.accountName, // Assign the account name from form values
             values.accountBalance, // Assign the account balance from form values
             values.accountType, // Assign the account type from form values
+            values.accountBalance,
             values.accountDescription || '', // Assign the optional account description
             values.interestRate || 0, // Assign the optional interest rate
             values.monthlyPayment || 0 // Assign the optional monthly payment
