@@ -1,19 +1,19 @@
 import { observer } from "mobx-react-lite";
-import { ActionIcon, Box, Center, Loader, LoadingOverlay, Modal, NumberFormatter, Table, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, Box, Button, Center, Loader, Modal, NumberFormatter, Table, Text, Tooltip } from "@mantine/core";
 import { Account } from "../../../models/account.ts";
-import { Pencil, Trash2 } from "lucide-react";
+import { CirclePlus, Trash2 } from "lucide-react";
 import { Transaction } from "../../../models/transaction.ts";
 import { useEffect, useState } from "react";
 import DeleteTransactionModal from "./deleteTransactionModal.tsx";
-import AddEditTransactionForm from "./addEditTransactionForm.tsx";
+import AddEditTransactionForm from "./addTransactionForm.tsx";
 import TransactionPayeeSelector from "./transactionPayeeSelector.tsx";
 import { useStore } from "../../../stores/store.ts";
 import TransactionBudgetItemSelector from "./transactionBudgetItemSelector.tsx";
-import { DatePicker, DatePickerInput } from "@mantine/dates";
-import { useClickOutside } from "@mantine/hooks";
 import TransactionTitleForm from "./transactionTitleForm.tsx";
 import TransactionDatePickerInput from "./transactionDatePickerInput.tsx";
 import TransactionAmountInput from "./transactionAmountInput.tsx";
+import { v4 as uuidv4 } from 'uuid';
+import { transaction } from "mobx";
 
 interface Props {
     account: Account
@@ -22,15 +22,12 @@ interface Props {
 }
 
 export default observer(function AccountTransactionDetails({ account, setAccount }: Props) {
-    const { accountStore } = useStore();
-    const { getPayeeBudgetItem } = accountStore;
 
     const { budgetStore } = useStore();
     const { loadBudgetCategories, budgetCategories, loading, getBudgetGroupFromMap: getBudgetItemFromMap } = budgetStore;
-
     const [deleteModalState, setDeleteModalState] = useState(false);
-    const [editModalState, setEditModalState] = useState(false);
-    const [transaction, setTransaction] = useState<Transaction>({
+    const [] = useState(false);
+    const [transactionToDelete, setTransactionToDelete] = useState<Transaction>({
         id: '',
         title: '',
         amount: 0,
@@ -40,21 +37,27 @@ export default observer(function AccountTransactionDetails({ account, setAccount
         budgetItemId: undefined,
     });
 
+    const [addTransaction, setAddTransaction] = useState(false);
+
     // Sets the delete modal open state and sets the current account
     function SetupDeleteAccountModal(transactionToDelete: Transaction) {
-        setTransaction(transactionToDelete);
+        setTransactionToDelete(transactionToDelete);
         setDeleteModalState(true);
     }
 
-    function SetupEditAccountModal(transactionToEdit: Transaction) {
-        setTransaction(transactionToEdit);
-        setEditModalState(true);
+    function HandleAddTransaction() {
+        setAddTransaction(!addTransaction)
+
+        if (selectedRow.length > 0) {
+            setSelectedRow("");
+            return;
+        }
     }
 
     const [selectedRow, setSelectedRow] = useState<string>("");
 
 
-    const rows = account.transactions.map((transaction: Transaction) => (
+    const rows = account.transactions.slice().sort((a, b) => b.date.localeCompare(a.date)).map((transaction: Transaction) => (
         <Table.Tr key={transaction.id}
             bg={selectedRow === transaction.id ? 'var(--mantine-color-blue-light)' : undefined}
             onClick={() => setSelectedRow(transaction.id)}
@@ -68,15 +71,18 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                         year: 'numeric'
                     }).format(new Date(transaction.date))}</Text>
                         :
-                        <TransactionDatePickerInput transaction={transaction} />
+                        <TransactionDatePickerInput transaction={transaction} onSubmit={() => setSelectedRow("")} />
                 }
 
             </Table.Td>
             <Table.Td>
                 {
-                    selectedRow !== transaction.id ? <Text>{transaction.payee?.payeeName}</Text>
+                    selectedRow !== transaction.id ?
+                        <Text>
+                            {transaction.payee?.payeeName && transaction.payee.payeeName.length > 0 ? transaction.payee.payeeName : "..."}
+                        </Text>
                         :
-                        <TransactionPayeeSelector transaction={transaction} />
+                        <TransactionPayeeSelector transaction={transaction} onSubmit={() => setSelectedRow("")} />
                 }
 
             </Table.Td>
@@ -84,15 +90,20 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                 {
                     selectedRow !== transaction.id ? <Text fw={500} className="noSelect">{transaction.title}</Text>
                         :
-                        <TransactionTitleForm transaction={transaction} />
+                        <TransactionTitleForm transaction={transaction} onSubmit={() => setSelectedRow("")} />
                 }
 
             </Table.Td>
             <Table.Td>
                 {
-                    selectedRow !== transaction.id ? <Text>{getBudgetItemFromMap(transaction.budgetItemId)?.title}</Text>
+                    selectedRow !== transaction.id ?
+                        <Text>
+                            {getBudgetItemFromMap(transaction.budgetItemId) && getBudgetItemFromMap(transaction.budgetItemId)!.title.length > 0
+                                ? getBudgetItemFromMap(transaction.budgetItemId)!.title
+                                : "..."}
+                        </Text>
                         :
-                        <TransactionBudgetItemSelector transaction={transaction} />
+                        <TransactionBudgetItemSelector transaction={transaction} onSubmit={() => setSelectedRow("")} />
                 }
             </Table.Td>
             <Table.Td>
@@ -103,22 +114,26 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                                 <NumberFormatter value={transaction.amount} prefix="$" decimalScale={2} fixedDecimalScale={true} />
                             </Text>
                             :
-                            <TransactionAmountInput transaction={transaction} updateAccount={setAccount} />
+                            <TransactionAmountInput transaction={transaction} updateAccount={setAccount} onSubmit={() => setSelectedRow("")} />
                     }
                 </Center>
             </Table.Td>
             <Table.Td ta="right" width={50} align="right">
-                <Center><Box style={{ display: "flex", zIndex: 1 }}>
+                <Center>
                     <Tooltip label="Delete transaction" position="top-start">
                         <ActionIcon size={30} style={{ marginRight: "10px" }} color="red">
                             <Trash2 style={{ width: '70%', height: '70%' }}
                                 onClick={() => SetupDeleteAccountModal(transaction)} />
                         </ActionIcon>
                     </Tooltip>
-                </Box></Center>
+                </Center>
             </Table.Td>
         </Table.Tr>
     ));
+
+    rows.push(
+        <AddEditTransactionForm key={uuidv4()} showForm={addTransaction && selectedRow.length == 0} account={account} onAdd={() => setAddTransaction(false)} />
+    )
 
     useEffect(() => {
         if (budgetCategories.size === 0)
@@ -144,18 +159,18 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                     </Table.Thead>
                     <Table.Tbody>{rows}</Table.Tbody>
                 </Table>
+                <Tooltip label="Add Transaction" position="top-start">
+                    <CirclePlus size={40} className="AddActionCircle" style={{ float: 'right', marginTop: '10px' }}
+                        onClick={HandleAddTransaction} />
+                </Tooltip>
 
                 <Modal opened={deleteModalState} onClose={() => setDeleteModalState(false)} title="Delete Transaction"
                     centered>
-                    <DeleteTransactionModal transaction={transaction} accountId={account.id}
+                    <DeleteTransactionModal transaction={transactionToDelete} accountId={account.id}
                         oncloseModal={() => setDeleteModalState(false)} />
                 </Modal>
+            </Box>
+        )
 
-                <Modal opened={editModalState} onClose={() => setEditModalState(false)} title="Edit Transaction"
-                    centered>
-                    <AddEditTransactionForm transaction={transaction} account={account}
-                        onCloseModal={() => setEditModalState(false)} />
-                </Modal>
-            </Box>)
     )
 })

@@ -9,15 +9,17 @@ import { Account } from '../../../models/account';
 interface Props {
     transaction: Transaction;
     updateAccount: (account: Account) => void;
+
+    onSubmit: () => void;
 }
 
-export default observer(function TransactionAmountInput({ transaction, updateAccount }: Props) {
+export default observer(function TransactionAmountInput({ transaction, updateAccount, onSubmit }: Props) {
     const { accountStore } = useStore();
     const { updateTransaction, accountRegistry } = accountStore;
     const [currentValue, setCurrentValue] = useState<string | number>(transaction.amount);
 
     async function handleAmountChange(value: string | number) {
-        if (value === '' || value === null) return;
+        if (value === '' || value === null || value === transaction.amount) return;
         const newAmount = typeof value === 'string' ? parseFloat(value) : value;
         if (isNaN(newAmount)) return;
 
@@ -45,7 +47,8 @@ export default observer(function TransactionAmountInput({ transaction, updateAcc
 
             // Call the updateTransaction method from accountStore
             await updateTransaction(transaction);
-            updateAccount(account);
+            await updateAccount(account);
+            onSubmit();
         } catch (error) {
             console.error('Error updating transaction amount:', error);
         } finally {
@@ -57,6 +60,7 @@ export default observer(function TransactionAmountInput({ transaction, updateAcc
         <NumberInput
             value={transaction.amount}
             onChange={(value) => setCurrentValue(value)}
+            onFocus={(event) => event.target.select()}
             onBlur={() => {
                 handleAmountChange(currentValue);
             }}

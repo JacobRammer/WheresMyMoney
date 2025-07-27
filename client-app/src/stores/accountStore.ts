@@ -1,10 +1,10 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent.ts";
-import {Account} from "../models/account.ts";
-import {Transaction} from "../models/transaction.ts";
-import {Payee} from "../models/payee.ts";
+import { Account } from "../models/account.ts";
+import { Transaction } from "../models/transaction.ts";
+import { Payee } from "../models/payee.ts";
 import BudgetCategoryStore from "./budgetStore.ts";
-import {BudgetItem} from "../models/budgetItem.ts";
+import { BudgetItem } from "../models/budgetItem.ts";
 import AssignedTransaction from "../models/assignedTransaction.ts";
 
 const budgetCategoryStore = new BudgetCategoryStore();
@@ -240,7 +240,6 @@ export default class AccountStore {
                     runInAction(() => {
                         account.transactions[idx] = { ...account.transactions[idx], ...transaction };
                         this.accountRegistry.set(account.id, account);
-                        console.log(account.balance);
                     });
                 }
             }
@@ -294,7 +293,7 @@ export default class AccountStore {
 
     updateAvailableBalance = async (assignedTransaction: AssignedTransaction) => {
         const account = this.accountRegistry.get(assignedTransaction.primaryAccountId);
-        
+
         if (account === undefined)
             return;
 

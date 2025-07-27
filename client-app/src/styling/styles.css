@@ -167,9 +167,8 @@ html {
 }
 
 .AddActionCircle {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
+    float: right;
+    margin-top: 10px;
     color: var(--backgroundColor)
 }
 

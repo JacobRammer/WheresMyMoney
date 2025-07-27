@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { Account } from "../../models/account.ts";
 import AccountTransactionDetails from "./transactions/accountTransactionDetails.tsx";
 import TransactionDashboardHeader from "./transactions/transactionDashboardHeader.tsx";
-import AddEditTransactionForm from "./transactions/addEditTransactionForm.tsx";
+import AddEditTransactionForm from "./transactions/addTransactionForm.tsx";
 
 export default observer(function AccountDetails() {
     const { accountStore } = useStore();
@@ -40,17 +40,6 @@ export default observer(function AccountDetails() {
                 </AppShell.Navbar>
                 <AppShell.Main>
                     <AccountTransactionDetails account={account} setAccount={setAccount} />
-
-                    <Tooltip label="Add Transaction" position="top-start">
-                        <CirclePlus size={40} className="AddActionCircle"
-                            onClick={() => setAddTransactionModalState(true)} />
-                    </Tooltip>
-                    <Modal opened={addTransactionSate} onClose={() => setAddTransactionModalState(false)}
-                        title="Add Transaction" centered>
-                        <AddEditTransactionForm onCloseModal={() => setAddTransactionModalState(false)}
-                            transaction={undefined}
-                            account={account} />
-                    </Modal>
                 </AppShell.Main>
             </AppShell>
         </MantineProvider>

@@ -2,14 +2,15 @@ import { observer } from 'mobx-react-lite';
 import { Transaction } from '../../../models/transaction';
 import { DatePickerInput } from '@mantine/dates';
 import { useStore } from '../../../stores/store';
-import { useState } from 'react';
 import { runInAction } from 'mobx';
 
 interface Props {
     transaction: Transaction
+
+    onSubmit: () => void;
 }
 
-export default observer(function TransactionDatePickerInput({ transaction }: Props) {
+export default observer(function TransactionDatePickerInput({ transaction, onSubmit }: Props) {
     const { accountStore } = useStore();
     const { updateTransaction } = accountStore;
 
@@ -23,6 +24,7 @@ export default observer(function TransactionDatePickerInput({ transaction }: Pro
 
             // Call the updateTransaction method from accountStore
             await updateTransaction(transaction);
+            onSubmit();
         } catch (error) {
             console.error('Error updating transaction date:', error);
         } finally {

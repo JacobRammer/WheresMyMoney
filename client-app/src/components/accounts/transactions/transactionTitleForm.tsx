@@ -8,9 +8,11 @@ import { runInAction } from 'mobx';
 
 interface Props {
     transaction: Transaction;
+
+    onSubmit: () => void;
 }
 
-export default observer(function TransactionTitleForm({ transaction }: Props) {
+export default observer(function TransactionTitleForm({ transaction, onSubmit }: Props) {
     const { accountStore } = useStore();
     const { updateTransaction } = accountStore;
 
@@ -25,7 +27,7 @@ export default observer(function TransactionTitleForm({ transaction }: Props) {
     });
 
     async function handleFormSubmit(values: any) {
-        if (!form.isValid()) return;
+        if (!form.isValid() || !form.isDirty()) return;
         try {
             // Update the transaction title
             runInAction(() => {
@@ -34,6 +36,7 @@ export default observer(function TransactionTitleForm({ transaction }: Props) {
 
             // Call the updateTransaction method from accountStore
             await updateTransaction(transaction);
+            onSubmit();
         } catch (error) {
             console.error('Error updating transaction title:', error);
         } finally {
