@@ -9,10 +9,12 @@ import { Payee } from "../../../models/payee";
 
 interface Props {
     transaction: Transaction;
+
+    onSubmit: () => void;
 }
 
-export default observer(function TransactionPayeeSelector({transaction}: Props) {
-    const {accountStore} = useStore()
+export default observer(function TransactionPayeeSelector({ transaction, onSubmit }: Props) {
+    const { accountStore } = useStore()
     const { updateTransaction, payeeMap, loadPayees, createPayee } = accountStore;
 
     const payeeNames = Array.from(payeeMap.values())
@@ -26,17 +28,23 @@ export default observer(function TransactionPayeeSelector({transaction}: Props) 
         createPayee(payee);
     }
 
-    function HandleUpdateTransaction(payeeName: string | null) {
+    async function HandleUpdateTransaction(payeeName: string | null) {
         console.log(payeeName)
-        if (payeeName === null)
-            return;
-        runInAction(() => {
-            const payee = payeeMap.get(payeeName);
-            if (payee) {
-                transaction.payee = payee;
-            }
-        });
-        updateTransaction(transaction);
+        if (payeeName === null) {
+            runInAction(() => {
+                transaction.payee = null;
+            })
+        } else {
+            runInAction(() => {
+                const payee = payeeMap.get(payeeName);
+                if (payee) {
+                    transaction.payee = payee;
+                }
+            });
+        }
+
+        await updateTransaction(transaction);
+        onSubmit();
     }
 
     useEffect(() => {
@@ -47,6 +55,7 @@ export default observer(function TransactionPayeeSelector({transaction}: Props) 
     return (
         <Select name="payeeSelect"
             placeholder="Select Payee"
+            allowDeselect
             data={[
                 { group: "Selected", items: transaction.payee ? [transaction.payee.payeeName] : [] },
                 {
@@ -72,6 +81,5 @@ export default observer(function TransactionPayeeSelector({transaction}: Props) 
                 </Button>
             }
         />
-        
     )
 })

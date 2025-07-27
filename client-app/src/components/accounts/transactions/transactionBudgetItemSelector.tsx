@@ -1,6 +1,5 @@
-import { Button, Select } from "@mantine/core";
+import { Text, Select } from "@mantine/core";
 import { observer } from "mobx-react-lite";
-import { BudgetItem } from "../../../models/budgetItem";
 import { useStore } from "../../../stores/store";
 import { Transaction } from "../../../models/transaction";
 import { useEffect, useState } from "react";
@@ -8,10 +7,11 @@ import { runInAction } from "mobx";
 
 interface Props {
   transaction: Transaction;
+  onSubmit: () => void;
 }
 
 export default observer(function TransactionBudgetItemSelector({
-  transaction,
+  transaction, onSubmit
 }: Props) {
   const { budgetStore } = useStore();
   const {
@@ -24,7 +24,7 @@ export default observer(function TransactionBudgetItemSelector({
   } = budgetStore;
 
   const { accountStore } = useStore();
-  const { addBudgetToTransaction } = accountStore;
+  const { addBudgetToTransaction, updateTransaction } = accountStore;
 
   const [availableBudgetItems, setAvailableBudgetItems] = useState<string[]>(
     []
@@ -33,7 +33,14 @@ export default observer(function TransactionBudgetItemSelector({
   const [searchValue, setSearchValue] = useState("");
 
   async function HandleChangingBudgetItem(value: string | null) {
-    if (value === null) return;
+    if (value === null) {
+      runInAction(() => {
+        transaction.budgetItemId = undefined;
+      })
+      await updateTransaction(transaction);
+      onSubmit();
+      return;
+    }
 
     const budgetItem = getBudgetItemFromMapByName(value!);
 
@@ -41,7 +48,9 @@ export default observer(function TransactionBudgetItemSelector({
 
     const budget = getBudgetItemFromMapByName(value)!;
     addBudgetToTransaction(transaction, budget);
-    updateBudgetItem(budget);
+
+    await updateBudgetItem(budget);
+    onSubmit();
   }
 
   useEffect(() => {
@@ -57,6 +66,7 @@ export default observer(function TransactionBudgetItemSelector({
     <Select
       name="budgetItemSelect"
       placeholder="Budget"
+      allowDeselect
       data={[
         {
           group: "Selected",
@@ -65,7 +75,7 @@ export default observer(function TransactionBudgetItemSelector({
             : [],
         },
         {
-          group: "Saved Payees",
+          group: "Current Budgets",
           items: availableBudgetItems.filter(
             (b) => b !== getBudgetItemFromMap(transaction.budgetItemId)?.title!
           ),
@@ -79,14 +89,7 @@ export default observer(function TransactionBudgetItemSelector({
         HandleChangingBudgetItem(value);
       }}
       nothingFoundMessage={
-        <Button
-          variant="light"
-          radius="md"
-          style={{ maxWidth: "200px" }} // maybe pop open a modal?
-          onClick={() => console.log("hi")}
-        >
-          Create "{searchValue}"
-        </Button>
+        <Text>No budget named {searchValue}. Please go to the dashboard to create it</Text>
       }
     />
   );
