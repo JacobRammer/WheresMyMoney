@@ -13,7 +13,6 @@ import TransactionTitleForm from "./transactionTitleForm.tsx";
 import TransactionDatePickerInput from "./transactionDatePickerInput.tsx";
 import TransactionAmountInput from "./transactionAmountInput.tsx";
 import { v4 as uuidv4 } from 'uuid';
-import { transaction } from "mobx";
 
 interface Props {
     account: Account
@@ -23,7 +22,7 @@ interface Props {
 
 export default observer(function AccountTransactionDetails({ account, setAccount }: Props) {
 
-    const { budgetStore } = useStore();
+    const { budgetStore, accountStore } = useStore();
     const { loadBudgetCategories, budgetCategories, loading, getBudgetGroupFromMap: getBudgetItemFromMap } = budgetStore;
     const [deleteModalState, setDeleteModalState] = useState(false);
     const [] = useState(false);
@@ -36,6 +35,8 @@ export default observer(function AccountTransactionDetails({ account, setAccount
         payee: null,
         budgetItemId: undefined,
     });
+
+    const { Checking } = accountStore;
 
     const [addTransaction, setAddTransaction] = useState(false);
 
@@ -103,7 +104,9 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                                 : "..."}
                         </Text>
                         :
-                        <TransactionBudgetItemSelector transaction={transaction} onSubmit={() => setSelectedRow("")} />
+                        <Box style={{ visibility: account.accountType === Checking ? "visible" : 'collapse' }}>
+                            <TransactionBudgetItemSelector transaction={transaction} onSubmit={() => setSelectedRow("")} />
+                        </Box>
                 }
             </Table.Td>
             <Table.Td>
