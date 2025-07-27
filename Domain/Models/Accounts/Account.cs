@@ -28,6 +28,11 @@ public class Account
     public double Balance { get; set; }
 
     /// <summary>
+    /// The available balance of this <see cref="Account"/>
+    /// </summary>
+    public double Available { get; set; }
+
+    /// <summary>
     /// The <see cref="AccountType"/> of the account
     /// </summary>
     [Required]

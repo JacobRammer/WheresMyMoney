@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.Core;
 using DataAccess;
 using Domain.Models.Budgets;
@@ -26,12 +22,21 @@ namespace App.Mediatr.Budget.BudgetItem
             // save changes to the db
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var assignedTransaction = await _context.AssignedTransactions.FirstOrDefaultAsync(t => t.BudgetItemId == request.AssignedTransaction.BudgetItemId, cancellationToken: cancellationToken);
+                var assignedTransaction = await _context.AssignedTransactions.FirstOrDefaultAsync(
+                    t => t.BudgetItemId == request.AssignedTransaction.BudgetItemId,
+                    cancellationToken: cancellationToken);
+
+                var account = await _context.Accounts.FirstOrDefaultAsync(
+                    a => a.Id == request.AssignedTransaction.PrimaryAccountId, cancellationToken: cancellationToken);
 
                 // If the assigned transaction already exists, update it
                 if (assignedTransaction != null)
                 {
                     assignedTransaction.Amount += request.AssignedTransaction.Amount;
+
+                    if (account != null)
+                        account.Available -= request.AssignedTransaction.Amount;
+
                     await _context.SaveChangesAsync(cancellationToken);
                     return Result<Unit>.Success(Unit.Value);
                 }
