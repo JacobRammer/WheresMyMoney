@@ -9,11 +9,12 @@ import AssignedTransaction from "../models/assignedTransaction.ts";
 
 const budgetCategoryStore = new BudgetCategoryStore();
 
-const Savings = "Savings";
-const Checking = "Checking";
-const Credit = "Credit";
-const Loan = "Loan";
+
 export default class AccountStore {
+    Savings = "Savings";
+    Checking = "Checking";
+    Credit = "Credit";
+    Loan = "Loan";
     accountRegistry = new Map<string, Account>();
 
     payeeMap: Map<string, Payee> = new Map();
@@ -85,7 +86,7 @@ export default class AccountStore {
             account.forEach((account: Account) => {
                 this.setAccountRegistry(account);
                 runInAction(() => {
-                    if (account.accountType === Checking) {
+                    if (account.accountType === this.Checking) {
                         this.balanceReadyToAssign = account.available;
                         this.primaryAccountId = account.id;
                     }
@@ -100,22 +101,22 @@ export default class AccountStore {
     }
 
     public sumAccountBalances = (account: Account) => {
-        if (account.accountType === Savings) {
+        if (account.accountType === this.Savings) {
             runInAction(() => {
                 this.savingsBalance += parseFloat(account.balance.toString());
             });
         }
-        else if (account.accountType === Checking) {
+        else if (account.accountType === this.Checking) {
             runInAction(() => {
                 this.checkingBalance += parseFloat(account.balance.toString());
             });
         }
-        else if (account.accountType === Credit) {
+        else if (account.accountType === this.Credit) {
             runInAction(() => {
                 this.creditBalance += parseFloat(account.balance.toString());
             });
         }
-        else if (account.accountType === Loan) {
+        else if (account.accountType === this.Loan) {
             runInAction(() => {
                 this.loanBalance += parseFloat(account.balance.toString());
             });
@@ -123,22 +124,22 @@ export default class AccountStore {
     }
 
     public removeFromAccountBalance = (account: Account) => {
-        if (account.accountType === Savings) {
+        if (account.accountType === this.Savings) {
             runInAction(() => {
                 this.savingsBalance -= parseFloat(account.balance.toString());
             });
         }
-        else if (account.accountType === Checking) {
+        else if (account.accountType === this.Checking) {
             runInAction(() => {
                 this.checkingBalance -= parseFloat(account.balance.toString());
             });
         }
-        else if (account.accountType === Credit) {
+        else if (account.accountType === this.Credit) {
             runInAction(() => {
                 this.creditBalance -= parseFloat(account.balance.toString());
             });
         }
-        else if (account.accountType === Loan) {
+        else if (account.accountType === this.Loan) {
             runInAction(() => {
                 this.loanBalance -= parseFloat(account.balance.toString());
             });
@@ -184,7 +185,7 @@ export default class AccountStore {
                 const account = this.accountRegistry.get(id)
                 if (account !== undefined) {
                     this.removeFromAccountBalance(account);
-                    if (account.accountType === Checking) {
+                    if (account.accountType === this.Checking) {
                         this.primaryAccountId = "";
                         this.balanceReadyToAssign = 0;
                         this.primaryAccountId = "";
@@ -258,15 +259,15 @@ export default class AccountStore {
     }
 
     getCashAccounts = () => {
-        return Array.from(this.accountRegistry.values()).filter(account => account.accountType === Savings || account.accountType === Checking);
+        return Array.from(this.accountRegistry.values()).filter(account => account.accountType === this.Savings || account.accountType === this.Checking);
     }
 
     getCreditAccounts = () => {
-        return Array.from(this.accountRegistry.values()).filter(account => account.accountType === Credit);
+        return Array.from(this.accountRegistry.values()).filter(account => account.accountType === this.Credit);
     }
 
     getLoanAccounts = () => {
-        return Array.from(this.accountRegistry.values()).filter(account => account.accountType === Loan);
+        return Array.from(this.accountRegistry.values()).filter(account => account.accountType === this.Loan);
     }
 
     getAllAccounts = () => {
