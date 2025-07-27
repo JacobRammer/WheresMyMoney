@@ -1,15 +1,13 @@
-import { observer } from "mobx-react-lite";
-import { useStore } from "../../stores/store.ts";
-import { useParams } from "react-router-dom";
+import {observer} from "mobx-react-lite";
+import {useStore} from "../../stores/store.ts";
+import {useParams} from "react-router-dom";
 import Sidebar from "../sidebar/sidebar.tsx";
-import { AppShell, Box, Flex, MantineProvider, Modal, NumberFormatter, Text, Title, Tooltip } from "@mantine/core";
-import { CircleHelp, CirclePlus } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Account } from "../../models/account.ts";
+import {AppShell, Flex, MantineProvider, Modal, NumberFormatter, Text, Title, Tooltip} from "@mantine/core";
+import {CircleHelp, CirclePlus} from "lucide-react";
+import {useEffect, useState} from "react";
+import {Account} from "../../models/account.ts";
 import AccountTransactionDetails from "./transactions/accountTransactionDetails.tsx";
 import AddEditTransactionForm from "./transactions/addEditTransactionForm.tsx";
-import AccountTable from "./accountTable.tsx";
-import CreateAccountForm from "./createAccountForm.tsx";
 
 export default observer(function AccountDetails() {
     const { accountStore } = useStore();
@@ -17,7 +15,7 @@ export default observer(function AccountDetails() {
     const { id } = useParams()
 
     const [addTransactionSate, setAddTransactionModalState] = useState(false);
-    const [account, setAccount] = useState(new Account("", "", 0, "", ""));
+    const [account, setAccount] = useState(new Account("", "", 0, "", 0, ""));
 
     useEffect(() => {
         const tempAccount = accountRegistry.get(id!);

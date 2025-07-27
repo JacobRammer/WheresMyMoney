@@ -1,13 +1,13 @@
-import { Box, Button, NumberFormatter, Text } from "@mantine/core";
-import { observer } from "mobx-react-lite";
-import { useStore } from "../../../stores/store";
-import { BudgetItem } from "../../../models/budgetItem";
+import {Box, Button, NumberFormatter, Text} from "@mantine/core";
+import {observer} from "mobx-react-lite";
+import {useStore} from "../../../stores/store";
+import {BudgetItem} from "../../../models/budgetItem";
 import AssignedTransaction from "../../../models/assignedTransaction";
-import { v4 as uuidv4 } from "uuid";
-import { useEffect } from "react";
+import {v4 as uuidv4} from "uuid";
 
 export default observer(function SelectedBudgetItemFundingOptions() {
-  const { budgetStore } = useStore();
+  const {budgetStore, accountStore} = useStore();
+  const {primaryAccountId, updateAvailableBalance} = accountStore;
   const { selectedBudgetItem, updateBudgetItemFunding } = budgetStore;
 
   function amountNeededToReachTarget() {
@@ -30,9 +30,16 @@ export default observer(function SelectedBudgetItemFundingOptions() {
       uuidv4(),
       selectedBudgetItem!.id,
       new Date(),
-      amountNeeded
+        amountNeeded,
+        primaryAccountId
     );
     updateBudgetItemFunding(updatedBudgetItem!, tempAssigned);
+    UpdateAssigned(tempAssigned);
+    
+  }
+
+  function UpdateAssigned(assignedTransaction: AssignedTransaction) {
+    updateAvailableBalance(assignedTransaction)
   }
 
   function UnfundBudgetItem() {
@@ -42,9 +49,11 @@ export default observer(function SelectedBudgetItemFundingOptions() {
       uuidv4(),
       selectedBudgetItem!.id,
       new Date(),
-      updatedBudgetItem.assigned * -1
+        updatedBudgetItem.assigned * -1,
+        primaryAccountId
     );
     updateBudgetItemFunding(updatedBudgetItem!, tempAssigned);
+    UpdateAssigned(tempAssigned);
   }
 
   return (

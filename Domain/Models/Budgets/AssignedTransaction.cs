@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Models.Budgets
 {
@@ -30,5 +27,11 @@ namespace Domain.Models.Budgets
         /// the amount assigned
         /// </summary>
         public double Amount { get; set; }
+
+        /// <summary>
+        /// The primary account ID
+        /// </summary>
+        [NotMapped]
+        public Guid PrimaryAccountId { get; set; }
     }
 }

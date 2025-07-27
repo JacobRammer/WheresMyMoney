@@ -1,9 +1,9 @@
-import { observer } from "mobx-react-lite";
-import { ActionIcon, Box, Center, Modal, NumberFormatter, Table, Text, Tooltip } from "@mantine/core";
-import { Account } from "../../models/account.ts";
-import { useStore } from "../../stores/store.ts";
-import { useState } from "react";
-import { Pencil, Trash2 } from "lucide-react";
+import {observer} from "mobx-react-lite";
+import {ActionIcon, Box, Center, Modal, NumberFormatter, Table, Text, Tooltip} from "@mantine/core";
+import {Account} from "../../models/account.ts";
+import {useStore} from "../../stores/store.ts";
+import {useState} from "react";
+import {Pencil, Trash2} from "lucide-react";
 import DeleteAccountModal from "./deleteAccountModal.tsx";
 import EditAccount from "./editAccount.tsx";
 
@@ -15,7 +15,7 @@ export default observer(function accountTable() {
 
     const [editModalState, setEditModalState] = useState(false);
 
-    const [account, setAccount] = useState(new Account("", "", 0, "", ""));
+    const [account, setAccount] = useState(new Account("", "", 0, "", 0, ""));
 
     // Sets the delete modal open state and sets the current account
     function SetupDeleteAccountModal(accountToDelete: Account) {

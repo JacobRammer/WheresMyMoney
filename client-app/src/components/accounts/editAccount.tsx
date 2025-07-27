@@ -60,6 +60,7 @@ export default observer(function EditAccount({onCloseModal, accountToEdit}: Edit
             values.accountName,
             accountToEdit.balance,
             accountToEdit.accountType,
+            accountToEdit.balance,
             values.accountDescription || '',
             values.interestRate,
             values.monthlyPayment,

@@ -1,10 +1,11 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent.ts";
-import { Account } from "../models/account.ts";
-import { Transaction } from "../models/transaction.ts";
-import { Payee } from "../models/payee.ts";
+import {Account} from "../models/account.ts";
+import {Transaction} from "../models/transaction.ts";
+import {Payee} from "../models/payee.ts";
 import BudgetCategoryStore from "./budgetStore.ts";
-import { BudgetItem } from "../models/budgetItem.ts";
+import {BudgetItem} from "../models/budgetItem.ts";
+import AssignedTransaction from "../models/assignedTransaction.ts";
 
 const budgetCategoryStore = new BudgetCategoryStore();
 
@@ -24,13 +25,12 @@ export default class AccountStore {
      * @type {number}
      */
     checkingBalance: number = 0;
+    balanceReadyToAssign: number = 0;
     savingsBalance: number = 0;
     creditBalance: number = 0;
     loanBalance: number = 0;
     numberOfTransactions: number = 0;
-
-
-
+    primaryAccountId: string = "";
 
     constructor() {
         makeAutoObservable(this);
@@ -85,6 +85,10 @@ export default class AccountStore {
             account.forEach((account: Account) => {
                 this.setAccountRegistry(account);
                 runInAction(() => {
+                    if (account.accountType === Checking) {
+                        this.balanceReadyToAssign = account.available;
+                        this.primaryAccountId = account.id;
+                    }
                     this.sumAccountBalances(account);
                 });
             })
@@ -180,6 +184,11 @@ export default class AccountStore {
                 const account = this.accountRegistry.get(id)
                 if (account !== undefined) {
                     this.removeFromAccountBalance(account);
+                    if (account.accountType === Checking) {
+                        this.primaryAccountId = "";
+                        this.balanceReadyToAssign = 0;
+                        this.primaryAccountId = "";
+                    }
                 }
                 this.accountRegistry.delete(id);
             })
@@ -281,6 +290,19 @@ export default class AccountStore {
 
         return budgetItem.title;
 
+    }
+
+    updateAvailableBalance = async (assignedTransaction: AssignedTransaction) => {
+        const account = this.accountRegistry.get(assignedTransaction.primaryAccountId);
+        
+        if (account === undefined)
+            return;
+
+        runInAction(() => {
+            account.available -= assignedTransaction.amount;
+            this.accountRegistry.set(account.id, account);
+            this.balanceReadyToAssign -= assignedTransaction.amount;
+        })
     }
 
     /**

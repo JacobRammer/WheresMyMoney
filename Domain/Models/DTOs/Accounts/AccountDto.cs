@@ -16,6 +16,11 @@ public class AccountDto
     public required string Name { get; set; }
 
     /// <summary>
+    /// The available balance of this <see cref="AccountDto"/>
+    /// </summary>
+    public double Available { get; set; }
+
+    /// <summary>
     /// the account balance
     /// </summary>
     public double Balance { get; set; }
