@@ -5,7 +5,7 @@ import {useState} from "react";
 import AddBudgetGroupForm from "./addBudgetGroupForm.tsx";
 
 export default observer(function CategoryTable() {
-    
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
@@ -13,21 +13,20 @@ export default observer(function CategoryTable() {
             <Flex className='CategoryTableFlex'>
                 <Menu shadow="md" radius={20} withArrow opened={isMenuOpen} onDismiss={() => setIsMenuOpen(false)}>
                     <Menu.Target>
-                        <Button onClick={() =>setIsMenuOpen(!isMenuOpen)}
-                                leftSection={<CirclePlus size={20}/>} radius='lg' variant='outline' 
+                        <Button onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                leftSection={<CirclePlus size={20}/>} radius='lg' variant='outline'
                                 color='rgb(121, 173, 220)'>
                             <Text size='xl' fw={600}>Add Category</Text>
                         </Button>
                     </Menu.Target>
 
                     <Menu.Dropdown>
-                        <Menu.Label>Create Budget Category</Menu.Label>
                         <Box style={{margin: '10px'}}>
                             <AddBudgetGroupForm updateMenuState={() => setIsMenuOpen(false)}/>
                         </Box>
                     </Menu.Dropdown>
                 </Menu>
-                
+
             </Flex>
         </Box>
     )

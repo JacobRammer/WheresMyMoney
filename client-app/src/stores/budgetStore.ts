@@ -1,7 +1,7 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent.ts";
-import { BudgetGroup } from "../models/budgetGroup.ts";
-import { BudgetItem } from "../models/budgetItem.ts";
+import {BudgetGroup} from "../models/budgetGroup.ts";
+import {BudgetItem} from "../models/budgetItem.ts";
 import AssignedTransaction from "../models/assignedTransaction.ts";
 
 export default class BudgetCategoryStore {
@@ -115,6 +115,7 @@ export default class BudgetCategoryStore {
 
                 }
             })
+            this.setSelectedBudgetItem(category);
         } catch (error) {
             console.log(error)
         }

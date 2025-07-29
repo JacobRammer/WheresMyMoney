@@ -1,23 +1,14 @@
-import { observer } from "mobx-react-lite";
-import {
-  ActionIcon,
-  Box,
-  Center,
-  Flex,
-  Menu,
-  NumberFormatter,
-  Text,
-  Tooltip,
-} from "@mantine/core";
-import { BudgetGroup } from "../../models/budgetGroup.ts";
+import {observer} from "mobx-react-lite";
+import {ActionIcon, Box, Center, Flex, Menu, NumberFormatter, Text, Tooltip,} from "@mantine/core";
+import {BudgetGroup} from "../../models/budgetGroup.ts";
 import CategoryItem from "./Category/categoryItem.tsx";
-import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
-import { CirclePlus } from "lucide-react";
-import { useHover } from "@mantine/hooks";
+import {v4 as uuidv4} from "uuid";
+import {useState} from "react";
+import {CirclePlus} from "lucide-react";
+import {useHover} from "@mantine/hooks";
 import AddCategoryItemForm from "./Category/addCategoryItemForm.tsx";
-import { BudgetItem } from "../../models/budgetItem.ts";
-import { useStore } from "../../stores/store.ts";
+import {BudgetItem} from "../../models/budgetItem.ts";
+import {useStore} from "../../stores/store.ts";
 
 interface Props {
   budgetGroup: BudgetGroup;
@@ -37,7 +28,7 @@ export default observer(function CategoryGroupItem({ budgetGroup }: Props) {
             <Center>
               <Text>{budgetGroup.title}</Text>
               {(hovered || active) && (
-                <Menu onChange={setActive}>
+                  <Menu onChange={setActive} shadow="md" radius={20}>
                   <Menu.Target>
                     <ActionIcon
                       variant="transparent"
@@ -49,10 +40,13 @@ export default observer(function CategoryGroupItem({ budgetGroup }: Props) {
                     </ActionIcon>
                   </Menu.Target>
                   <Menu.Dropdown>
-                    <AddCategoryItemForm
-                      updateMenuState={() => setActive(false)}
-                      budgetGroupId={budgetGroup.id}
-                    />
+                      <Box style={{margin: '10px'}}>
+                          <AddCategoryItemForm
+                              updateMenuState={() => setActive(false)}
+                              budgetGroupId={budgetGroup.id}
+                          />
+                      </Box>
+
                   </Menu.Dropdown>
                 </Menu>
               )}

@@ -1,10 +1,10 @@
-import { observer } from 'mobx-react-lite';
-import { Transaction } from '../../../models/transaction';
-import { NumberInput } from '@mantine/core';
-import { useStore } from '../../../stores/store';
-import { useState } from 'react';
-import { runInAction } from 'mobx';
-import { Account } from '../../../models/account';
+import {observer} from 'mobx-react-lite';
+import {Transaction} from '../../../models/transaction';
+import {NumberInput} from '@mantine/core';
+import {useStore} from '../../../stores/store';
+import {useState} from 'react';
+import {runInAction} from 'mobx';
+import {Account} from '../../../models/account';
 
 interface Props {
     transaction: Transaction;
@@ -42,12 +42,11 @@ export default observer(function TransactionAmountInput({ transaction, updateAcc
                 }
 
                 accountRegistry.set(account.id, account);
-
             });
 
             // Call the updateTransaction method from accountStore
             await updateTransaction(transaction);
-            await updateAccount(account);
+            updateAccount(account);
             onSubmit();
         } catch (error) {
             console.error('Error updating transaction amount:', error);
@@ -62,7 +61,7 @@ export default observer(function TransactionAmountInput({ transaction, updateAcc
             onChange={(value) => setCurrentValue(value)}
             onFocus={(event) => event.target.select()}
             onBlur={() => {
-                handleAmountChange(currentValue);
+                handleAmountChange(currentValue).then();
             }}
             prefix="$"
             min={0}
