@@ -17,6 +17,7 @@ html {
     --BudgetGroupWidth: 70%;
     --BudgetGroupAndItemBorderRadius: 10px;
     --SelectedBudgetItemPadding: 15px;
+    --SelectedBudgetItemInnerBoxColor: #F0F8FF;
 }
 
 .blueBackgroundColor {
@@ -166,9 +167,16 @@ html {
     margin-left: 20px;
 }
 
-.AddActionCircle {
+.AddActionCircleBottom {
     float: right;
     margin-top: 10px;
+    color: var(--backgroundColor)
+}
+
+.AddActionCircleBottom {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
     color: var(--backgroundColor)
 }
 
@@ -194,7 +202,13 @@ html {
 }
 
 .SelectedBudgetItemOuterBox {
-    background-color: aliceblue;
+    background-color: var(--SelectedBudgetItemInnerBoxColor);
+    border-radius: var(--BudgetGroupAndItemBorderRadius);
+    padding: var(--SelectedBudgetItemPadding);
+    margin-top: 10px;
+}
+
+.SelectedBudgetItemFundingOptionFundBox {
     border-radius: var(--BudgetGroupAndItemBorderRadius);
     padding: var(--SelectedBudgetItemPadding);
     margin-top: 10px;
@@ -208,7 +222,7 @@ html {
 
 .SelectedBudgetItemFundingOptions {
     margin-top: 20px;
-    background-color: aliceblue;
+    background-color: var(--SelectedBudgetItemInnerBoxColor);
     padding: var(--SelectedBudgetItemPadding);
     border-radius: var(--BudgetGroupAndItemBorderRadius);
 }
@@ -220,4 +234,9 @@ html {
 .selectedBudgetItemInfoFlex {
     justify-content: space-between;
     margin-top: 10px;
+}
+
+.selectedBudgetInfoDivider {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
