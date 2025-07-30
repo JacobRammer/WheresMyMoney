@@ -1,9 +1,9 @@
-import {observer} from "mobx-react-lite";
-import {Button, NumberFormatter, Text} from "@mantine/core";
-import {BudgetItem} from "../../../../models/budgetItem.ts";
+import { observer } from "mobx-react-lite";
+import { Button, NumberFormatter, Text } from "@mantine/core";
+import { BudgetItem } from "../../../../models/budgetItem.ts";
 import AssignedTransaction from "../../../../models/assignedTransaction.ts";
-import {v4 as uuidv4} from "uuid";
-import {useStore} from "../../../../stores/store.ts";
+import { v4 as uuidv4 } from "uuid";
+import { useStore } from "../../../../stores/store.ts";
 
 interface Props {
     variant?: string;
@@ -12,16 +12,18 @@ interface Props {
 }
 
 export default observer(function FundBudgetItemButton({
-                                                          variant = "filled",
-                                                          color = "blue",
-                                                          text = "Underfunded"
-                                                      }: Props) {
+    variant = "filled",
+    color = "blue",
+    text = "Underfunded"
+}: Props) {
 
-    const {budgetStore, accountStore} = useStore();
-    const {primaryAccountId, updateAvailableBalance} = accountStore;
-    const {updateBudgetItemFunding, selectedBudgetItem} = budgetStore
+    const { budgetStore, accountStore } = useStore();
+    const { primaryAccountId, updateAvailableBalance } = accountStore;
+    const { updateBudgetItemFunding, selectedBudgetItem } = budgetStore
 
     function amountNeededToReachTarget() {
+        if (selectedBudgetItem!.available < 0)
+            return Math.abs(selectedBudgetItem!.available);
         if (
             selectedBudgetItem!.assigned >= selectedBudgetItem!.target &&
             selectedBudgetItem!.available >= 0

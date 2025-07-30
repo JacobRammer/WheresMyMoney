@@ -124,7 +124,7 @@ export default observer(function CategoryItem({ budgetItem }: Props) {
                 style={{ marginRight: "10px" }}
                 sections={[
                   {
-                    value: (budgetItem.assigned / budgetItem.target) * 100,
+                    value: (budgetItem.assigned === 0 ? 0 : budgetItem.assigned / budgetItem.target) * 100,
                     color:
                       budgetItem.assigned >= budgetItem.target
                         ? BudgetItemAvailableStyling.COLOR.GREEN
