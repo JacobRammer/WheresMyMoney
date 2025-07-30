@@ -44,7 +44,9 @@ export default observer(function BudgetItemFundingProgress() {
                                 )
 
                                 :
-                                <Text ta="center">{BudgetItemAssignedPercent}%</Text>
+                                <Center>
+                                    <NumberFormatter suffix="%" decimalScale={1} value={BudgetItemAssignedPercent} />
+                                </Center>
                         }
                         transitionDuration={250}
                     />
