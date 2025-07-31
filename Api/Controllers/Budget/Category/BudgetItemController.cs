@@ -13,7 +13,7 @@ public class BudgetItemController : BaseApiController
     /// <param name="categoryGroupId">The id of the <see cref="BudgetGroup"/></param>
     /// <returns>List of categories</returns>
     [HttpGet("{categoryGroupId}")]
-    public async Task<IActionResult> GetAllCategories(Guid categoryGroupId)
+    public async Task<IActionResult> GetAllBudgetItems(Guid categoryGroupId)
     {
         return HandleResults(await Mediator.Send(new GetAllBudgetItems.Query { CategoryGroupId = categoryGroupId }));
     }
@@ -24,7 +24,7 @@ public class BudgetItemController : BaseApiController
     /// <param name="id">The id of the <see cref="BudgetItem"/> to delete</param>
     /// <returns>Nothing</returns>
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCategory(Guid id)
+    public async Task<IActionResult> DeleteBudgetItem(Guid id)
     {
         return HandleResults(await Mediator.Send(new DeleteBudgetItem.Command { Id = id }));
     }
@@ -47,7 +47,7 @@ public class BudgetItemController : BaseApiController
     /// <param name="budget">The <see cref="Budget"/> to add</param>
     /// <returns>Nothing</returns>
     [HttpPost]
-    public async Task<IActionResult> AddCategory(BudgetItem budget)
+    public async Task<IActionResult> AddBudgetItem(BudgetItem budget)
     {
         return HandleResults(await Mediator.Send(new AddBudgetItem.Command
         {
@@ -56,7 +56,7 @@ public class BudgetItemController : BaseApiController
     }
 
     [HttpPost("/api/UpdateAssigned")]
-    public async Task<IActionResult> UpdateAssigned(AssignedTransaction assignedTransaction)
+    public async Task<IActionResult> UpdateBudgetItemAssigned(AssignedTransaction assignedTransaction)
     {
         return HandleResults(await Mediator.Send(new AddAssignedTransaction.Command
         {

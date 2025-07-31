@@ -1,17 +1,17 @@
-import {Button, Flex, TextInput} from "@mantine/core";
-import {useForm} from "@mantine/form";
-import {observer} from "mobx-react-lite";
-import {useStore} from "../../../stores/store";
-import {v4 as uuidv4} from "uuid";
-import {BudgetItem} from "../../../models/budgetItem.ts";
+import { Button, Flex, TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../../stores/store";
+import { v4 as uuidv4 } from "uuid";
+import { BudgetItem } from "../../../models/budgetItem.ts";
 
 interface AddBudgetItemProps {
     budgetGroupId: string;
     updateMenuState: () => void;
 }
 export default observer(function AddCategoryItemForm({ updateMenuState, budgetGroupId }: AddBudgetItemProps) {
-    const {budgetStore} = useStore();
-    const {createBudgetItem} = budgetStore;
+    const { budgetStore } = useStore();
+    const { createBudgetItem, setSelectedBudgetItem } = budgetStore;
 
     function CreateNewCategory() {
         if (form.isValid()) {
@@ -30,7 +30,7 @@ export default observer(function AddCategoryItemForm({ updateMenuState, budgetGr
         },
     });
 
-    function handleFormSubmit(values: any) {
+    async function handleFormSubmit(values: any) {
 
         const budgetItem = new BudgetItem(
             uuidv4(), // Generate a unique ID
@@ -41,31 +41,33 @@ export default observer(function AddCategoryItemForm({ updateMenuState, budgetGr
             0,
             0,
         );
-        createBudgetItem(budgetItem).then(() => {
+        await createBudgetItem(budgetItem).then(() => {
             updateMenuState()
         });
+
+        setSelectedBudgetItem(budgetItem);
     }
 
     return (
         <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
-                    <TextInput name="title"
-                            withAsterisk
-                            label="Budget Title"
-                            placeholder="Rent"
-                            key={form.key('budgetTitle')}
-                            type="text" autoComplete="off"
+            <TextInput name="title"
+                withAsterisk
+                label="Budget Title"
+                placeholder="Rent"
+                key={form.key('budgetTitle')}
+                type="text" autoComplete="off"
                 {...form.getInputProps('budgetTitle')}
-                    />
-                    
-                    <Flex justify='space-between' mt="md">
+            />
+
+            <Flex justify='space-between' mt="md">
                 <Button style={{ backgroundColor: 'red' }} onClick={updateMenuState}>
-                            Cancel
+                    Cancel
                 </Button>
-        
-                        <Button onClick={CreateNewCategory} type='submit' disabled={!form.isValid()}>
-                            Create
-                        </Button>
-                    </Flex>
-                </form>
+
+                <Button onClick={CreateNewCategory} type='submit' disabled={!form.isValid()}>
+                    Create
+                </Button>
+            </Flex>
+        </form>
     )
 })

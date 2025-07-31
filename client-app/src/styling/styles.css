@@ -168,12 +168,6 @@ html {
 }
 
 .AddActionCircleBottom {
-    float: right;
-    margin-top: 10px;
-    color: var(--backgroundColor)
-}
-
-.AddActionCircleBottom {
     position: fixed;
     bottom: 30px;
     right: 30px;
@@ -243,4 +237,9 @@ html {
 
 .selectedBudgetItemInformationDivider {
     margin-bottom: 10px;
+}
+
+.deleteBudgetItemBox {
+    position: fixed;
+    bottom: 30px;
 }

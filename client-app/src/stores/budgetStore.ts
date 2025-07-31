@@ -1,7 +1,7 @@
-import {makeAutoObservable, runInAction} from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent.ts";
-import {BudgetGroup} from "../models/budgetGroup.ts";
-import {BudgetItem} from "../models/budgetItem.ts";
+import { BudgetGroup } from "../models/budgetGroup.ts";
+import { BudgetItem } from "../models/budgetItem.ts";
 import AssignedTransaction from "../models/assignedTransaction.ts";
 
 export default class BudgetCategoryStore {
@@ -208,5 +208,37 @@ export default class BudgetCategoryStore {
 
         await this.updateBudgetItem(budgetItem);
         await agent.Budgets.updateBudgetItemAssigned(assignedTransaction);
+    }
+
+    deleteBudgetItem = async (budgetItemId: string) => {
+        try {
+            await agent.Budgets.deleteBudgetItem(budgetItemId);
+
+            runInAction(() => {
+                // Find and remove the budget item from the store
+                for (const group of this.budgetCategories.values()) {
+                    const itemIndex = group.categories.findIndex(item => item.id === budgetItemId);
+                    if (itemIndex !== -1) {
+                        const budgetItem = group.categories[itemIndex];
+
+                        // Update group totals by subtracting the deleted item's amounts
+                        group.assigned -= budgetItem.assigned;
+                        group.available -= budgetItem.available;
+
+                        // Remove the item from the categories array
+                        group.categories.splice(itemIndex, 1);
+                        break;
+                    }
+                }
+
+                // Clear selected item if it was the deleted one
+                if (this.selectedBudgetItem?.id === budgetItemId) {
+                    this.selectedBudgetItem = undefined;
+                }
+            });
+        } catch (error) {
+            console.error('Error deleting budget item:', error);
+            throw error;
+        }
     }
 }

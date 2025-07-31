@@ -41,6 +41,7 @@ const Budgets = {
     createBudgetItem: (budgetItem: BudgetItem) => requests.post<BudgetItem>('/BudgetItem', budgetItem),
     createBudgetGroup: (budgetGroup: BudgetGroup) => requests.post<BudgetGroup>('/BudgetItemGroup', budgetGroup),
     updateBudgetItemAssigned: (assignedTransaction: AssignedTransaction) => requests.post<AssignedTransaction>('UpdateAssigned', assignedTransaction),
+    deleteBudgetItem: (id: string) => requests.del(`/BudgetItem/${id}`),
 }
 
 const Payees = {
