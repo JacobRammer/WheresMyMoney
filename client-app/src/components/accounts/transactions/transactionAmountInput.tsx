@@ -1,27 +1,32 @@
-import {observer} from 'mobx-react-lite';
-import {Transaction} from '../../../models/transaction';
-import {NumberInput} from '@mantine/core';
-import {useStore} from '../../../stores/store';
-import {useState} from 'react';
-import {runInAction} from 'mobx';
-import {Account} from '../../../models/account';
+import { observer } from 'mobx-react-lite';
+import { Transaction } from '../../../models/transaction';
+import { Box, NumberInput } from '@mantine/core';
+import { useStore } from '../../../stores/store';
+import { useState } from 'react';
+import { runInAction } from 'mobx';
+import { Account } from '../../../models/account';
 
 interface Props {
     transaction: Transaction;
     updateAccount: (account: Account) => void;
 
     onSubmit: () => void;
+
+    column: string;
 }
 
-export default observer(function TransactionAmountInput({ transaction, updateAccount, onSubmit }: Props) {
+export default observer(function TransactionAmountInput({ transaction, updateAccount, onSubmit, column }: Props) {
     const { accountStore } = useStore();
     const { updateTransaction, accountRegistry } = accountStore;
     const [currentValue, setCurrentValue] = useState<string | number>(transaction.amount);
 
     async function handleAmountChange(value: string | number) {
         if (value === '' || value === null || value === transaction.amount) return;
-        const newAmount = typeof value === 'string' ? parseFloat(value) : value;
+        let newAmount = typeof value === 'string' ? parseFloat(value) : value;
         if (isNaN(newAmount)) return;
+
+        if (column === 'outflow' && newAmount > 0)
+            newAmount *= -1;
 
         try {
             const account = accountRegistry.get(transaction.accountId);
@@ -55,17 +60,29 @@ export default observer(function TransactionAmountInput({ transaction, updateAcc
         }
     }
 
+    function generateValue() {
+        if (transaction.amount < 0 && column === 'inflow')
+            return undefined;
+        if (transaction.amount > 0 && column === 'outflow')
+            return undefined;
+        return transaction.amount;
+    }
+
     return (
-        <NumberInput
-            value={transaction.amount}
-            onChange={(value) => setCurrentValue(value)}
-            onFocus={(event) => event.target.select()}
-            onBlur={() => {
-                handleAmountChange(currentValue).then();
-            }}
-            prefix="$"
-            min={0}
-            hideControls
-        />
+        <Box>
+            <NumberInput
+                value={generateValue()}
+                onChange={(value) => setCurrentValue(value)}
+                onFocus={(event) => event.target.select()}
+                placeholder={column}
+                onBlur={() => {
+                    handleAmountChange(currentValue).then();
+                }}
+                prefix="$"
+                min={0}
+                hideControls
+            />
+        </Box>
+
     );
 });
