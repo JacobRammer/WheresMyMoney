@@ -43,7 +43,7 @@ export default observer(function AccountDashboard() {
                     </Flex>
 
                     <Flex align='center'>
-                        <Text>Cash balance:&nbsp;
+                        <Text>Available cash:&nbsp;
                             <NumberFormatter prefix="$" decimalScale={2} fixedDecimalScale={true} value={balanceReadyToAssign}
                                 style={{ color: balanceReadyToAssign > 0 ? 'black' : BudgetItemAvailableStyling.COLOR.REDWARNING }} />
                         </Text>
