@@ -63,11 +63,14 @@ export default observer(function TransactionPayeeSelector({ transaction, onSubmi
                         name => name !== transaction.payee?.payeeName)
                 }
             ]}
-            value={transaction.payee?.payeeName}
+            value={transaction.payee?.payeeName || (searchValue || '')}
             searchable
             onSearchChange={setSearchValue}
             comboboxProps={{ width: 250 }}
             onChange={(value) => {
+                if (value) {
+                    setSearchValue(''); // Clear search when selecting
+                }
                 HandleUpdateTransaction(value)
             }}
             onFocus={(event) => event.target.select()}
@@ -75,8 +78,11 @@ export default observer(function TransactionPayeeSelector({ transaction, onSubmi
                 <Button
                     variant="light"
                     radius="md"
-                    style={{ maxWidth: '200px' }} // maybe pop open a modal?
-                    onClick={() => CreateTransactionPayee(searchValue)}>
+                    style={{ maxWidth: '200px' }}
+                    onClick={() => {
+                        CreateTransactionPayee(searchValue);
+                        setSearchValue(''); // Clear after creating
+                    }}>
                     Create "{searchValue}"
                 </Button>
             }
