@@ -32,7 +32,7 @@ export default observer(function TransactionDashboardHeader({ account }: Props) 
             {
                 isCashAccount(account) &&
                 <Flex align='center'>
-                    <Text style={{ paddingRight: '5px' }}>Balance:</Text> <Text
+                    <Text style={{ paddingRight: '5px' }}>Available Balance:</Text> <Text
                         c={account.balance < 0 ? 'red' : 'black'}
                         fw={account.balance < 0 ? 600 : 400}>
                         <NumberFormatter value={account.available} prefix="$" decimalScale={2} fixedDecimalScale={true} />
