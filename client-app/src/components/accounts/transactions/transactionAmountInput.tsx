@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { Transaction } from '../../../models/transaction';
-import { Box, NumberInput } from '@mantine/core';
+import { NumberInput } from '@mantine/core';
 import { useStore } from '../../../stores/store';
 import { useState } from 'react';
 import { runInAction } from 'mobx';
@@ -69,20 +69,18 @@ export default observer(function TransactionAmountInput({ transaction, updateAcc
     }
 
     return (
-        <Box>
-            <NumberInput
-                value={generateValue()}
-                onChange={(value) => setCurrentValue(value)}
-                onFocus={(event) => event.target.select()}
-                placeholder={column}
-                onBlur={() => {
-                    handleAmountChange(currentValue).then();
-                }}
-                prefix="$"
-                min={0}
-                hideControls
-            />
-        </Box>
+        <NumberInput
+            value={generateValue()}
+            onChange={(value) => setCurrentValue(value)}
+            onFocus={(event) => event.target.select()}
+            placeholder={column}
+            onBlur={() => {
+                handleAmountChange(currentValue).then();
+            }}
+            prefix="$"
+            min={0}
+            hideControls
+        />
 
     );
 });
