@@ -81,11 +81,14 @@ export default observer(function TransactionBudgetItemSelector({
           ),
         },
       ]}
-      value={getBudgetItemFromMap(transaction.budgetItemId)?.title!}
+      value={getBudgetItemFromMap(transaction.budgetItemId)?.title || searchValue}
       searchable
       onFocus={(event) => event.target.select()}
       onSearchChange={setSearchValue}
       onChange={(value) => {
+        if (value) {
+          setSearchValue(''); // Clear search when selecting
+        }
         HandleChangingBudgetItem(value);
       }}
       nothingFoundMessage={
