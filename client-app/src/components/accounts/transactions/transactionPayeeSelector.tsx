@@ -63,7 +63,7 @@ export default observer(function TransactionPayeeSelector({ transaction, onSubmi
                         name => name !== transaction.payee?.payeeName)
                 }
             ]}
-            value={transaction.payee?.payeeName || searchValue}
+            value={transaction.payee?.payeeName || (searchValue || '')}
             searchable
             onSearchChange={setSearchValue}
             comboboxProps={{ width: 250 }}
