@@ -81,7 +81,7 @@ export default observer(function TransactionBudgetItemSelector({
           ),
         },
       ]}
-      value={getBudgetItemFromMap(transaction.budgetItemId)?.title || searchValue}
+      value={getBudgetItemFromMap(transaction.budgetItemId)?.title || ''}
       searchable
       onFocus={(event) => event.target.select()}
       onSearchChange={setSearchValue}
