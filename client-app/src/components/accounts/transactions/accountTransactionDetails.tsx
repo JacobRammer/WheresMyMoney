@@ -114,10 +114,29 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                     {
                         selectedRow !== transaction.id ?
                             <Text fw={500} className="noSelect">
-                                <NumberFormatter value={transaction.amount} prefix="$" decimalScale={2} fixedDecimalScale={true} />
+                                {transaction.amount > 0 &&
+                                    <NumberFormatter value={transaction.amount} prefix="$" decimalScale={2} fixedDecimalScale={true} />
+                                }
+
                             </Text>
                             :
-                            <TransactionAmountInput transaction={transaction} updateAccount={setAccount} onSubmit={() => setSelectedRow("")} />
+
+                            <TransactionAmountInput column='inflow' transaction={transaction} updateAccount={setAccount} onSubmit={() => setSelectedRow("")} />
+                    }
+                </Center>
+            </Table.Td>
+
+            <Table.Td>
+                <Center>
+                    {
+                        selectedRow !== transaction.id ?
+                            <Text fw={500} className="noSelect">
+                                {transaction.amount < 0 &&
+                                    <NumberFormatter value={Math.abs(transaction.amount)} prefix="$" decimalScale={2} fixedDecimalScale={true} />
+                                }
+                            </Text>
+                            :
+                            <TransactionAmountInput column='outflow' transaction={transaction} updateAccount={setAccount} onSubmit={() => setSelectedRow("")} />
                     }
                 </Center>
             </Table.Td>
@@ -156,7 +175,8 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                             <Table.Th w={200}>Payee</Table.Th>
                             <Table.Th >Title</Table.Th>
                             <Table.Th w={300}>Associated Budget</Table.Th>
-                            <Table.Th w={125}>Amount</Table.Th>
+                            <Table.Th w={125}>Inflow</Table.Th>
+                            <Table.Th w={125}>Outflow</Table.Th>
                             <Table.Th w={100}>Actions</Table.Th>
                         </Table.Tr>
                     </Table.Thead>
