@@ -311,4 +311,8 @@ export default class AccountStore {
     get cashBalance(): number {
         return this.checkingBalance + this.savingsBalance;
     }
+
+    isCashAccount = (account: Account) => {
+        return account.accountType === this.Checking || account.accountType === this.Savings;
+    }
 }

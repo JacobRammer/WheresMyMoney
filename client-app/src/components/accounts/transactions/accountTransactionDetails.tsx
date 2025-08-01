@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { ActionIcon, Box, Button, Center, Loader, Modal, NumberFormatter, Table, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, Box, Center, Loader, Modal, NumberFormatter, Table, Text, Tooltip } from "@mantine/core";
 import { Account } from "../../../models/account.ts";
 import { CirclePlus, Trash2 } from "lucide-react";
 import { Transaction } from "../../../models/transaction.ts";
@@ -163,7 +163,7 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                     <Table.Tbody>{rows}</Table.Tbody>
                 </Table>
                 <Tooltip label="Add Transaction" position="top-start">
-                    <CirclePlus size={40} className="AddActionCircle" style={{ float: 'right', marginTop: '10px' }}
+                    <CirclePlus size={40} className="AddActionCircleBottom"
                         onClick={HandleAddTransaction} />
                 </Tooltip>
 
