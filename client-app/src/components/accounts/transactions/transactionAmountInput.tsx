@@ -65,7 +65,7 @@ export default observer(function TransactionAmountInput({ transaction, updateAcc
             return undefined;
         if (transaction.amount > 0 && column === 'outflow')
             return undefined;
-        return transaction.amount;
+        return Math.abs(transaction.amount);
     }
 
     return (

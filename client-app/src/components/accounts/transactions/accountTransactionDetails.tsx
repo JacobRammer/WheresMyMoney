@@ -132,7 +132,7 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                         selectedRow !== transaction.id ?
                             <Text fw={500} className="noSelect">
                                 {transaction.amount < 0 &&
-                                    <NumberFormatter value={transaction.amount} prefix="$" decimalScale={2} fixedDecimalScale={true} />
+                                    <NumberFormatter value={Math.abs(transaction.amount)} prefix="$" decimalScale={2} fixedDecimalScale={true} />
                                 }
                             </Text>
                             :
