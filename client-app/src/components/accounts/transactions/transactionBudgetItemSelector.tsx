@@ -67,12 +67,13 @@ export default observer(function TransactionBudgetItemSelector({
       name="budgetItemSelect"
       placeholder="Budget"
       allowDeselect
+      disabled={transaction.amount > 0}
       data={[
         {
           group: "Selected",
           items: transaction.budgetItemId
             ? [getBudgetItemFromMap(transaction.budgetItemId)?.title!]
-            : [],
+            : [''],
         },
         {
           group: "Current Budgets",
