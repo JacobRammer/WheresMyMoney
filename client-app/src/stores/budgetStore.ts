@@ -241,4 +241,24 @@ export default class BudgetCategoryStore {
             throw error;
         }
     }
+
+    updateBudgetGroup = async (budgetGroup: BudgetGroup) => {
+        try {
+            this.budgetCategories.set(budgetGroup.id, budgetGroup);
+            await agent.Budgets.updateBudgetGroup(budgetGroup);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    deleteBudgetGroup = async (budgetGroup: BudgetGroup) => {
+        try {
+            this.budgetCategories.delete(budgetGroup.id);
+            await agent.Budgets.deleteBudgetGroup(budgetGroup.id);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
 }
