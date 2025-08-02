@@ -38,7 +38,7 @@ public class BudgetItemGroupController : BaseApiController
     /// </summary>
     /// <param name="id">The id of the <see cref="Budget"/></param>
     /// <returns>Nothing</returns>
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCategoryGroup(Guid id)
     {
         return HandleResults(await Mediator.Send(new DeleteBudgetGroup.Command
@@ -47,12 +47,12 @@ public class BudgetItemGroupController : BaseApiController
         }));
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCategoryGroup(Guid id)
+    [HttpPut]
+    public async Task<IActionResult> UpdateCategoryGroup(BudgetGroup budgetGroup)
     {
-        return HandleResults(await Mediator.Send(new DeleteBudgetGroup.Command
+        return HandleResults(await Mediator.Send(new EditBudgetGroup.Command
         {
-            Id = id
+            UpdatedBudgetGroup = budgetGroup
         }));
     }
 }

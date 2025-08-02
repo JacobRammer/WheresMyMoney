@@ -16,5 +16,6 @@ public class MappingProfiles : Profile
         CreateMap<Transaction, Transaction>().ReverseMap();
         CreateMap<BudgetItem, BudgetItem>().ReverseMap();
         CreateMap<BudgetGroup, CategoryGroupDto>().ReverseMap();
+        CreateMap<BudgetGroup, BudgetGroup>().ReverseMap();
     }
 }

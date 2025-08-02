@@ -38,10 +38,12 @@ const CategoryGroup = {
 
 const Budgets = {
     updateBudgetItem: (budgetItem: BudgetItem) => requests.put<BudgetItem>('/BudgetItem', budgetItem),
+    updateBudgetGroup: (budgetGroup: BudgetGroup) => requests.put<BudgetItem>('/BudgetItemGroup', budgetGroup),
     createBudgetItem: (budgetItem: BudgetItem) => requests.post<BudgetItem>('/BudgetItem', budgetItem),
     createBudgetGroup: (budgetGroup: BudgetGroup) => requests.post<BudgetGroup>('/BudgetItemGroup', budgetGroup),
     updateBudgetItemAssigned: (assignedTransaction: AssignedTransaction) => requests.post<AssignedTransaction>('UpdateAssigned', assignedTransaction),
     deleteBudgetItem: (id: string) => requests.del(`/BudgetItem/${id}`),
+    deleteBudgetGroup: (id: string) => requests.del(`/BudgetItemGroup/${id}`),
 }
 
 const Payees = {
