@@ -102,7 +102,7 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                             {getBudgetItemFromMap(transaction.budgetItemId) && getBudgetItemFromMap(transaction.budgetItemId)!.title.length > 0
                                 ? getBudgetItemFromMap(transaction.budgetItemId)!.title
                                 : (
-                                    transaction.amount < 0 ? "..." : 'Inflow'
+                                    transaction.amount < 0. || transaction.amount === 0 ? "..." : 'Inflow'
                                 )
                             }
                         </Text>
@@ -112,7 +112,7 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                                 transaction.amount < 0 ?
                                     <TransactionBudgetItemSelector transaction={transaction} onSubmit={() => setSelectedRow("")} />
                                     :
-                                    <Text>Inflow</Text>
+                                    <Text>...</Text>
                             }
 
                         </Box>
