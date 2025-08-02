@@ -45,6 +45,8 @@ export default observer(function TransactionAmountInput({ transaction, updateAcc
                 } else {
                     account.balance -= Math.abs(difference);
                 }
+                if (transaction.amount > 0 && transaction.budgetItemId !== undefined)
+                    transaction.budgetItemId = undefined;
 
                 accountRegistry.set(account.id, account);
             });

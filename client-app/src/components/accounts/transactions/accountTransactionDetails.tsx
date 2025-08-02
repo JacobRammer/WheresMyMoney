@@ -101,11 +101,20 @@ export default observer(function AccountTransactionDetails({ account, setAccount
                         <Text>
                             {getBudgetItemFromMap(transaction.budgetItemId) && getBudgetItemFromMap(transaction.budgetItemId)!.title.length > 0
                                 ? getBudgetItemFromMap(transaction.budgetItemId)!.title
-                                : "..."}
+                                : (
+                                    transaction.amount < 0. || transaction.amount === 0 ? "..." : 'Inflow'
+                                )
+                            }
                         </Text>
                         :
                         <Box style={{ visibility: account.accountType === Checking ? "visible" : 'collapse' }}>
-                            <TransactionBudgetItemSelector transaction={transaction} onSubmit={() => setSelectedRow("")} />
+                            {
+                                transaction.amount < 0 ?
+                                    <TransactionBudgetItemSelector transaction={transaction} onSubmit={() => setSelectedRow("")} />
+                                    :
+                                    <Text>...</Text>
+                            }
+
                         </Box>
                 }
             </Table.Td>
