@@ -38,7 +38,7 @@ const CategoryGroup = {
 
 const Budgets = {
     updateBudgetItem: (budgetItem: BudgetItem) => requests.put<BudgetItem>('/BudgetItem', budgetItem),
-    updateBudgetGroup: (budgetGroup: BudgetGroup) => requests.put<BudgetItem>('/BudgetItemGroup', budgetGroup),
+    updateBudgetGroup: (budgetGroup: BudgetGroup) => requests.put<BudgetGroup>('/BudgetItemGroup', budgetGroup),
     createBudgetItem: (budgetItem: BudgetItem) => requests.post<BudgetItem>('/BudgetItem', budgetItem),
     createBudgetGroup: (budgetGroup: BudgetGroup) => requests.post<BudgetGroup>('/BudgetItemGroup', budgetGroup),
     updateBudgetItemAssigned: (assignedTransaction: AssignedTransaction) => requests.post<AssignedTransaction>('UpdateAssigned', assignedTransaction),
