@@ -1,6 +1,6 @@
 import {observer} from "mobx-react-lite";
 import {v4 as uuidv4} from "uuid";
-import {Input} from "@mantine/core";
+import {NumberInput} from "@mantine/core"; // Change from Input to NumberInput
 import {useClickOutside} from "@mantine/hooks";
 import {useStore} from "../../../stores/store.ts";
 import {useForm} from "@mantine/form";
@@ -25,12 +25,25 @@ export default observer(function CategoryAmountAssignedForm({category, handleCli
     initialValues: {
       amountAssigned: category.assigned.toFixed(2),
     },
-  });
+
+    validate: {
+      amountAssigned: (value: string) => {
+        const numericValue = parseFloat(value);
+        if (isNaN(numericValue)) {
+          return 'Amount must be a valid number';
+        }
+        if (numericValue < 0) {
+          return 'Amount assigned must be positive';
+        }
+        return null;
+      }
+    }
+  })  
 
   function handleInputSubmit() {
     handleClickOutside();
     // If the user hasn't modified the assigned, then nothing to do
-    if (!form.isDirty()) {
+    if (!form.isDirty() && !form.isValid()) {
       return;
     }
     form.onSubmit((values) => {
@@ -53,22 +66,22 @@ export default observer(function CategoryAmountAssignedForm({category, handleCli
       updateBudgetItemFunding(budgetItem, tempAssigned).catch((error) => {
         console.error("Error updating category:", error);
       });
-      updateAvailableBalance(tempAssigned);
+      updateAvailableBalance(tempAssigned).then();
     })();
   }
   return (
     <form>
-      <Input
+      <NumberInput
+          hideControls
+          prefix="$"
         id={uuidv4()}
         ref={hep}
         size="sm"
-        color="red"
-        defaultValue={
-          category.assigned !== null ? category.assigned.toFixed(2) : 0
-        }
+          defaultValue={category.assigned !== null ? category.assigned : 0}
         key={form.key("amountAssigned")}
         {...form.getInputProps("amountAssigned")}
         onFocus={(event) => event.target.select()}
+          decimalScale={2}
       />
     </form>
   );
