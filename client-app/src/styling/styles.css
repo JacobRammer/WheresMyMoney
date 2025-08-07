@@ -18,6 +18,8 @@ html {
     --BudgetGroupAndItemBorderRadius: 10px;
     --SelectedBudgetItemPadding: 15px;
     --SelectedBudgetItemInnerBoxColor: #F0F8FF;
+    --BottomMargin: 15px;
+    --RightMargin: 10px;
 }
 
 .blueBackgroundColor {
@@ -169,8 +171,8 @@ html {
 
 .AddActionCircleBottom {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    bottom: var(--BottomMargin);
+    right: var(--RightMargin);
     color: var(--backgroundColor)
 }
 
@@ -241,5 +243,9 @@ html {
 
 .deleteBudgetItemBox {
     position: fixed;
-    bottom: 30px;
+    bottom: var(--BottomMargin);
+}
+
+.closeBudgetItemActionIcon {
+    margin-left: 93%;
 }
