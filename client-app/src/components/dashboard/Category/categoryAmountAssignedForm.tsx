@@ -43,7 +43,7 @@ export default observer(function CategoryAmountAssignedForm({category, handleCli
   function handleInputSubmit() {
     handleClickOutside();
     // If the user hasn't modified the assigned, then nothing to do
-    if (!form.isDirty() && !form.isValid()) {
+    if (!form.isDirty() || !form.isValid()) {
       return;
     }
     form.onSubmit((values) => {
