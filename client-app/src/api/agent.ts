@@ -1,9 +1,9 @@
-import axios, { AxiosResponse } from "axios";
-import { Account } from "../models/account.ts";
-import { Transaction } from "../models/transaction.ts";
-import { BudgetGroup } from "../models/budgetGroup.ts";
-import { BudgetItem } from "../models/budgetItem.ts";
-import { Payee } from "../models/payee.ts";
+import axios, {AxiosResponse} from "axios";
+import {Account} from "../models/account.ts";
+import {Transaction} from "../models/transaction.ts";
+import {BudgetGroup} from "../models/budgetGroup.ts";
+import {BudgetItem} from "../models/budgetItem.ts";
+import {Payee} from "../models/payee.ts";
 import AssignedTransaction from "../models/assignedTransaction.ts";
 
 axios.defaults.baseURL = 'http://localhost:5241/api';
@@ -29,6 +29,7 @@ const Transactions = {
     deleteTransaction: (id: string) => requests.del(`/Transaction/${id}`),
     addTransaction: (transaction: Transaction) => requests.post('/Transaction', transaction),
     updateTransaction: (transaction: Transaction) => requests.put('/Transaction', transaction),
+    getSpendingForMonth: (month: number) => requests.get<number>(`/Transaction/SpentInfo/${month}`),
 }
 
 const CategoryGroup = {
@@ -46,6 +47,10 @@ const Budgets = {
     deleteBudgetGroup: (id: string) => requests.del(`/BudgetItemGroup/${id}`),
 }
 
+const AssignedTransactions = {
+    getAssignedForMonth: (month: number) => requests.get<number>(`/AssignedTransactions/${month}`),
+}
+
 const Payees = {
     CreatePayee: (payee: Payee) => requests.post<Payee>('/Payee', payee),
     DeletePayee: (id: string) => requests.del<Payee>(`/Payee/${id}`),
@@ -58,6 +63,7 @@ const agent = {
     Transactions,
     Budgets,
     Payees,
+    AssignedTransactions
 }
 
 export default agent;

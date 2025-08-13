@@ -64,4 +64,10 @@ public class TransactionController : BaseApiController
             Transaction = transaction
         }));
     }
+
+    [HttpGet("SpentInfo/{month:int}")]
+    public async Task<IActionResult> GetSpendingForMonth(int month)
+    {
+        return HandleResults(await Mediator.Send(new GetSpendingInfoForMonth.Query { Month = month }));
+    }
 }

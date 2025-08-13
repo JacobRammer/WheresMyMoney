@@ -1,14 +1,15 @@
-import { AppShell, Box, ScrollArea, Tooltip } from '@mantine/core';
-import { CircleHelp } from 'lucide-react';
-import { observer } from 'mobx-react-lite';
+import {AppShell, Box, ScrollArea, Tooltip} from '@mantine/core';
+import {CircleHelp} from 'lucide-react';
+import {observer} from 'mobx-react-lite';
 import SelectedBudgetItemInfo from './budgetItems/selectedBudgetItemInfo';
 import CategoryGroupItem from './categoryGroupItem';
 import CategoryTable from './categoryTable';
 import CategoryGroupHeader from './categoryGroupHeader';
 import Sidebar from '../sidebar/sidebar';
 import DashboardHeader from './dashboardHeader';
-import { BudgetGroup } from '../../models/budgetGroup';
-import { useStore } from '../../stores/store';
+import {BudgetGroup} from '../../models/budgetGroup';
+import {useStore} from '../../stores/store';
+import BudgetInsights from "./aside/budgetInsights.tsx";
 
 export default observer(function BudgetInfo() {
 
@@ -46,8 +47,12 @@ export default observer(function BudgetInfo() {
         </Box>
       </AppShell.Main>
       <AppShell.Aside p="md">
-        {selectedBudgetItem &&
-          <SelectedBudgetItemInfo />}
+        {selectedBudgetItem ?
+            <SelectedBudgetItemInfo/>
+            :
+            <BudgetInsights/>
+        }
+        
         <Tooltip label="Help" position="top-start">
           <CircleHelp size={40} className="AddActionCircleBottom" />
         </Tooltip>
