@@ -5,26 +5,12 @@ import {useStore} from "../../stores/store.ts";
 import {useState} from "react";
 
 export default observer(function DashboardHeader() {
-  const monthNames = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "June",
-    "July",
-    "Aug",
-    "Sept",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
   const { accountStore } = useStore();
   const {balanceReadyToAssign} = accountStore;
 
-  const { budgetStore } = useStore();
-  const { activeDate, setActiveDate } = budgetStore;
+    const {budgetStore,} = useStore();
+    const {activeDate, setActiveDate, monthListAbbreviated} = budgetStore;
 
   const [date, setDate] = useState(activeDate);
 
@@ -49,7 +35,7 @@ export default observer(function DashboardHeader() {
       <Flex w={240} align="center" style={{ marginLeft: '10px' }} className="noSelect">
         <Tooltip
           label={
-            monthNames[
+              monthListAbbreviated[
             Math.abs(date.getMonth() - 1 < 0 ? 11 : date.getMonth() - 1)
             ]
           }
@@ -63,12 +49,12 @@ export default observer(function DashboardHeader() {
         </Tooltip>
 
         <Title order={2}>
-          {monthNames[date.getMonth()]} {date.getFullYear()}
+            {monthListAbbreviated[date.getMonth()]} {date.getFullYear()}
         </Title>
 
         <Tooltip
           label={
-            monthNames[date.getMonth() + 1 > 11 ? 0 : date.getMonth() + 1]
+              monthListAbbreviated[date.getMonth() + 1 > 11 ? 0 : date.getMonth() + 1]
           }
         >
           <CircleArrowRight
@@ -85,7 +71,7 @@ export default observer(function DashboardHeader() {
           <Tooltip
             label={
               <Text>
-                Go back to today ({monthNames[new Date().getMonth()]})
+                  Go back to today ({monthListAbbreviated[new Date().getMonth()]})
               </Text>
             }
           >

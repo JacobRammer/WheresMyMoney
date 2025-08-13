@@ -1,7 +1,7 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 import agent from "../api/agent.ts";
-import { BudgetGroup } from "../models/budgetGroup.ts";
-import { BudgetItem } from "../models/budgetItem.ts";
+import {BudgetGroup} from "../models/budgetGroup.ts";
+import {BudgetItem} from "../models/budgetItem.ts";
 import AssignedTransaction from "../models/assignedTransaction.ts";
 
 export default class BudgetCategoryStore {
@@ -13,12 +13,48 @@ export default class BudgetCategoryStore {
 
     hoveredBudgetItem: BudgetItem | undefined;
 
+    assignedLastMonth: number = 0;
+
+    spentLastMonth: number = 0;
+
     /**
      * The month of the current budget
      *
      * @type {number}
      */
     activeDate: Date = new Date();
+
+    monthListAbbreviated: string[] =
+        [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "June",
+            "July",
+            "Aug",
+            "Sept",
+            "Oct",
+            "Nov",
+            "Dec",
+        ];
+
+    monthList: string[] =
+        [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ]
 
     constructor() {
         makeAutoObservable(this)
@@ -34,10 +70,38 @@ export default class BudgetCategoryStore {
      * Sets the activeDate
      * @param dateToSet the month as an int
      */
-    setActiveDate = (dateToSet: Date) => {
+    setActiveDate = async (dateToSet: Date) => {
         runInAction(() => {
             this.activeDate = dateToSet;
         })
+        await this.updatePreviousMonthSpendingInfo();
+    }
+
+    async updatePreviousMonthSpendingInfo() {
+        await this.getAssignedLastMonth();
+        await this.getSpentLastMonth();
+    }
+
+    async getAssignedLastMonth() {
+        try {
+            const assigned = await agent.AssignedTransactions.getAssignedForMonth(this.activeDate.getMonth());
+            runInAction(() => {
+                this.assignedLastMonth = assigned;
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async getSpentLastMonth() {
+        try {
+            const spent = await agent.Transactions.getSpendingForMonth(this.activeDate.getMonth());
+            runInAction(() => {
+                this.spentLastMonth = spent;
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     getBudgetItemsByMonth = (budgetGroup: BudgetGroup) => {
@@ -51,8 +115,8 @@ export default class BudgetCategoryStore {
     loadBudgetCategories = async () => {
         this.loading = true;
         try {
-            console.log(this.activeDate.getMonth() + 1);
             const budgetCategories = await agent.CategoryGroup.getBudgetGroups(this.activeDate.getMonth() + 1);
+            await this.updatePreviousMonthSpendingInfo();
             budgetCategories.sort((a, b) => a.dateCreated.localeCompare(b.dateCreated));
             runInAction(() => {
                 this.budgetCategories.clear();

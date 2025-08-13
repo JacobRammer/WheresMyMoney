@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Models.Transactions;
 
 namespace Domain.Models.Budgets
 {

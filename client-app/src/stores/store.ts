@@ -4,7 +4,7 @@ import AccountStore from "./accountStore.ts";
 
 interface Store {
     budgetStore: BudgetCategoryStore;
-    accountStore: AccountStore
+    accountStore: AccountStore;
 }
 
 export const store: Store = {
